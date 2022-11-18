@@ -2,13 +2,13 @@ install:
 	poetry install
 
 lint:
-	poetry run flake8 django_blog
+	poetry run flake8 blog
 
 test:
-	poetry run pytest django_blog
+	poetry run pytest blog
 
 test-cov:
-	poetry run pytest --cov=django_blog
+	poetry run pytest --cov=blog
 
 check-pyproject:
 	poetry check
@@ -22,7 +22,7 @@ start: startdb
 	poetry run python3 manage.py runserver
 
 startdb:
-	cat ~/.password_root | sudo service postgresql start
+	@(cat ~/.password_root | sudo --stdin service postgresql start)
 
 shell: startdb
 	poetry run python3 manage.py shell
