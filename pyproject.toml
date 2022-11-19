@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "It is a simple article blog for everyone"
 authors = ["Michael Fedorov <mikhailfedorov1939@gmail.com>"]
 readme = "README.md"
-packages = [{include = "django_blog"}]
+packages = [{include = "config"}]
 
 [tool.poetry.dependencies]
 python = "^3.10.4"
