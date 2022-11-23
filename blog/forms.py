@@ -6,7 +6,7 @@ from blog.models import Article, Author
 class CreateNewArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'body', 'author']
+        fields = ['title', 'body', 'author', 'language']
 
 
 class CreateNewAuthorForm(forms.ModelForm):

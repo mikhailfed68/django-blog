@@ -19,7 +19,23 @@ class Author(TimeStampedModel):
         return self.alias
 
 
+class Language(models.Model):
+    language = models.CharField(max_length=16, unique=True, default='Others')
+
+    def __str__(self):
+        return self.language
+
+
+def get_default_language():
+    language, created = Language.objects.get_or_create(language='Others')
+    return language.id
+
+
 class Article(TimeStampedModel):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, verbose_name='Автор', on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, verbose_name='Язык', on_delete=models.SET(get_default_language))
     title = models.CharField('Заголовок', max_length=256, unique=True)
     body = models.TextField('Содержание', unique=True)
+
+    def __str__(self):
+        return self.title
