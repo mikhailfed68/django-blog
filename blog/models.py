@@ -10,13 +10,16 @@ class TimeStampedModel(models.Model):
 
 
 class Author(TimeStampedModel):
-    first_name = models.CharField(max_length=16)
-    surname = models.CharField(max_length=16)
-    alias = models.CharField(max_length=16, unique=True)
-    email = models.EmailField(unique=True)
+    first_name = models.CharField('Ваше имя', max_length=16)
+    surname = models.CharField('Ваша фамилия', max_length=16)
+    alias = models.CharField('Ваш псевдоним', max_length=16, unique=True)
+    email = models.EmailField('Ваш адрес электронной почты', unique=True)
+
+    def __str__(self):
+        return self.alias
 
 
 class Article(TimeStampedModel):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    title = models.CharField('Name article', max_length=256)
-    body = models.TextField()
+    title = models.CharField('Заголовок', max_length=256, unique=True)
+    body = models.TextField('Содержание', unique=True)
