@@ -1,5 +1,31 @@
-<ul>
-{% for article in articles %}
-    <li><a href="">{{ article.title }}</a></li>
-{% endfor %}
-</ul>
+{% extends "blog/base.html" %}
+
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/css/article_list.css' %}">
+{% endblock %}
+
+{% block content %}
+    <section>
+        <h2 class="section-header">Недавние статьи</h2>
+    {% for article in articles %}
+    <a class="click" href="{% url 'blog:article_detail' article.id %}">
+        <article class="article">
+            <div class="article-body">
+                <div class="article-title">
+                    <div class="article-name">
+                        {{ article.title }}
+                    </div>
+                    <div class="article-time">
+                        {{ article.created_at|date:"j E" }}
+                    </div>
+                </div>
+                <p class="article-content">
+                    {{ article.body|truncatewords:10 }}
+                </p>
+            </div>
+        </article>
+    </a>
+    {% endfor %}
+    </section>
+{% endblock %}

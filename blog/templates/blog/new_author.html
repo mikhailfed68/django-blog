@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Новый автор{% endblock %}
+
+{% block style %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'blog/css/base_article_form.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Создание нового автора</h1>
+    <form action="{% url 'blog:new_author' %}" method="post">
+        {% csrf_token %}
+        <table>
+            {{ form }}
+        </table>
+        <button>Создать</button>
+    </form>
+{% endblock %}

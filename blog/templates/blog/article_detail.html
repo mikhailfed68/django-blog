@@ -1,0 +1,18 @@
+{% extends "blog/base.html" %}
+
+{% block title %}{{ article.title}} | {{ article.author.alias }}{% endblock %}
+
+{% block style %}
+    <style>
+        p {
+            white-space: break-spaces;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ article.title }}</h1>
+    <a href="{% url 'blog:update_article' article.id %}">Редактировать</a>
+    <h4>{{ article.author.alias }}</h4>
+    <p>{{ article.body }}</p>
+{% endblock %}
