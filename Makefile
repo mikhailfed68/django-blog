@@ -1,3 +1,6 @@
+all:
+	code . && make start
+
 install:
 	poetry install
 
