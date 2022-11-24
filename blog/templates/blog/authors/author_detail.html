@@ -1,14 +1,30 @@
-{% extends "blog/base.html" %}
+{% extends 'blog/base.html' %}
+
+{% block title %} {{ author.alias }} | Авторы {% endblock %}
 
 {% block style %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'blog/css/article_list.css' %}">
+    <style>
+        main {
+            background: var(--main-background);
+        }
+        p {
+            white-space: break-spaces;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
+    <h2>Об авторе</h2>
+    <p><b>Псевдоним: </b>{{ author.alias }}</p>
+    <p><b>Полностью: </b>{{ author.first_name }} {{ author_surname }}</p>
+    <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
+    <p class="about_author"><b>О себе: </b>Тут должно быть небольшое описание в будущем.</p>
+    <br>
     <section>
-        <h2 class="section-header">Недавние статьи</h2>
-        {% for article in articles %}
+        <h2 class="section-header">Cтатьи автора</h2>
+        {% for article in author.article_set.all %}
         <a class="click" href="{% url 'blog:article_detail' article.id %}">
             <article class="article">
                 <div class="article-body">

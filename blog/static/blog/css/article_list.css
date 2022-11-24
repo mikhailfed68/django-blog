@@ -12,7 +12,7 @@ article {
     width: 300px;
     margin: 1em;
     border-radius: 10px;
-    background: linear-gradient(140deg, ghostwhite, rgb(247, 247, 253));
+    background: linear-gradient(140deg, rgb(235, 235, 241), rgb(247, 247, 253));
     border: 1px solid rgb(91, 91, 255);
 }
 
@@ -23,7 +23,7 @@ article {
 }
 
 .article:active {
-    background: rgb(219, 219, 252);
+    background: rgb(228, 228, 248);
 }
 
 .article-body {

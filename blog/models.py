@@ -19,6 +19,9 @@ class Author(TimeStampedModel):
 
     def __str__(self):
         return self.alias
+    
+    class Meta:
+        ordering = ['first_name']
 
 
 class Language(models.Model):

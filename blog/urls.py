@@ -11,4 +11,6 @@ urlpatterns = [
     path('<int:id>/edit/', views.UpdateArticleView.as_view(), name='update_article'),
     path('<int:id>/delete/', views.DestroyArticleView.as_view(), name='destroy_article'),
     path('authors/new/', views.CreateNewAuthorView.as_view(), name='new_author'),
+    path('authors/', views.AuthorListView.as_view(), name='authors_list'),
+    path('author/<int:pk>', views.AuthorDetailView.as_view(), name='author_detail'),
 ]

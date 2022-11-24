@@ -23,6 +23,20 @@ class ArticleDetailView(generic.DetailView):
     model = models.Article
 
 
+class AuthorListView(generic.ListView):
+    """Представление, возвращающее список авторов в блоге."""
+    model = models.Author
+    template_name = 'blog/authors/author_list.html'
+    context_object_name = 'authors'
+    paginate_by = 3
+
+
+class AuthorDetailView(generic.DetailView):
+    """Представление, возвращающее страницу конкретного автора"""
+    model = models.Author
+    template_name = 'blog/authors/author_detail.html'
+
+
 class CreateNewArticleView(View):
     """
     Возвращает форму создания статьи (метод get)
@@ -55,7 +69,7 @@ class CreateNewAuthorView(View):
         form = forms.CreateNewAuthorForm()
         return render(
             request,
-            'blog/new_author.html',
+            'blog/authors/new_author.html',
             {'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -63,8 +77,8 @@ class CreateNewAuthorView(View):
         if form.is_valid():
             form.save()
             messages.success(request, 'Профиль был успешно создан')
-            return redirect('blog:index')
-        return render(request, 'blog/new_author.html', {'form': form})
+            return redirect('blog:authors_list')
+        return render(request, 'blog/authors/new_author.html', {'form': form})
 
 
 class UpdateArticleView(View):

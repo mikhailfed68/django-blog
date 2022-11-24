@@ -14,6 +14,7 @@
         <nav>
             <ul class="menu">
                 <li><a href="{% url 'blog:index' %}">Главная</a></li>
+                <li><a href="{% url 'blog:authors_list' %}">Авторы</a></li>
                 <li><a href="{% url 'blog:new_article' %}">Создать статью</a></li>
                 <li><a href="{% url 'blog:new_author' %}">Создать автора</a></li>
             </ul>
@@ -29,6 +30,8 @@
         {% endif %}
 
         {% block content %}{% endblock %}
+
+        {% block pagination %}{% endblock %}
     </main>
     <div class="clear"></div>
     <footer>

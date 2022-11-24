@@ -1,0 +1,45 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Авторы{% endblock %}
+
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/css/author_list.css' %}">
+{% endblock %}
+
+{% block content %}
+    <section class="authors">
+        <h2>Авторы</h2>
+        {% for author in authors %}
+        <a href="{% url 'blog:author_detail' author.id %}">
+        <div class="body">
+            <div class="alias">{{ author.alias }}</div>
+            <div class="fullname">
+                {{ author.first_name }} {{ author.surname }}
+            </div>
+            <div class="publications">
+                Публикаций: {{ author.article_set.count }}
+            </div>
+        </div>
+        </a>
+        {% endfor %}
+    </section>
+{% endblock %}
+
+{% block pagination %}
+    {% if is_paginated %}
+    <div class="pagination">
+        <span class="page-links">
+            {% if page_obj.has_previous %}
+                <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">назад</a>
+            {% endif %}
+            <span class="page-current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">далее</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+{% endblock %}

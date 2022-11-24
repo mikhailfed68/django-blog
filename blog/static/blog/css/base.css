@@ -1,6 +1,6 @@
 :root {
     --main-background: linear-gradient(#e9e5e5, #f1f0f0);
-    --main-color: #1e1f26;
+    --main-color: #292a30;
     --main-white-color: aliceblue;
     --main-font-size: 18px/1.5 sans-serif;
     --main-red-color: linear-gradient(140deg, #A65353, #b65f5f);
@@ -53,9 +53,11 @@ body {
 main {
     height: auto;
     min-height: 100vh;
-    background: var(--main-background);
     padding: 50px 100px 50px 100px;
     padding-top: calc(var(--header-height) + 1em);
+
+    background-image: url('../images/background.jpg');
+    background-size: cover;
 }
 
 header {
