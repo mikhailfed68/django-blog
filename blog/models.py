@@ -1,5 +1,7 @@
 from django.db import models
 
+from blog.services.blog_services import get_default_language
+
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -24,12 +26,6 @@ class Language(models.Model):
 
     def __str__(self):
         return self.language
-
-
-def get_default_language():
-    language, created = Language.objects.get_or_create(language='Others')
-    return language.id
-
 
 class Article(TimeStampedModel):
     author = models.ForeignKey(Author, verbose_name='Автор', on_delete=models.CASCADE)
