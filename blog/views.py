@@ -1,33 +1,26 @@
+from django.views import generic
 from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from blog import forms
 from blog.services.blog_services import get_latest_created_articles, get_article_by_id
+from blog import models
+from blog import forms
 
 
-def index(request):
+class IndexListView(generic.ListView):
     """
     Представление, возвращающее список из последних 10 статей
     на главную страницу сайта.
     """
-    if request.path == '/':
-        return redirect('blog:index')
-    return render(
-        request,
-        'blog/index.html',
-        context={'articles': get_latest_created_articles()})
+    template_name = 'blog/index.html'
+    context_object_name = 'articles'
+    queryset = get_latest_created_articles()
 
 
-def article_detail(request, id):
-    """
-    Представление, возвращающее страницу конкретной статьи.
-    """
-    article = get_article_by_id(id)
-    return render(
-        request,
-        'blog/article_detail.html',
-        context={'article': article})
+class ArticleDetailView(generic.DetailView):
+    """Представление, возвращающее страницу конкретной статьи."""
+    model = models.Article
 
 
 class CreateNewArticleView(View):
@@ -95,7 +88,7 @@ class UpdateArticleView(View):
         if form.is_valid():
             form.save()
             messages.success(request, 'Статья успешно обновлена')
-            return redirect('blog:article_detail', id=article_id)
+            return redirect('blog:article_detail', pk=article_id)
         context = dict(article_id=article_id, form=form)
         return render(request, 'blog/update_article.html', context)
 

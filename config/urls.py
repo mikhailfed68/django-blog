@@ -20,7 +20,7 @@ import blog.views
 
 
 urlpatterns = [
-    path('', blog.views.index),
+    path('', blog.views.IndexListView.as_view()),
     path('articles/', include('blog.urls')),
     path('admin/', admin.site.urls),
 ]
