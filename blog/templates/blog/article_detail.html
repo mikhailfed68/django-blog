@@ -10,13 +10,17 @@
         p {
             white-space: break-spaces;
         }
+        a {
+            color: var(--main-colord);
+            text-decoration: underline;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
     <h1>{{ article.title }}</h1>
     <a href="{% url 'blog:update_article' article.id %}">Редактировать</a>
-    <h4>{{ article.author.alias }}</h4>
+    <h4><a href="{% url 'blog:author_detail' article.author.id %}">{{ article.author.alias }}</a></h4>
     <p>Язык: {{ article.language }}</p>
     <p>{{ article.body }}</p>
 {% endblock %}

@@ -40,7 +40,9 @@ input, button, textarea {font-family: inherit;}
 input::-ms-clear {display: none;}
 button {cursor: pointer;}
 button::-moz-focus-inner {padding: 0; border: 0;}
-a, a:visited{text-decoration: none;}
+a, a:visited{
+    text-decoration: none;
+}
 a:hover {text-decoration: none;}
 ul li {list-style: none;}
 img {vertical-align: top;}
@@ -132,4 +134,12 @@ ul.messages {
     background: linear-gradient(90deg,#b7fbb7, #9cf89c);
     margin: 0;
     height: 6vh;
+}
+
+.link-pagination, .pagination {
+    color: var(--main-white-color);
+}
+
+.pagination {
+    text-align: center;
 }

@@ -1,7 +1,8 @@
 from django.views import generic
 from django.views import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.db.models import Count
 
 from blog.services.blog_services import get_latest_created_articles, get_article_by_id
 from blog import models
@@ -16,6 +17,7 @@ class IndexListView(generic.ListView):
     template_name = 'blog/index.html'
     context_object_name = 'articles'
     queryset = get_latest_created_articles()
+    paginate_by = 8
 
 
 class ArticleDetailView(generic.DetailView):
@@ -24,17 +26,36 @@ class ArticleDetailView(generic.DetailView):
 
 
 class AuthorListView(generic.ListView):
-    """Представление, возвращающее список авторов в блоге."""
-    model = models.Author
+    """
+    Представление, возвращающее список авторов в блоге,
+    количество статей для каждого автора и реализует
+    пагинацию каждые 6 статей.
+    """
     template_name = 'blog/authors/author_list.html'
     context_object_name = 'authors'
-    paginate_by = 3
+    paginate_by = 6
+
+    def get_queryset(self):
+        return models.Author.objects.annotate(Count('article')).order_by('-article__count')
 
 
-class AuthorDetailView(generic.DetailView):
-    """Представление, возвращающее страницу конкретного автора"""
-    model = models.Author
+class AuthorDetailView(generic.ListView):
+    """
+    Представление, возвращающее страницу конкретного автора
+    и все опубликованные статьи автора.
+    """
     template_name = 'blog/authors/author_detail.html'
+    context_object_name = 'articles'
+    paginate_by = 4
+
+    def get_queryset(self):
+        self.author = get_object_or_404(models.Author, pk=self.kwargs['pk'])
+        return models.Article.objects.filter(author=self.author)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = self.author
+        return context
 
 
 class CreateNewArticleView(View):
