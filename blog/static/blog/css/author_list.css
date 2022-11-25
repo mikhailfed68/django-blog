@@ -1,6 +1,5 @@
 a, a:visited{
     text-decoration: none;
-    color: var(--main-color);
 }
 
 .body {
@@ -17,6 +16,11 @@ a, a:visited{
 .body:hover {
     background: rgb(183, 194, 194);
 }
+
+.link {
+    color: var(--main-color);
+}
+
 .fullname, .publications {
     font-size: small;
 }

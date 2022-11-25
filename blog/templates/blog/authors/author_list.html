@@ -11,7 +11,7 @@
     <section class="authors">
         <h2>Авторы</h2>
         {% for author in authors %}
-        <a href="{% url 'blog:author_detail' author.id %}">
+        <a href="{% url 'blog:author_detail' author.id %}" class="link">
         <div class="body">
             <div class="alias">{{ author.alias }}</div>
             <div class="fullname">
@@ -31,13 +31,13 @@
     <div class="pagination">
         <span class="page-links">
             {% if page_obj.has_previous %}
-                <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">назад</a>
+                <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="link">назад</a>
             {% endif %}
             <span class="page-current">
                 Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
             </span>
             {% if page_obj.has_next %}
-                <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">далее</a>
+                <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" class="link">далее</a>
             {% endif %}
         </span>
     </div>
