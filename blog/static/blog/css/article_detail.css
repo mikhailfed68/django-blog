@@ -1,0 +1,28 @@
+main {
+    background: var(--main-background);
+}
+
+p {
+    white-space: break-spaces;
+}
+
+.edit-link, .alias-link {
+    color: var(--main-color);
+    text-decoration: underline;
+}
+
+.tags-body {
+    display: flex;
+    flex-wrap: wrap;    
+}
+
+.tag {
+    margin: 0.3em;
+    padding: 0.2em;
+    border-radius: 10px;
+
+    background: var(--main-red-color);
+    color: var(--main-white-color);
+    
+    font-size: 0.9em;
+}

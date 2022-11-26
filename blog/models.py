@@ -21,6 +21,13 @@ class Author(TimeStampedModel):
         return self.alias
 
 
+class Tag(models.Model):
+    name = models.CharField('Тег', max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Language(models.Model):
     language = models.CharField(max_length=16, unique=True, default='Others')
 
@@ -30,6 +37,7 @@ class Language(models.Model):
 class Article(TimeStampedModel):
     author = models.ForeignKey(Author, verbose_name='Автор', on_delete=models.CASCADE)
     language = models.ForeignKey(Language, verbose_name='Язык', on_delete=models.SET(get_default_language))
+    tags = models.ManyToManyField(Tag, verbose_name='Теги')
     title = models.CharField('Заголовок', max_length=256, unique=True)
     body = models.TextField('Содержание', unique=True)
 
