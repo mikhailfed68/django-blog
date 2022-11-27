@@ -58,6 +58,13 @@ class AuthorDetailView(generic.ListView):
         return context
 
 
+class TagListView(generic.ListView):
+    model = models.Tag
+    template_name = 'blog/tags/tag_list.html'
+    context_object_name = 'tags'
+    paginate_by = 10
+
+
 class CreateNewArticleView(View):
     """
     Возвращает форму создания статьи (метод get)
