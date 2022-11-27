@@ -105,7 +105,7 @@ class CreateNewAuthorView(View):
         if form.is_valid():
             form.save()
             messages.success(request, 'Профиль был успешно создан')
-            return redirect('blog:authors_list')
+            return redirect('blog:authors')
         return render(request, 'blog/authors/new_author.html', {'form': form})
 
 
