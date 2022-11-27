@@ -8,7 +8,7 @@
 {% block content %}
 <div class="tags-body">
     {% for tag in tags %}
-    <div class="tag">{{ tag.name }}&nbsp;</div>
+    <a href="{% url 'blog:articles_by_tag' tag.id %}"><div class="tag">{{ tag.name }}&nbsp;</div></a>
     {% endfor %}
 </div>
 {% endblock %}

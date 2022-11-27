@@ -11,7 +11,8 @@ urlpatterns = [
     path('<int:id>/edit/', views.UpdateArticleView.as_view(), name='update_article'),
     path('<int:id>/delete/', views.DestroyArticleView.as_view(), name='destroy_article'),
     path('tags/', views.TagListView.as_view(), name='tags'),
+    path('tags/<int:pk>/', views.TagArticleListView.as_view(), name='articles_by_tag'),
     path('authors/new/', views.CreateNewAuthorView.as_view(), name='new_author'),
     path('authors/', views.AuthorListView.as_view(), name='authors'),
-    path('author/<int:pk>', views.AuthorDetailView.as_view(), name='author_detail'),
+    path('author/<int:pk>/', views.AuthorDetailView.as_view(), name='author_detail'),
 ]

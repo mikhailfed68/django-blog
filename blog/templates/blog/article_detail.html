@@ -12,7 +12,7 @@
     <h1>{{ article.title }}</h1>
     <div class="tags-body">
         {% for tag in article.tags.all %}
-        <div class="tag">{{ tag.name }}&nbsp;</div>
+        <a href="{% url 'blog:articles_by_tag' tag.id %}"><div class="tag">{{ tag.name }}&nbsp;</div></a>
         {% endfor %}
     </div>
     <a href="{% url 'blog:update_article' article.id %}" class="edit-link">Редактировать</a>

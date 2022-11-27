@@ -25,6 +25,28 @@ class ArticleDetailView(generic.DetailView):
     model = models.Article
 
 
+class TagListView(generic.ListView):
+    model = models.Tag
+    template_name = 'blog/tags/tag_list.html'
+    context_object_name = 'tags'
+    paginate_by = 10
+
+
+class TagArticleListView(generic.ListView):
+    template_name = 'blog/articles_by_tag.html'
+    context_object_name = 'articles'
+    paginate_by = 5
+
+    def get_queryset(self):
+        self.tag = get_object_or_404(models.Tag, pk=self.kwargs['pk'])
+        return models.Article.objects.filter(tags=self.tag)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.tag
+        return context
+
+
 class AuthorListView(generic.ListView):
     """
     Представление, возвращающее список авторов в блоге,
@@ -56,13 +78,6 @@ class AuthorDetailView(generic.ListView):
         context = super().get_context_data(**kwargs)
         context['author'] = self.author
         return context
-
-
-class TagListView(generic.ListView):
-    model = models.Tag
-    template_name = 'blog/tags/tag_list.html'
-    context_object_name = 'tags'
-    paginate_by = 10
 
 
 class CreateNewArticleView(View):

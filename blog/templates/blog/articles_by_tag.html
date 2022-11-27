@@ -1,0 +1,37 @@
+{% extends "blog/base.html" %}
+
+{% block style %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'blog/css/article_list.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/tags/tags.css' %}">
+    <style>
+        .tag {
+            display: inline;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section>
+        <h2 class="section-header">Статьи по тегу<div class="tag">{{ tag.name }}</div></h2>
+        {% for article in articles %}
+        <a class="click" href="{% url 'blog:article_detail' article.id %}">
+            <article class="article">
+                <div class="article-body">
+                    <div class="article-title">
+                        <div class="article-name">
+                            {{ article.title }}
+                        </div>
+                        <div class="article-time">
+                            {{ article.created_at|date:"j E" }}
+                        </div>
+                    </div>
+                    <p class="article-content">
+                        {{ article.body|truncatewords:10 }}
+                    </p>
+                </div>
+            </article>
+        </a>
+        {% endfor %}
+    </section>
+{% endblock %}

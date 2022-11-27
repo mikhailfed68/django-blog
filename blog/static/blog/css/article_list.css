@@ -3,7 +3,7 @@ section {
 }
 
 .section-header::after {
-    content: " >";
+    content: ":";
 }
 
 article {
