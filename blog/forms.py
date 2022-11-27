@@ -1,15 +1,21 @@
 from django import forms
 
-from blog.models import Article, Author
+from blog.models import Article, Author, Tag
 
 
-class CreateNewArticleForm(forms.ModelForm):
+class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ['title', 'body', 'author', 'language', 'tags']
 
 
-class CreateNewAuthorForm(forms.ModelForm):
+class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
         fields = ['first_name', 'surname', 'alias', 'email']
+
+
+class TagFrom(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['name']
