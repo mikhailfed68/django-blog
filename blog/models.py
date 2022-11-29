@@ -1,6 +1,6 @@
 from django.db import models
 
-from blog.services.blog_services import get_default_language
+from blog.services.blog import get_default_language
 
 
 class TimeStampedModel(models.Model):

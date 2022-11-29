@@ -1,12 +1,11 @@
-from django.views import generic
-from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views import generic, View
 from django.contrib import messages
 from django.db.models import Count
 
-from blog.services.blog_services import get_latest_created_articles, get_article_by_id
 from blog import models
 from blog import forms
+from blog.services.blog import get_article_by_id, get_articles_for_search_query
 
 
 class IndexListView(generic.ListView):
