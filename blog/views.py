@@ -13,10 +13,16 @@ class IndexListView(generic.ListView):
     Представление, возвращающее список по 10 статей 
     и далее использует пагинацию.
     """
+    model = models.Article
     template_name = 'blog/index.html'
     context_object_name = 'articles'
-    queryset = get_latest_created_articles()
-    paginate_by = 10
+    paginate_by = 6
+
+    def get_queryset(self):
+        search_query = self.request.GET.get('search', '')
+        if search_query:
+            return get_articles_for_search_query(search_query)
+        return super().get_queryset()
 
 
 class ArticleDetailView(generic.DetailView):
