@@ -20,6 +20,9 @@ class Author(TimeStampedModel):
     def __str__(self):
         return self.alias
 
+    class Meta:
+        ordering = ['-created_at']
+
 
 class Article(TimeStampedModel):
     author = models.ForeignKey(Author, verbose_name='Автор', on_delete=models.CASCADE)
@@ -31,6 +34,9 @@ class Article(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ['-created_at']
+
 
 class Tag(models.Model):
     name = models.CharField('Тег', max_length=100, unique=True)
@@ -39,7 +45,7 @@ class Tag(models.Model):
         return self.name
     
     class Meta:
-        ordering = ['-id']
+        ordering = ['name']
 
 
 class Language(models.Model):

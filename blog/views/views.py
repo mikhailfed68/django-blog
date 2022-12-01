@@ -24,8 +24,9 @@ class IndexListView(generic.ListView):
         self.form = form
         if form.is_valid():
             query = form.cleaned_data.get('query')
+            sort = form.cleaned_data.get('sort')
             if query:
-                articles = search.get_content_for_search_query(query, 'articles')
+                articles = search.get_content_for_search_query(query, 'articles', sort=sort)
                 return articles
         return super().get_queryset()
 
@@ -100,8 +101,9 @@ class AuthorListView(generic.ListView):
         self.form = form
         if form.is_valid():
             query = form.cleaned_data.get('query')
+            sort = form.cleaned_data.get('sort')
             if query:
-                articles = search.get_content_for_search_query(query, 'authors')
+                articles = search.get_content_for_search_query(query, 'authors', sort=sort)
                 return articles
         return models.Author.objects.annotate(Count('article')).order_by('-article__count')
 

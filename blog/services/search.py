@@ -53,11 +53,16 @@ def get_tags_for_search_query(search_query):
     )
 
 
-def get_content_for_search_query(search_query, target_type):
+def get_content_for_search_query(search_query, target_type, sort=None):
+    if sort == 'new':
+        sorting = '-created_at'
+    elif sort =='relevancy':
+        sorting = '-rank'
+
     if target_type == 'articles':
-        return get_articles_for_search_query(search_query)
+        return get_articles_for_search_query(search_query).order_by(sorting)
     if target_type == 'authors':
-        return get_authors_for_search_query(search_query)
+        return get_authors_for_search_query(search_query).order_by(sorting)
     if target_type =='tags':
         return get_tags_for_search_query(search_query)
     else:
