@@ -5,7 +5,7 @@ from django.db.models import Count
 
 from blog import models
 from blog import forms
-from blog.services.blog import get_article_by_id, get_articles_for_search_query
+from blog.services.blog import get_article_by_id
 
 
 class IndexListView(generic.ListView):
@@ -17,12 +17,6 @@ class IndexListView(generic.ListView):
     template_name = 'blog/index.html'
     context_object_name = 'articles'
     paginate_by = 6
-
-    def get_queryset(self):
-        search_query = self.request.GET.get('search', '')
-        if search_query:
-            return get_articles_for_search_query(search_query)
-        return super().get_queryset()
 
 
 class ArticleDetailView(generic.DetailView):
