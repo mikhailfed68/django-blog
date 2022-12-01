@@ -1,5 +1,5 @@
 all:
-	code . && make start
+	code . && sleep 7 && make start
 
 install:
 	poetry install
@@ -25,7 +25,7 @@ start: startdb
 	poetry run python3 manage.py runserver
 
 startdb:
-	@(cat ~/.password_root | sudo --stdin service postgresql start)
+	cat ~/.password_root | sudo --stdin service postgresql start
 
 shell: startdb
 	poetry run python3 manage.py shell
