@@ -21,6 +21,17 @@ class Author(TimeStampedModel):
         return self.alias
 
 
+class Article(TimeStampedModel):
+    author = models.ForeignKey(Author, verbose_name='Автор', on_delete=models.CASCADE)
+    language = models.ForeignKey('Language', verbose_name='Язык', on_delete=models.SET(get_default_language))
+    tags = models.ManyToManyField('Tag', verbose_name='Теги')
+    title = models.CharField('Заголовок', max_length=256, unique=True)
+    body = models.TextField('Содержание', unique=True)
+
+    def __str__(self):
+        return self.title
+
+
 class Tag(models.Model):
     name = models.CharField('Тег', max_length=100, unique=True)
 
@@ -36,13 +47,3 @@ class Language(models.Model):
 
     def __str__(self):
         return self.language
-
-class Article(TimeStampedModel):
-    author = models.ForeignKey(Author, verbose_name='Автор', on_delete=models.CASCADE)
-    language = models.ForeignKey(Language, verbose_name='Язык', on_delete=models.SET(get_default_language))
-    tags = models.ManyToManyField(Tag, verbose_name='Теги')
-    title = models.CharField('Заголовок', max_length=256, unique=True)
-    body = models.TextField('Содержание', unique=True)
-
-    def __str__(self):
-        return self.title

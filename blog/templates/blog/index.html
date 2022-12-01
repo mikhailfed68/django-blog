@@ -5,14 +5,16 @@
     <link rel="stylesheet" href="{% static 'blog/css/article_list.css' %}">
 {% endblock %}
 
+{% block search %}
+    <form action="{% url 'blog:index' %}" method="get">
+        {{ form }}
+        <input type="submit" value="Искать">
+    </form>
+{% endblock %}
+
 {% block content %}
     <section>
         <h2 class="section-header">Недавние статьи</h2>
-
-        <form action="{% url 'blog:index' %}" method="get">
-            <input type="search" name="search" style="border: 1px solid black;">
-            <input type="submit" value="Искать">
-        </form>
 
         {% for article in articles %}
         <a class="click" href="{% url 'blog:article_detail' article.id %}">

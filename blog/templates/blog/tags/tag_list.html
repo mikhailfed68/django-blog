@@ -5,6 +5,13 @@
     <link rel="stylesheet" href="{% static 'blog/css/tags/tags.css' %}">
 {% endblock %}
 
+{% block search %}
+    <form action="{% url 'blog:tags' %}" method="get">
+        {{ form }}
+        <input type="submit" value="Искать">
+    </form>
+{% endblock %}
+
 {% block content %}
 <div class="tags-body">
     {% for tag in tags %}

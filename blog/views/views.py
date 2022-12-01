@@ -6,6 +6,7 @@ from django.db.models import Count
 from blog import models
 from blog import forms
 from blog.services.blog import get_article_by_id
+from blog.services import search
 
 
 class IndexListView(generic.ListView):
@@ -17,6 +18,21 @@ class IndexListView(generic.ListView):
     template_name = 'blog/index.html'
     context_object_name = 'articles'
     paginate_by = 6
+
+    def get_queryset(self):
+        form = forms.SearchForm(self.request.GET)
+        self.form = form
+        if form.is_valid():
+            query = form.cleaned_data.get('query')
+            if query:
+                articles = search.get_content_for_search_query(query, 'articles')
+                return articles
+        return super().get_queryset()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form
+        return context
 
 
 class ArticleDetailView(generic.DetailView):
@@ -33,6 +49,21 @@ class TagListView(generic.ListView):
     template_name = 'blog/tags/tag_list.html'
     context_object_name = 'tags'
     paginate_by = 20
+
+    def get_queryset(self):
+        form = forms.SearchForm(self.request.GET)
+        self.form = form
+        if form.is_valid():
+            query = form.cleaned_data.get('query')
+            if query:
+                articles = search.get_content_for_search_query(query, 'tags')
+                return articles
+        return super().get_queryset()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form
+        return context
 
 
 class TagArticleListView(generic.ListView):
@@ -65,7 +96,19 @@ class AuthorListView(generic.ListView):
     paginate_by = 6
 
     def get_queryset(self):
+        form = forms.SearchForm(self.request.GET)
+        self.form = form
+        if form.is_valid():
+            query = form.cleaned_data.get('query')
+            if query:
+                articles = search.get_content_for_search_query(query, 'authors')
+                return articles
         return models.Author.objects.annotate(Count('article')).order_by('-article__count')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form
+        return context
 
 
 class AuthorDetailView(generic.ListView):

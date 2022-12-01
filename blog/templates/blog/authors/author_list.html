@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="{% static 'blog/css/author_list.css' %}">
 {% endblock %}
 
+{% block search %}
+    <form action="{% url 'blog:authors' %}">
+        {{ form }}
+        <input type="submit" value="Искать">
+    </form>
+{% endblock %}
+
 {% block content %}
     <section class="authors">
         <h2>Авторы</h2>

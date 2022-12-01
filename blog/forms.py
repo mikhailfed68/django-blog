@@ -19,3 +19,7 @@ class TagFrom(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ['name']
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(label='Поиск', max_length=255, required=False)
