@@ -12,7 +12,7 @@ class ArticleForm(forms.ModelForm):
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = ['first_name', 'surname', 'alias', 'email']
+        fields = ['first_name', 'surname', 'alias', 'email', 'tags']
 
 
 class TagFrom(forms.ModelForm):

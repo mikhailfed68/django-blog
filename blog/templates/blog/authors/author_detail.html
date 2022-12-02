@@ -5,6 +5,7 @@
 {% block style %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'blog/css/article_list.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/tags/tags.css' %}">
     <style>
         .link-pagination, .pagination {
             color: var(--main-color);
@@ -24,6 +25,16 @@
     <p><b>Полностью: </b>{{ author.first_name }} {{ author.surname }}</p>
     <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
     <p class="about_author"><b>О себе: </b>Тут должно быть небольшое описание в будущем.</p>
+
+    {% if author.tags.all %}
+    <p>Следит за тегами:</p>
+        <div class="tags-body">
+        {% for tag in author.tags.all %}
+        <a href="{% url 'blog:articles_by_tag' tag.id %}"><div class="tag">{{ tag.name }}&nbsp;</div></a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <br>
     <section>
         <h2 class="section-header">Cтатьи автора</h2>

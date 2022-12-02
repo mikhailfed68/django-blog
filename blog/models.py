@@ -16,6 +16,7 @@ class Author(TimeStampedModel):
     surname = models.CharField('Ваша фамилия', max_length=16)
     alias = models.CharField('Ваш псевдоним', max_length=16, unique=True)
     email = models.EmailField('Ваш адрес электронной почты', unique=True)
+    tags = models.ManyToManyField('Tag', verbose_name='Теги')
 
     def __str__(self):
         return self.alias
