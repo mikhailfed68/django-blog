@@ -1,0 +1,12 @@
+main {
+    background: var(--main-background);
+}
+
+p {
+    white-space: break-spaces;
+}
+
+.edit-link, .alias-link {
+    color: var(--main-color);
+    text-decoration: underline;
+}
