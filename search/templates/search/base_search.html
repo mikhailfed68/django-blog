@@ -1,0 +1,8 @@
+{% extends 'blog/base.html' %}
+
+{% block search %}
+    <form action="{% url 'search:search' %}">
+        {{ form }}
+        <input type="submit" value="Искать">
+    </form>
+{% endblock %}

@@ -1,4 +1,4 @@
-{% extends "blog/base.html" %}
+{% extends 'search/base_search.html' %}
 
 {% block style %}
     {% load static %}
@@ -7,9 +7,7 @@
 
 {% block content %}
     <section>
-        <h2 class="section-header">Недавние статьи</h2>
-
-        {% for article in articles %}
+        {% for article in search_result %}
         <a class="click" href="{% url 'blog:article_detail' article.id %}">
             <article class="article">
                 <div class="article-body">

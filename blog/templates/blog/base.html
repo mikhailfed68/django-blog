@@ -20,6 +20,12 @@
                 <li><a href="{% url 'blog:new_author' %}">Создать автора</a></li>
             </ul>
         </nav>
+        <nav class="menu">
+            <ul>
+                <li><a href="{% url 'search:search' %}">Поиск</a></li>
+                <li><a href="">Вход</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
         {% if messages %}

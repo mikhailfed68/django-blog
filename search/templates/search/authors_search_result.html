@@ -1,4 +1,4 @@
-{% extends "blog/base.html" %}
+{% extends 'search/base_search.html' %}
 
 {% block title %}Авторы{% endblock %}
 
@@ -10,7 +10,7 @@
 {% block content %}
     <section class="authors">
         <h2>Авторы</h2>
-        {% for author in authors %}
+        {% for author in search_result %}
         <a href="{% url 'blog:author_detail' author.id %}" class="link-author">
         <div class="body">
             <div class="alias">{{ author.alias }}</div>

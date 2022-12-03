@@ -67,3 +67,7 @@ def get_content_for_search_query(search_query, target_type, sort=None):
         return get_tags_for_search_query(search_query)
     else:
         raise Http404('Not Found')
+
+
+def get_template_name(target_type):
+    return f'search/{target_type}_search_result.html'
