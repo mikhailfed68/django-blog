@@ -21,10 +21,10 @@
 
 {% block content %}
     <h2>Об авторе</h2>
-    <p><b>Псевдоним: </b>{{ author.alias }}</p>
-    <p><b>Полностью: </b>{{ author.first_name }} {{ author.surname }}</p>
+    <p><b>Псевдоним: </b>{{ author.user.get_username }}</p>
+    <p><b>Полностью: </b>{{ author.user.get_full_name }}</p>
     <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
-    <p class="about_author"><b>О себе: </b>Тут должно быть небольшое описание в будущем.</p>
+    <p class="about_author"><b>О себе: </b>{{ author.about_yourself }}</p>
 
     {% if author.tags.all %}
     <p>Следит за тегами:</p>

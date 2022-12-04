@@ -84,26 +84,26 @@ class AuthorDetailView(generic.ListView):
         return context
 
 
-class AuthorFormCreateView(View):
-    """
-    Возвращает форму создания автора (метод get)
-    или создает нового автора в базе данных
-    и выполняет редирект на главную старницу (метод post).
-    """
-    def get(self, request, *args, **kwargs):
-        form = forms.AuthorForm()
-        return render(
-            request,
-            'blog/authors/new_author.html',
-            {'form': form})
+#     class AuthorFormCreateView(View):
+#         """
+#         Возвращает форму создания автора (метод get)
+#         или создает нового автора в базе данных
+#         и выполняет редирект на главную старницу (метод post).
+#         """
+#         def get(self, request, *args, **kwargs):
+#             form = forms.AuthorForm()
+#             return render(
+#                 request,
+#                 'blog/authors/new_author.html',
+#                 {'form': form})
 
-    def post(self, request, *args, **kwargs):
-        form = forms.AuthorForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Профиль был успешно создан')
-            return redirect('blog:authors')
-        return render(request, 'blog/authors/new_author.html', {'form': form})
+#         def post(self, request, *args, **kwargs):
+#             form = forms.AuthorForm(request.POST)
+#             if form.is_valid():
+#                 form.save()
+#                 messages.success(request, 'Профиль был успешно создан')
+#                 return redirect('blog:authors')
+#             return render(request, 'blog/authors/new_author.html', {'form': form})
 
 
 class ArticleFormCreateView(View):

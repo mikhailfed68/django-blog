@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 from blog.services.blog import get_default_language
 
@@ -11,24 +12,19 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
-class Author(TimeStampedModel):
-    first_name = models.CharField('Ваше имя', max_length=16)
-    surname = models.CharField('Ваша фамилия', max_length=16)
-    alias = models.CharField('Ваш псевдоним', max_length=16, unique=True)
-    email = models.EmailField('Ваш адрес электронной почты', unique=True)
-    tags = models.ManyToManyField('Tag', verbose_name='Теги')
+class Author(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    about_yourself = models.TextField('О себе', null=True)
+    tags = models.ManyToManyField('Tag', verbose_name='Следит за данными тегами', blank=True)
 
     def __str__(self):
-        return self.alias
-
-    class Meta:
-        ordering = ['-created_at']
+        return self.user.get_username()
 
 
 class Article(TimeStampedModel):
-    author = models.ForeignKey(Author, verbose_name='Автор', on_delete=models.CASCADE)
     language = models.ForeignKey('Language', verbose_name='Язык', on_delete=models.SET(get_default_language))
-    tags = models.ManyToManyField('Tag', verbose_name='Теги')
+    author = models.ForeignKey(Author, verbose_name='Автор', on_delete=models.CASCADE)
+    tags = models.ManyToManyField('Tag', verbose_name='Теги', blank=True)
     title = models.CharField('Заголовок', max_length=256, unique=True)
     body = models.TextField('Содержание', unique=True)
 

@@ -58,7 +58,7 @@ main {
     padding: 50px 100px 50px 100px;
     padding-top: calc(var(--header-height) + 1em);
 
-    background-image: url('../images/background.jpg');
+    background:rgb(168, 177, 177);
     background-size: cover;
 }
 

@@ -18,13 +18,18 @@
                 <li><a href="{% url 'blog:tags' %}">Теги</a></li>
                 <li><a href="{% url 'blog:authors' %}">Авторы</a></li>
                 <li><a href="{% url 'blog:new_article' %}">Создать статью</a></li>
-                <li><a href="{% url 'blog:new_author' %}">Создать автора</a></li>
+                <li><a href="">Создать автора</a></li>
             </ul>
         </nav>
         <nav class="menu">
             <ul>
                 <li><a href="{% url 'search:search' %}">Поиск</a></li>
-                <li><a href="">Вход</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="">{{ user.get_username }}</a></li>
+                <li><a href="{% url 'logout' %}?next={{request.path}}">Выйти</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}?next={{request.path}}">Войти</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

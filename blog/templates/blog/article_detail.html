@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ article.title}} | {{ article.author.alias }}{% endblock %}
+{% block title %}{{ article.title}} | {{ article.author.user.username }}{% endblock %}
 
 {% block style %}
 {% load static %}
@@ -16,7 +16,7 @@
         {% endfor %}
     </div>
     <a href="{% url 'blog:update_article' article.id %}" class="edit-link">Редактировать</a>
-    <h4><a href="{% url 'blog:author_detail' article.author.id %}" class="alias-link">{{ article.author.alias }}</a></h4>
+    <h4><a href="{% url 'blog:author_detail' article.author.id %}" class="alias-link">{{ article.author.user.get_username }}</a></h4>
     <p>Язык: {{ article.language }}</p>
     <p>{{ article.body }}</p>
 {% endblock %}

@@ -17,6 +17,5 @@ urlpatterns = [
     path('tags/', views.TagListView.as_view(), name='tags'),
 
     path('authors/', views.AuthorListView.as_view(), name='authors'),
-    path('authors/new/', views.AuthorFormCreateView.as_view(), name='new_author'),
     path('author/<int:pk>/', views.AuthorDetailView.as_view(), name='author_detail'),
 ]

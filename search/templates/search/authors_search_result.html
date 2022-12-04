@@ -13,9 +13,9 @@
         {% for author in search_result %}
         <a href="{% url 'blog:author_detail' author.id %}" class="link-author">
         <div class="body">
-            <div class="alias">{{ author.alias }}</div>
+            <div class="alias">{{ author.user.get_username }}</div>
             <div class="fullname">
-                {{ author.first_name }} {{ author.surname }}
+                {{ author.user.get_full_name }}
             </div>
             <div class="publications">
                 Публикаций: {{ author.article__count }}
