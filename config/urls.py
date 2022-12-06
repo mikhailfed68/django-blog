@@ -24,5 +24,8 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('', include('users.urls')),
+    # 'неявные' view из auth app (шаблоны лежат в /templates/registration)
+    path('users/', include('django.contrib.auth.urls')),
+    # остальные view и шаблоны пользователей лежат в users app
+    path('users/', include('users.urls'))
 ]

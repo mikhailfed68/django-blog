@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} {{ author.alias }} | Авторы {% endblock %}
+{% block title %} {{ author.get_username }} | Авторы {% endblock %}
 
 {% block style %}
     {% load static %}
@@ -21,15 +21,18 @@
 
 {% block content %}
     <h2>Об авторе</h2>
-    <p><b>Псевдоним: </b>{{ author.user.get_username }}</p>
-    <p><b>Полностью: </b>{{ author.user.get_full_name }}</p>
+    {% if user.get_username == article.author.get_username and perms.user.change_user %}
+    <p><a href="">Редактировать</a></p>
+    {% endif %}
+    <p><b>Псевдоним: </b>{{ author.get_username }}</p>
+    <p><b>Полностью: </b>{{ author.get_full_name }}</p>
     <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
-    <p class="about_author"><b>О себе: </b>{{ author.about_yourself }}</p>
+    <p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>
 
-    {% if author.tags.all %}
+    {% if author.profile.tags.all %}
     <p>Следит за тегами:</p>
         <div class="tags-body">
-        {% for tag in author.tags.all %}
+        {% for tag in author.profile.tags.all %}
         <a href="{% url 'blog:articles_by_tag' tag.id %}"><div class="tag">{{ tag.name }}&nbsp;</div></a>
         {% endfor %}
     </div>

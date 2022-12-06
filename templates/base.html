@@ -16,7 +16,7 @@
             <ul class="menu">
                 <li><a href="{% url 'blog:index' %}">Главная</a></li>
                 <li><a href="{% url 'blog:tags' %}">Теги</a></li>
-                <li><a href="{% url 'blog:authors' %}">Авторы</a></li>
+                <li><a href="{% url 'users:users' %}">Авторы</a></li>
                 <li><a href="{% url 'blog:new_article' %}">Создать Статью</a></li>
             </ul>
         </nav>
@@ -24,11 +24,11 @@
             <ul>
                 <li><a href="{% url 'search:search' %}">Поиск</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="">{{ user.get_username }}</a></li>
-                <li><a href="{% url 'users:logout' %}?next={{request.path}}">Выйти</a></li>
+                <li><a href="{% url 'users:profile' user.username %}">{{ user.get_username }}</a></li>
+                <li><a href="{% url 'logout' %}?next={{request.path}}">Выйти</a></li>
                 {% else %}
                 <li><a href="{% url 'users:signup' %}">Регистрация</a></li>
-                <li><a href="{% url 'users:login' %}?next={{request.path}}">Войти</a></li>
+                <li><a href="{% url 'login' %}?next={{request.path}}">Войти</a></li>
                 {% endif %}
             </ul>
         </nav>

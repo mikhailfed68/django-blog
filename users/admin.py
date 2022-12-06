@@ -1,18 +1,17 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from users.models import User
-from blog.models import Author
+from users.models import User, Profile
 
 
-class AuthorInLine(admin.StackedInline):
-    model = Author
+class ProfileInLine(admin.StackedInline):
+    model = Profile
     can_delete = False
-    verbose_name_plural = 'Авторы'
+    verbose_name_plural = 'Профили'
 
 
 class UserAdmin(BaseUserAdmin):
-    inlines = (AuthorInLine,)
+    inlines = (ProfileInLine,)
 
 
 admin.site.register(User, UserAdmin)
