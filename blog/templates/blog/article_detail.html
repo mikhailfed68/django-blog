@@ -15,8 +15,10 @@
         <a href="{% url 'blog:articles_by_tag' tag.id %}"><div class="tag">{{ tag.name }}&nbsp;</div></a>
         {% endfor %}
     </div>
+    {% if user.get_username == article.author.get_username and perms.blog.change_article %}
     <a href="{% url 'blog:update_article' article.id %}" class="edit-link">Редактировать</a>
-    <h4><a href="{% url 'blog:author_detail' article.author.id %}" class="alias-link">{{ article.author.user.get_username }}</a></h4>
+    {% endif %}
+    <h4><a href="{% url 'users:profile' article.author.get_username %}" class="alias-link">{{ article.author.get_username }}</a></h4>
     <p>Язык: {{ article.language }}</p>
     <p>{{ article.body }}</p>
 {% endblock %}
