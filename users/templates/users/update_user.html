@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование профиля | {{ user.get_username }} {% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ user_form.as_div }}
+        {{ profile_form.as_div }}
+        <button>Сохранить</button>
+    </form>
+    <form action="{% url 'users:destroy_user' user.get_username %}" method="post">
+        {% csrf_token %}
+        <button>Удалить аккаунт</button>
+    </form>
+{% endblock %}

@@ -21,8 +21,8 @@
 
 {% block content %}
     <h2>Об авторе</h2>
-    {% if user.get_username == article.author.get_username and perms.user.change_user %}
-    <p><a href="">Редактировать</a></p>
+    {% if user.get_username == author.get_username %}
+    <p><a href="{% url 'users:update_user' user.get_username %}">Редактировать</a></p>
     {% endif %}
     <p><b>Псевдоним: </b>{{ author.get_username }}</p>
     <p><b>Полностью: </b>{{ author.get_full_name }}</p>
