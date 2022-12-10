@@ -5,7 +5,7 @@ from django.shortcuts import (
 )
 from django.conf import settings
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from django.contrib import messages
 from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.models import Group
@@ -14,35 +14,23 @@ from django.contrib.auth.views import logout_then_login
 
 from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
 from users.services import get_user_list
+from users import models
 
 from blog.services.blog import get_articles_by_author
 
 
-class SiqnUp(View):
-    """
-    Регистрирует нового пользователя в блоге и
-    выполняет его аутентификацию.
-    Для уже авторизованных пользователей выполняет редирект
-    на главную страницу.
-    """
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect(settings.LOGIN_REDIRECT_URL)
-        form = SignUpForm()
-        return render(
-            request,
-            'registration/signup.html',
-            dict(form=form),
-            )
+class SiqnUp(CreateView):
+    model = models.User
+    form_class = SignUpForm
+    template_name = 'registration/signup.html'
+    success_url = settings.LOGIN_REDIRECT_URL
 
-    def post(self, request):
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.groups.add(Group.objects.get(name='base_members_of_blog'))
-            login(request, user)
-            messages.success(request, 'Вы успешно зарегестрированы!')
-            return redirect(settings.LOGIN_REDIRECT_URL)
+    def form_valid(self, form):
+        user = form.save()
+        user.groups.add(Group.objects.get(name='base_members_of_blog'))
+        login(self.request, user)
+        messages.success(self.request, 'Вы успешно зарегестрированы!')
+        return redirect(self.success_url)
 
 
 class ProfileDetailView(ListView):

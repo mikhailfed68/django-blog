@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin,
     PermissionRequiredMixin,
 )
+from django.views.generic.edit import CreateView
 
 from blog import models, forms
 from blog.services.blog import get_article_by_id, is_author_of_article
@@ -57,7 +58,7 @@ class TagArticleListView(generic.ListView):
         return context
 
 
-class ArticleFormCreateView(PermissionRequiredMixin, View):
+class ArticleFormCreateView(PermissionRequiredMixin, CreateView):
     """
     Возвращает форму создания статьи (метод get)
     или создает новую статью в базе данных
@@ -65,24 +66,17 @@ class ArticleFormCreateView(PermissionRequiredMixin, View):
     """
     permission_required = 'blog.add_article'
 
-    def get(self, request, *args, **kwargs):
-        form = forms.ArticleForm()
-        return render(
-            request,
-            'blog/new_article.html',
-            {'form': form})
+    model = models.Article
+    fields = ['title', 'body', 'language', 'tags']
+    template_name = 'blog/new_article.html'
 
-    def post(self, request, *args, **kwargs):
-        form = forms.ArticleForm(request.POST)
-        print(form.fields)
-        if form.is_valid():
+    def form_valid(self, form):
             new_article = form.save(commit=False)
-            new_article.author = request.user
+            new_article.author = self.request.user
             new_article.save()
             form.save_m2m()
-            messages.add_message(request, messages.SUCCESS, 'Новая статья была успешно создана')
+            messages.add_message(self.request, messages.SUCCESS, 'Новая статья была успешно создана')
             return redirect('blog:index')
-        return render(request, 'blog/new_article.html', {'form': form})
 
 
 class ArticleFormUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):

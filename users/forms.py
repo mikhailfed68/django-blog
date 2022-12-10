@@ -7,7 +7,7 @@ from users.models import User, Profile
 class SignUpForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("username",)
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
 
 class ChangeProfileForm(forms.ModelForm):
