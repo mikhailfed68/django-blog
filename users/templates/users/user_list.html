@@ -2,26 +2,26 @@
 
 {% block title %}Авторы{% endblock %}
 
-{% block style %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'blog/css/author_list.css' %}">
-{% endblock %}
-
 {% block content %}
-    <section class="authors">
-        <h2>Авторы</h2>
+    <section>
+        <h2 class="display-4">Авторы</h2>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for author in authors %}
-        <a href="{% url 'users:profile' author.get_username %}" class="link-author">
-        <div class="body">
-            <div class="alias">{{ author.get_username }}</div>
-            <div class="fullname">
-                {{ author.get_full_name }}
+        <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">{{ author.get_username }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ author.get_full_name }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Публикаций: {{ author.article__count }}</h6>
+                <p class="card-text">О себе будет немного</p>
+                <a href="{% url 'users:profile' author.username %}" class="btn btn-outline-primary">Посмотреть</a>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted"> Был в сети {{ author.last_login }}</small>
+              </div>
             </div>
-            <div class="publications">
-                Публикаций: {{ author.article__count }}
-            </div>
-        </div>
-        </a>
+          </div>
         {% endfor %}
+      </div>
     </section>
 {% endblock %}

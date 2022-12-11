@@ -2,70 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{% block title %}Главная{% endblock %}</title>
 
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {# Load the tag library #}
+    {% load bootstrap5 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    {# Display django.contrib.messages as Bootstrap alerts #}
+    {% bootstrap_messages %}
 
     {% block style %}{% endblock %}
 </head>
-<body>
-    <header>
-        <div class="logo"'>ИНКОГНИТО<span class="end-logo">.РУ</span></div>
-        <nav>
-            <ul class="menu">
-                <li><a href="{% url 'blog:index' %}">Главная</a></li>
-                <li><a href="{% url 'blog:tags' %}">Теги</a></li>
-                <li><a href="{% url 'users:users' %}">Авторы</a></li>
-                <li><a href="{% url 'blog:new_article' %}">Создать Статью</a></li>
+<body style="padding-top: 3.5rem" style="padding-bottom: 3.5rem;">
+  <header>
+      <nav class="navbar navbar-expand-lg bg-light fixed-top">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Переключатель навигации">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <div class="navbar-brand">Incognito</div>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'blog:index' %}">Главная</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:users' %}">Авторы</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'blog:tags' %}">Теги</a>
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'users:profile' user.username %}">{{ user.get_username }}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:signup' %}">Регистрация</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}?next={{request.path}}">Войти</a>
+              </li>
+              {% endif %}
             </ul>
-        </nav>
-        <nav class="menu">
-            <ul>
-                <li><a href="{% url 'search:search' %}">Поиск</a></li>
-                {% if user.is_authenticated %}
-                <li><a href="{% url 'users:profile' user.username %}">{{ user.get_username }}</a></li>
-                <li><a href="{% url 'logout' %}">Выйти</a></li>
-                {% else %}
-                <li><a href="{% url 'users:signup' %}">Регистрация</a></li>
-                <li><a href="{% url 'login' %}?next={{request.path}}">Войти</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
-    <main>
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+            <form class="d-flex me-3" role="search">
+              <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+              <button class="btn btn-outline-primary" type="submit">Поиск</button>
+            </form>
+        </div>
+      </nav>
+  </header>
 
+
+    <main class="container">
         {% block search %}{% endblock %}
 
         {% block content %}{% endblock %}
 
         {% block pagination %}
             {% if is_paginated %}
-            <div class="pagination">
-                <span class="page-links">
+            <nav aria-label="Search results pages" class="mt-4">
+                <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
-                        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="link-pagination">назад</a>
+                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Предыдущая</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="">Предыдущая</a></li>
                     {% endif %}
-                    <span class="page-current">
-                        cтраница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
-                    </span>
+
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+
                     {% if page_obj.has_next %}
-                        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" class="link-pagination">далее</a>
+                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Следующая</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="">Следующая</a></li>
                     {% endif %}
-                </span>
-            </div>
+                </ul>
+              </nav>
             {% endif %}
         {% endblock %}
     </main>
-    <div class="clear"></div>
+
     <footer>
     </footer>
+
 </body>
 </html>

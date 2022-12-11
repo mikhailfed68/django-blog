@@ -2,14 +2,8 @@
 
 {% block title %}{{ article.title}} | {{ article.author.user.username }}{% endblock %}
 
-{% block style %}
-{% load static %}
-    <link rel="stylesheet" href="{% static 'blog/css/article_detail.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/css/tags/tags.css' %}">
-{% endblock %}
-
 {% block content %}
-    <h1>{{ article.title }}</h1>
+    <h2 class="display-4">{{ article.title }}</h1>
     <div class="tags-body">
         {% for tag in article.tags.all %}
         <a href="{% url 'blog:articles_by_tag' tag.id %}"><div class="tag">{{ tag.name }}&nbsp;</div></a>

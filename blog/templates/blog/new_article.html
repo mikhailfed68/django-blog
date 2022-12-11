@@ -2,18 +2,21 @@
 
 {% block title %}Новая статья{% endblock %}
 
-{% block style %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'blog/css/base_article_form.css' %}">
-{% endblock %}
-
 {% block content %}
-    <h1>Создание новой статьи</h1>
-    <form action="{% url 'blog:new_article' %}" method="post">
-        {% csrf_token %}
-        <table>
-            {{ form }}
-        </table>
-        <button>Опубликовать</button>
-    </form>
+
+<div class="container">
+    <div class="row">
+        <h2 class="display-4">Создание новой статьи</h1>
+        <form action="{% url 'blog:new_article' %}" method="post">
+            {% csrf_token %}
+            {% load bootstrap5 %}
+            {% bootstrap_form form %}
+            {% buttons %}
+            <button type="submit" class="btn btn-primary">
+                Опубликовать
+              </button>
+            {% endbuttons %}
+        </form>
+    </div>
+</div>
 {% endblock %}

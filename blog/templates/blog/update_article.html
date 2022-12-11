@@ -2,23 +2,25 @@
 
 {% block title %}Редактирование статьи{% endblock %}
 
-{% block style %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'blog/css/base_article_form.css' %}">
-{% endblock %}
-
 {% block content %}
-<h1>Редактирование статьи</h1>
+<h2 class="display-4">Редактирование статьи</h4>
 <form action="{% url 'blog:update_article' article_id %}" method="post">
     {% csrf_token %}
-    <table>
-        {{ form }}
-    </table>
-    <button>Сохранить</button>
+    {% load bootstrap5 %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">
+        Сохранить
+    </button>
+    {% endbuttons %}
 </form>
 
 <form action="{% url 'blog:destroy_article' article_id %}" method="post">
     {% csrf_token %}
-    <button>Удалить</button>
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">
+        Удалить
+    </button>
+    {% endbuttons %}
 </form>
 {% endblock %}
