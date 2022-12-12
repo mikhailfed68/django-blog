@@ -14,5 +14,6 @@
     {% endif %}
     <h4><a href="{% url 'users:profile' article.author.get_username %}" class="alias-link">{{ article.author.get_username }}</a></h4>
     <p>Язык: {{ article.language }}</p>
-    <p>{{ article.body }}</p>
+    {% load markdown_extras %}
+    <p>{{ article.body|markdown|safe }}</p>
 {% endblock %}
