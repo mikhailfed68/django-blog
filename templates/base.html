@@ -18,82 +18,77 @@
 
     {% block style %}{% endblock %}
 </head>
-<body style="padding-top: 3.5rem" style="padding-bottom: 3.5rem;">
+<body>
   <header>
-      <nav class="navbar navbar-expand-lg bg-light fixed-top">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Переключатель навигации">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <div class="navbar-brand">Incognito</div>
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'blog:index' %}">Главная</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'users:users' %}">Авторы</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'blog:tags' %}">Теги</a>
-              </li>
-              {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'users:profile' user.username %}">{{ user.get_username }}</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
-              </li>
-              {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'users:signup' %}">Регистрация</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}?next={{request.path}}">Войти</a>
-              </li>
-              {% endif %}
-            </ul>
-            <form class="d-flex me-3" role="search">
-              <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
-              <button class="btn btn-outline-primary" type="submit">Поиск</button>
-            </form>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded" aria-label="Eleventh navbar example">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'blog:index' %}">Incognito</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExample09">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'blog:index' %}">Главная</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'users:users' %}">Авторы</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blog:tags' %}">Теги</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'users:profile' user.username %}">Мой профиль</a>
+            </li>
+            {% endif %}
+          </ul>
+          <form class="me-2 mb-2 mb-sm-2 mb-md-2 mt-lg-2">
+            <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+          </form>
+            {% if user.is_authenticated %}
+          <div>
+              <a class="btn btn-outline-primary me-2" href="{% url 'logout' %}">Выйти</a>
+            {% else %}
+              <a class="btn btn-outline-primary me-2" href="{% url 'users:signup' %}">Регистрация</a>
+              <a class="btn btn-outline-primary me-2" href="{% url 'login' %}?next={{request.path}}">Вход</a>
+            {% endif %}
+          </div>
         </div>
-      </nav>
+      </div>
+    </nav>
   </header>
 
 
-    <main class="container">
-        {% block search %}{% endblock %}
+  <main class="container">
+      {% block search %}{% endblock %}
 
-        {% block content %}{% endblock %}
+      {% block content %}{% endblock %}
 
-        {% block pagination %}
-            {% if is_paginated %}
-            <nav aria-label="Search results pages" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    {% if page_obj.has_previous %}
-                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Предыдущая</a></li>
-                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
-                    {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="">Предыдущая</a></li>
-                    {% endif %}
+      {% block pagination %}
+          {% if is_paginated %}
+          <nav aria-label="Search results pages" class="mt-4">
+              <ul class="pagination justify-content-center">
+                  {% if page_obj.has_previous %}
+                  <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Предыдущая</a></li>
+                  <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+                  {% else %}
+                  <li class="page-item disabled"><a class="page-link" href="">Предыдущая</a></li>
+                  {% endif %}
 
-                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+                  <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
 
-                    {% if page_obj.has_next %}
-                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
-                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Следующая</a></li>
-                    {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="">Следующая</a></li>
-                    {% endif %}
-                </ul>
-              </nav>
-            {% endif %}
-        {% endblock %}
-    </main>
-
-    <footer>
-    </footer>
-
+                  {% if page_obj.has_next %}
+                  <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+                  <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Следующая</a></li>
+                  {% else %}
+                  <li class="page-item disabled"><a class="page-link" href="">Следующая</a></li>
+                  {% endif %}
+              </ul>
+            </nav>
+          {% endif %}
+      {% endblock %}
+  </main>
 </body>
 </html>
