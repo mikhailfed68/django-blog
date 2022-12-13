@@ -5,6 +5,7 @@ from blog.services.blog import get_default_language
 
 
 class TimeStampedModel(models.Model):
+    from django.utils import timezone
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -26,8 +27,9 @@ class Article(TimeStampedModel):
         ordering = ['-created_at']
 
 
-class Tag(models.Model):
+class Tag(TimeStampedModel):
     name = models.CharField('Тег', max_length=100, unique=True)
+    description = models.CharField(max_length=256)
 
     def __str__(self):
         return self.name
