@@ -4,6 +4,18 @@
 
 {% block content %}
 <div>
+<h2 class="display-4">Хабы</h2>
+
+    <div class="btn-group">
+        <button class="btn btn-outline-primary dropdown-toggle mt-2 mb-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Сортировать
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{# utl 'blog:tags' #}?sort=new">Новые</a></li>
+            <li><a class="dropdown-item" href="{# utl 'blog:tags' #}?sort=top">Популярные</a></li>
+        </ul>
+      </div>
+
     {% for tag in tags %}
     <a href="{% url 'blog:articles_by_tag' tag.id %}"><div>{{ tag.name }}&nbsp;</div></a>
     {% endfor %}

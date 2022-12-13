@@ -5,6 +5,20 @@
 {% block content %}
     <section>
         <h2 class="display-4">Авторы</h2>
+
+      <div class="btn-group">
+        <button class="btn btn-outline-primary dropdown-toggle mt-2 mb-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Сортировать
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{# url 'users:users' #}?sort=new">Новые</a></li>
+            <li><a class="dropdown-item" href="{# url 'users:users' #}?sort=top">Популярные</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="{# url 'users:users' #}?sort=articles_count">По количеству публикаций</a></li>
+        </ul>
+      </div>
+  
+
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for author in authors %}
         <div class="col">

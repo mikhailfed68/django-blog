@@ -3,7 +3,7 @@
 {% block title %} Автор | {{ author.get_username }} {% endblock %}
 
 {% block content %}
-    <h2>Об авторе</h2>
+    <h2 class="display-4">Об авторе</h2>
     {% if user.get_username == author.get_username %}
     <a href="{% url 'blog:new_article' %}">Создать Статью</a>
     <p><a href="{% url 'users:update_user' user.get_username %}">Редактировать</a></p>

@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMi
 from django.contrib.auth.views import logout_then_login
 
 from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
-from users.services import get_user_list
+from users.services import get_user_list, get_users_by_sort
 from users import models
 
 from blog.services.blog import get_articles_by_author
@@ -60,7 +60,13 @@ class UserListView(ListView):
     """
     context_object_name = 'authors'
     paginate_by = 10
-    queryset = get_user_list()
+
+    def get_queryset(self):
+        "If sort parameter exists, it'll retrun a sorted queryset"
+        sort = self.request.GET.get('sort')
+        if sort:
+            return get_users_by_sort(sort)
+        return get_user_list()
 
 
 class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):

@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import (
 from django.views.generic.edit import CreateView
 
 from blog import models, forms
-from blog.services.blog import get_article_by_id, is_author_of_article
+from blog.services.blog import get_article_by_id, is_author_of_article, get_articles_by_sort, get_tags_by_sort
 
 
 class IndexListView(generic.ListView):
@@ -21,6 +21,13 @@ class IndexListView(generic.ListView):
     template_name = 'blog/index.html'
     context_object_name = 'articles'
     paginate_by = 6
+
+    def get_queryset(self):
+        "If sort parameter exists, it'll retrun a sorted queryset"
+        sort = self.request.GET.get('sort')
+        if sort:
+            return get_articles_by_sort(sort)
+        return super().get_queryset()
 
 
 class ArticleDetailView(generic.DetailView):
@@ -37,6 +44,13 @@ class TagListView(generic.ListView):
     template_name = 'blog/tags/tag_list.html'
     context_object_name = 'tags'
     paginate_by = 20
+
+    def get_queryset(self):
+        "If sort parameter exists, it'll retrun a sorted queryset"
+        sort = self.request.GET.get('sort')
+        if sort:
+            return get_tags_by_sort(sort)
+        return super().get_queryset()
 
 
 class TagArticleListView(generic.ListView):

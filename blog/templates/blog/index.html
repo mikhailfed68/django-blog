@@ -4,6 +4,16 @@
     <section>
         <h2 class="display-4">Недавние статьи</h2>
 
+      <div class="btn-group">
+        <button class="btn btn-outline-primary dropdown-toggle mt-2 mb-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Сортировать
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'blog:index' %}?sort=new">Новые</a></li>
+            <li><a class="dropdown-item" href="{% url 'blog:index' %}?sort=top">Популярные</a></li>
+        </ul>
+      </div>
+
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for article in articles %}
             <div class="col">
