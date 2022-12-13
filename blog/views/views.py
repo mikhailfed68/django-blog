@@ -40,9 +40,9 @@ class TagListView(generic.ListView):
     Возвращает список по 20 последних тегов
     и далее использует пагинацию.
     """
-    model = models.Tag
-    template_name = 'blog/tags/tag_list.html'
-    context_object_name = 'tags'
+    model = models.Blog
+    template_name = 'blog/blog_list.html'
+    context_object_name = 'blogs'
     paginate_by = 20
 
     def get_queryset(self):
@@ -53,22 +53,22 @@ class TagListView(generic.ListView):
         return super().get_queryset()
 
 
-class TagArticleListView(generic.ListView):
+class BlogArticleListView(generic.ListView):
     """
     Возвращает список по 10 последних статей
     по конкретному тегу и далее использует пагинацию
     """
-    template_name = 'blog/articles_by_tag.html'
+    template_name = 'blog/articles_by_blog.html'
     context_object_name = 'articles'
     paginate_by = 10
 
     def get_queryset(self):
-        self.tag = get_object_or_404(models.Tag, pk=self.kwargs['pk'])
-        return models.Article.objects.filter(tags=self.tag).order_by('-created_at')
+        self.blog = get_object_or_404(models.Blog, pk=self.kwargs['pk'])
+        return models.Article.objects.filter(tags=self.blog).order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tag'] = self.tag
+        context['blog'] = self.blog
         return context
 
 
@@ -81,7 +81,7 @@ class ArticleFormCreateView(PermissionRequiredMixin, CreateView):
     permission_required = 'blog.add_article'
 
     model = models.Article
-    fields = ['title', 'body', 'language', 'tags']
+    fields = ['title', 'body', 'language', 'blogs']
     template_name = 'blog/new_article.html'
 
     def form_valid(self, form):

@@ -23,12 +23,12 @@ def get_articles_by_sort(sort):
 
 def get_tags_sort_new():
     'Return tags sorted by newest'
-    return models.Tag.objects.order_by('-created_at')
+    return models.Blog.objects.order_by('-created_at')
 
 
 def get_tags_sort_top():
     'Return tags sorted by popularty'
-    return models.Tag.objects.all()
+    return models.Blog.objects.all()
 
 
 def get_tags_by_sort(sort):

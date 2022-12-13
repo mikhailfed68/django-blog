@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Теги{% endblock %}
+{% block title %}Блоги{% endblock %}
 
 {% block content %}
 <div>
-<h2 class="display-4">Хабы</h2>
+<h2 class="display-4">Блоги</h2>
 
     <div class="btn-group">
         <button class="btn btn-outline-primary dropdown-toggle mt-2 mb-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -16,8 +16,11 @@
         </ul>
       </div>
 
-    {% for tag in tags %}
-    <a href="{% url 'blog:articles_by_tag' tag.id %}"><div>{{ tag.name }}&nbsp;</div></a>
+    {% for blog in blogs %}
+    <a href="{% url 'blog:articles_by_blog' blog.id %}"><div>{{ blog.name }}&nbsp;</div></a>
+    <p>Статей: {{ blog.article_set.count }}</p>
+    <p>Подписок: {{ blog.profile_set.count }}</p>
+    <p>Описание: {{ blog.description }}</p>
     {% endfor %}
 </div>
 {% endblock %}

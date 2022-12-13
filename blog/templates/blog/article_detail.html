@@ -5,8 +5,8 @@
 {% block content %}
     <h2 class="display-4">{{ article.title }}</h1>
     <div class="tags-body">
-        {% for tag in article.tags.all %}
-        <a href="{% url 'blog:articles_by_tag' tag.id %}"><div class="tag">{{ tag.name }}&nbsp;</div></a>
+        {% for blog in article.blogs.all %}
+        <a href="{% url 'blog:articles_by_blog' blog.id %}"><div class="blog">{{ blog.name }}&nbsp;</div></a>
         {% endfor %}
     </div>
     {% if user.get_username == article.author.get_username and perms.blog.change_article %}

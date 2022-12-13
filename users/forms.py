@@ -13,7 +13,7 @@ class SignUpForm(UserCreationForm):
 class ChangeProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['about_me', 'tags']
+        fields = ['about_me', 'blogs']
 
 
 class CustomUserChangeForm(UserChangeForm):

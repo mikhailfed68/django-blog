@@ -13,6 +13,6 @@ urlpatterns = [
     path('articles/<int:pk>/', views.ArticleDetailView.as_view(), name='article_detail'),
     path('articles/<int:id>/edit/', views.ArticleFormUpdateView.as_view(), name='update_article'),
     path('articles/<int:id>/delete/', views.ArticleFormDestroyView.as_view(), name='destroy_article'),
-    path('tags/<int:pk>/', views.TagArticleListView.as_view(), name='articles_by_tag'),
-    path('tags/', views.TagListView.as_view(), name='tags'),
+    path('blogs/<int:pk>/', views.BlogArticleListView.as_view(), name='articles_by_blog'),
+    path('blog/', views.TagListView.as_view(), name='blogs'),
 ]

@@ -26,7 +26,7 @@
                         <a href="{% url 'blog:article_detail' article.id %}" class="btn btn-outline-primary">Читать</a>
                     </div>
                     <div class="card-footer">
-                        <small class="text-muted">Обновлено 5 мин. назад</small>
+                        <small class="text-muted">{{ article.updated_at }}</small>
                     </div>
                 </article>
             </div>

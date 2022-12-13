@@ -1,11 +1,11 @@
 from django import forms
 
-from blog.models import Tag, Article
+from blog.models import Blog, Article
 
 
 class TagFrom(forms.ModelForm):
     class Meta:
-        model = Tag
+        model = Blog
         fields = ['name']
 
 class ArticleForm(forms.ModelForm):
