@@ -13,9 +13,6 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 
-    {# Display django.contrib.messages as Bootstrap alerts #}
-    {% bootstrap_messages %}
-
     {% block style %}{% endblock %}
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -60,6 +57,8 @@
     </nav>
   </header>
 
+  {# Display django.contrib.messages as Bootstrap alerts #}
+  {% bootstrap_messages %}
 
   <main class="container mt-2 mb-5">
       {% block search %}{% endblock %}
