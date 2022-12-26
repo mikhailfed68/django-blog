@@ -6,6 +6,7 @@ from django.shortcuts import (
 from django.conf import settings
 from django.views import View
 from django.views.generic import ListView, CreateView
+from django.views.generic.detail import SingleObjectMixin
 from django.contrib import messages
 from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.models import Group
@@ -33,24 +34,28 @@ class SiqnUp(CreateView):
         return redirect(self.success_url)
 
 
-class ProfileDetailView(ListView):
+class ProfileDetailView(SingleObjectMixin, ListView):
     """
-    Возвращает страницу конкретного автора
-    и все опубликованные статьи автора с пагинацией по 10 статей.
+    Return the user profile by the 'username' slug,
+    as well as all of its published articles list.
     """
-
     template_name = 'users/profile.html'
-    context_object_name = 'articles'
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
     paginate_by = 10
 
-    def get_queryset(self):
-        self.author = get_object_or_404(get_user_model(), username=self.kwargs['username'])
-        return get_articles_by_author(author=self.author)
+    def get(self, request, *args, **kwargs):
+        # return the desired User object for further processing
+        self.object = self.get_object(queryset=get_user_model().objects.all())
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['author'] = self.author
+        context['author'] = self.object
         return context
+
+    def get_queryset(self):
+        return self.object.article_set.all()
 
 
 class UserListView(ListView):
