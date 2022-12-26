@@ -1,23 +1,18 @@
-from django.shortcuts import (
-    render,
-    redirect,
-    get_object_or_404,
-)
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.views import View
 from django.views.generic import ListView, CreateView
 from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import BaseDeleteView
 from django.contrib import messages
-from django.contrib.auth import login, logout, get_user_model
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth import login, get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.views import logout_then_login
 
-from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
-from users.services import get_user_list, get_users_by_sort
 from users import models
-
-from blog.services.blog import get_articles_by_author
+from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
+from users.services import get_users_by_sort, get_users_by_newest
 
 
 class SiqnUp(CreateView):
@@ -40,18 +35,18 @@ class ProfileDetailView(SingleObjectMixin, ListView):
     as well as all of its published articles list.
     """
     template_name = 'users/profile.html'
+    context_object_name = 'author'
     slug_field = 'username'
     slug_url_kwarg = 'username'
     paginate_by = 10
 
     def get(self, request, *args, **kwargs):
-        # return the desired User object for further processing
+        "Assigning the desired User object to object atrribute for further processing."
         self.object = self.get_object(queryset=get_user_model().objects.all())
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['author'] = self.object
         return context
 
     def get_queryset(self):
@@ -59,10 +54,7 @@ class ProfileDetailView(SingleObjectMixin, ListView):
 
 
 class UserListView(ListView):
-    """
-    Возвращает список авторов в блоге и реализует
-    пагинацию по 10 статей.
-    """
+    "Rerturn the registred users list."
     context_object_name = 'authors'
     paginate_by = 10
 
@@ -71,11 +63,11 @@ class UserListView(ListView):
         sort = self.request.GET.get('sort')
         if sort:
             return get_users_by_sort(sort)
-        return get_user_list()
+        return get_users_by_newest()
 
 
 class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
-    "This view update data User as well as his data Profile"
+    "Update User data as well as his Profile data"
     permission_required = 'users.change_user'
 
     def test_func(self):
@@ -106,14 +98,19 @@ class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
         )
 
 
-class UserDestroyView(UserPassesTestMixin, PermissionRequiredMixin, View):
-    "This view destroy user"
+class UserDestroyView(
+        UserPassesTestMixin, PermissionRequiredMixin,
+        SuccessMessageMixin, BaseDeleteView):
+    "This view delete user"
     permission_required = 'users.delete_user'
 
-    def test_func(self):
-        return self.request.user.get_username() == self.kwargs.get('username')
+    model = get_user_model()
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+    success_url = settings.LOGOUT_REDIRECT_URL
 
-    def post(self, request, *args, **kwargs):
-        request.user.delete()
-        messages.success(request, 'Аккаунт успешно удален')
-        return logout_then_login(request)
+    success_message = 'Аккаунт успешно удален'
+
+    def test_func(self):
+        "Verify user identity by session user object"
+        return self.request.user.get_username() == self.kwargs.get('username')
