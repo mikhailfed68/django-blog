@@ -45,10 +45,6 @@ class ProfileDetailView(SingleObjectMixin, ListView):
         self.object = self.get_object(queryset=get_user_model().objects.all())
         return super().get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
     def get_queryset(self):
         return self.object.article_set.all()
 
