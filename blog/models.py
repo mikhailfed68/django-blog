@@ -1,5 +1,7 @@
 from django.db import models
+from django.urls import reverse
 from django.conf import settings
+
 
 from blog.services.blog import get_default_language
 
@@ -18,17 +20,20 @@ class Article(TimeStampedModel):
     body = models.TextField('Содержание', unique=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Автор', on_delete=models.CASCADE)
     language = models.ForeignKey('Language', verbose_name='Язык', on_delete=models.SET(get_default_language))
-    blogs = models.ManyToManyField('Blog', verbose_name='Теги', blank=True)
+    blogs = models.ManyToManyField('Blog', verbose_name='Блоги', blank=True)
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('blog:article_detail', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ['-created_at']
 
 
 class Blog(TimeStampedModel):
-    name = models.CharField('Тег', max_length=100, unique=True)
+    name = models.CharField('Блог', max_length=100, unique=True)
     description = models.CharField(max_length=256)
 
     def __str__(self):

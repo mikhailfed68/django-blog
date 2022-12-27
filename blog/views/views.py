@@ -1,82 +1,71 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views import generic, View
-from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth.mixins import (
-    UserPassesTestMixin,
-    PermissionRequiredMixin,
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import CreateView, UpdateView, BaseDeleteView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMixin
+
+from blog import models
+from blog.services.blog import (
+    is_author_of_article,
+    get_articles_by_sort,
+    get_tags_by_sort,
 )
-from django.views.generic.edit import CreateView
-
-from blog import models, forms
-from blog.services.blog import get_article_by_id, is_author_of_article, get_articles_by_sort, get_tags_by_sort
 
 
-class IndexListView(generic.ListView):
-    """
-    Представление, возвращающее список по 10 статей 
-    и далее использует пагинацию.
-    """
+class IndexListView(ListView):
+    "Returns the list of articles to the main page"
     model = models.Article
     template_name = 'blog/index.html'
     context_object_name = 'articles'
     paginate_by = 6
 
     def get_queryset(self):
-        "If sort parameter exists, it'll retrun a sorted queryset"
+        "If sort parameter exists, it'll retruns a sorted queryset."
         sort = self.request.GET.get('sort')
         if sort:
             return get_articles_by_sort(sort)
         return super().get_queryset()
 
 
-class ArticleDetailView(generic.DetailView):
-    """Возвращает данные конкретной статьи."""
+class ArticleDetailView(DetailView):
+    "Returns the details of article."
     model = models.Article
 
 
-class TagListView(generic.ListView):
-    """
-    Возвращает список по 20 последних тегов
-    и далее использует пагинацию.
-    """
+class BlogListView(ListView):
+    "Returns the list of blogs."
     model = models.Blog
-    template_name = 'blog/blog_list.html'
     context_object_name = 'blogs'
     paginate_by = 20
 
     def get_queryset(self):
-        "If sort parameter exists, it'll retrun a sorted queryset"
+        "If sort parameter exists, it'll retrun a sorted queryset."
         sort = self.request.GET.get('sort')
         if sort:
             return get_tags_by_sort(sort)
         return super().get_queryset()
 
 
-class BlogArticleListView(generic.ListView):
-    """
-    Возвращает список по 10 последних статей
-    по конкретному тегу и далее использует пагинацию
-    """
+class BlogDetailView(SingleObjectMixin, ListView):
+    "Retruns the details of blog and the list of articles its blog." 
     template_name = 'blog/articles_by_blog.html'
-    context_object_name = 'articles'
+    context_object_name = 'blog'
     paginate_by = 10
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=models.Blog.objects.all())
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
-        self.blog = get_object_or_404(models.Blog, pk=self.kwargs['pk'])
-        return models.Article.objects.filter(tags=self.blog).order_by('-created_at')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['blog'] = self.blog
-        return context
+        return self.object.article_set.all()
 
 
-class ArticleFormCreateView(PermissionRequiredMixin, CreateView):
+class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     """
-    Возвращает форму создания статьи (метод get)
-    или создает новую статью в базе данных
-    и выполняет редирект на главную старницу (метод post).
+    Returns a form for creation an article by GET request
+    or creates an new article by POST request.    
     """
     permission_required = 'blog.add_article'
 
@@ -84,68 +73,42 @@ class ArticleFormCreateView(PermissionRequiredMixin, CreateView):
     fields = ['title', 'body', 'language', 'blogs']
     template_name = 'blog/new_article.html'
 
+    success_message = 'Статья успешно создана!'
+
     def form_valid(self, form):
-            new_article = form.save(commit=False)
-            new_article.author = self.request.user
-            new_article.save()
-            form.save_m2m()
-            messages.add_message(self.request, messages.SUCCESS, 'Новая статья была успешно создана')
-            return redirect('blog:index')
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
-class ArticleFormUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
+class ArticleUpdateView(
+        UserPassesTestMixin, PermissionRequiredMixin,
+        SuccessMessageMixin, UpdateView):
     """
-    Возвращает форму редактирования конкретной статьи
-    с заполнеными данными (метод get)
-    или обновляет статью в базе данных
-    и выполняет редирект на страницу обновленной статьи (метод post).
+    Returns a form for updating an article by GET request
+    or updates an article by POST request.
     """
     permission_required = 'blog.change_article'
 
+    model = models.Article
+    fields = ['title', 'body', 'language', 'blogs']
+    template_name = 'blog/update_article.html'
+
+    success_message = 'Статья успешно обновлена'
+
     def test_func(self):
-        return is_author_of_article(user=self.request.user, article_id=self.kwargs.get('id'))
-
-    def get(self, request, *args, **kwargs):
-        article_id = self.kwargs.get('id')
-        article = get_article_by_id(article_id)
-        form = forms.ArticleForm(instance=article)
-        context = dict(article_id=article_id, form=form)
-        return render(
-            request,
-            'blog/update_article.html',
-            context,
-        )
-
-    def post(self, request, *args, **kwargs):
-        article_id = self.kwargs.get('id')
-        article = get_article_by_id(article_id)
-        form = forms.ArticleForm(request.POST, instance=article)
-        if form.is_valid():
-            if form.has_changed():
-                form.save()
-                messages.success(request, 'Статья успешно обновлена')
-            else:
-                messages.info(request, 'Вы не изменили никаких данных.')
-            return redirect('blog:article_detail', pk=article_id)
-        return render(request,
-        'blog/update_article.html',
-        dict(article_id=article_id, form=form),
-        )
+        return is_author_of_article(author=self.request.user, article_id=self.kwargs.get('pk'))
 
 
-class ArticleFormDestroyView(UserPassesTestMixin, PermissionRequiredMixin, View):
-    """
-    Удаляет конкретную статью из базы данных
-    и выполняет редирект на главную страницу.
-    """
+class ArticleDestroyView(
+        UserPassesTestMixin, PermissionRequiredMixin,
+        SuccessMessageMixin, BaseDeleteView):
+    "Deletes the article from database."
     permission_required = 'blog.delete_article'
 
-    def test_func(self):
-        return is_author_of_article(user=self.request.user, article_id=self.kwargs.get('id'))
+    model = models.Article
+    success_url = reverse_lazy('blog:index')
 
-    def post(self, request, *args, **kwargs):
-        article = get_article_by_id(self.kwargs.get('id'))
-        if article:
-            article.delete()
-            messages.add_message(request, messages.SUCCESS, 'Статья успешно удалена')
-        return redirect('blog:index')
+    success_message = 'Статья успешно удалена'
+
+    def test_func(self):
+        return is_author_of_article(author=self.request.user, article_id=self.kwargs.get('pk'))

@@ -7,7 +7,7 @@
         <h2 class="display-4">Статьи по тегу <div>{{ blog.name }}</div></h2>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {% for article in articles %}
+            {% for article in object_list %}
             <div class="col">
                 <article class="card h-100">
                     <img src="https://img2.fonwall.ru/o/tk/alpine-fields-landscape.jpg" class="card-img-top" alt="image">

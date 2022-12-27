@@ -4,12 +4,12 @@ from django.http import Http404
 from blog import models
 
 def get_articles_sort_new():
-    'Return articles sorted by newest.'
+    'Returns articles sorted by newest.'
     return models.Article.objects.order_by('-created_at')
 
 
 def get_articles_sort_top():
-    'Return articles sorted by popularty'
+    'Returns articles sorted by popularty'
     return models.Article.objects.all()
 
 
@@ -22,12 +22,12 @@ def get_articles_by_sort(sort):
 
 
 def get_tags_sort_new():
-    'Return tags sorted by newest'
+    'Returns tags sorted by newest'
     return models.Blog.objects.order_by('-created_at')
 
 
 def get_tags_sort_top():
-    'Return tags sorted by popularty'
+    'Returns tags sorted by popularty'
     return models.Blog.objects.all()
 
 
@@ -52,6 +52,6 @@ def get_default_language():
     return language.id
 
 
-def is_author_of_article(user, article_id):
+def is_author_of_article(author, article_id):
     article = get_article_by_id(article_id)
-    return article.author == user
+    return article.author == author

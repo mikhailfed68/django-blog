@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2 class="display-4">Редактирование статьи</h4>
-<form action="{% url 'blog:update_article' article_id %}" method="post">
+<form method="post">
     {% csrf_token %}
     {% load bootstrap5 %}
     {% bootstrap_form form %}
@@ -35,7 +35,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
 
-          <form action="{% url 'blog:destroy_article' article_id %}" method="post">
+          <form action="{% url 'blog:destroy_article' article.pk %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">
                 Удалить
