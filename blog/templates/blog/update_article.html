@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2 class="display-4">Редактирование статьи</h4>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% load bootstrap5 %}
     {% bootstrap_form form %}

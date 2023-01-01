@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row">
         <h2 class="display-4">Создание новой статьи</h1>
-        <form action="{% url 'blog:new_article' %}" method="post">
+        <form action="{% url 'blog:new_article' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {% load bootstrap5 %}
             {% bootstrap_form form %}

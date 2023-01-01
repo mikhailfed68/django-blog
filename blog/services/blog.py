@@ -55,3 +55,11 @@ def get_default_language():
 def is_author_of_article(author, article_id):
     article = get_article_by_id(article_id)
     return article.author == author
+
+
+def get_user_directory_path(instance, filename):
+    """
+    Accepts two arguments and returns a Unix-style path
+    to be passed along to the storage system.
+    """
+    return f'users/user_{instance.author.id}/{filename}'

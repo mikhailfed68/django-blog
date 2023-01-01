@@ -70,7 +70,7 @@ class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
     permission_required = 'blog.add_article'
 
     model = models.Article
-    fields = ['title', 'body', 'language', 'blogs']
+    fields = ['title', 'title_photo', 'body', 'language', 'blogs']
     template_name = 'blog/new_article.html'
 
     success_message = 'Статья успешно создана!'
@@ -90,7 +90,7 @@ class ArticleUpdateView(
     permission_required = 'blog.change_article'
 
     model = models.Article
-    fields = ['title', 'body', 'language', 'blogs']
+    fields = ['title', 'title_photo', 'body', 'language', 'blogs']
     template_name = 'blog/update_article.html'
 
     success_message = 'Статья успешно обновлена'

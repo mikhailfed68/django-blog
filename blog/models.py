@@ -2,12 +2,12 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 
+from PIL import Image
 
-from blog.services.blog import get_default_language
+from blog.services.blog import get_default_language, get_user_directory_path
 
 
 class TimeStampedModel(models.Model):
-    from django.utils import timezone
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -16,7 +16,9 @@ class TimeStampedModel(models.Model):
 
 
 class Article(TimeStampedModel):
+    "Article of blog."
     title = models.CharField('Заголовок', max_length=256, unique=True)
+    title_photo = models.ImageField('Фото', upload_to=get_user_directory_path, blank=True, null=True)
     body = models.TextField('Содержание', unique=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Автор', on_delete=models.CASCADE)
     language = models.ForeignKey('Language', verbose_name='Язык', on_delete=models.SET(get_default_language))
@@ -27,6 +29,16 @@ class Article(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse('blog:article_detail', kwargs={'pk': self.pk})
+
+    def save(self):
+        "Make 'title_photo' into a thumbnail if it is not blank, no larger than the given size."
+        super().save()
+
+        if self.title_photo:
+            img = Image.open(self.title_photo.path)
+            MAX_SIZE = (510, 320)
+            img.thumbnail(MAX_SIZE)
+            img.save(self.title_photo.path)
 
     class Meta:
         ordering = ['-created_at']
