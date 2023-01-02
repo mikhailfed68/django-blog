@@ -48,8 +48,9 @@ def get_articles_by_author(author):
 
 
 def get_default_language():
+    "Gets or creates a default value language (Others)."
     language, is_created = models.Language.objects.get_or_create(language='Others')
-    return language.id
+    return language
 
 
 def get_preffered_language(language):
