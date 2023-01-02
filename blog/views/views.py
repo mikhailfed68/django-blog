@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
@@ -11,6 +10,7 @@ from blog.services.blog import (
     is_author_of_article,
     get_articles_by_sort,
     get_tags_by_sort,
+    get_preffered_language,
 )
 
 
@@ -71,6 +71,7 @@ class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
 
     model = models.Article
     fields = ['title', 'description', 'title_photo', 'body', 'language', 'blogs']
+    initial = {'language': get_preffered_language('Русский')}
     template_name = 'blog/new_article.html'
 
     success_message = 'Статья успешно создана!'

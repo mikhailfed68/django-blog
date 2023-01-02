@@ -52,6 +52,17 @@ def get_default_language():
     return language.id
 
 
+def get_preffered_language(language):
+    """
+    Returns a preffered language if one exists, 
+    otherwise it calls get_default language.
+    """
+    try:
+        return models.Language.objects.get(language=language)
+    except models.Language.DoesNotExist:
+        return get_default_language()
+
+
 def is_author_of_article(author, article_id):
     article = get_article_by_id(article_id)
     return article.author == author
