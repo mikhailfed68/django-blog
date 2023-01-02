@@ -17,8 +17,9 @@ class TimeStampedModel(models.Model):
 
 class Article(TimeStampedModel):
     "Article of blog."
-    title = models.CharField('Заголовок', max_length=256, unique=True)
+    title = models.CharField('Заголовок', max_length=100, unique=True)
     title_photo = models.ImageField('Фото', upload_to=get_user_directory_path, blank=True, null=True)
+    description = models.CharField('Описание', max_length=100)
     body = models.TextField('Содержание', unique=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Автор', on_delete=models.CASCADE)
     language = models.ForeignKey('Language', verbose_name='Язык', on_delete=models.SET(get_default_language))
