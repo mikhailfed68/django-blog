@@ -3,7 +3,7 @@
 {% block title %}{{ article.title}} | {{ article.author.get_username }}{% endblock %}
 
 {% block content %}
-    <h2 class="display-4">{{ article.title }}</h1>
+<h2 class="display-4">{{ article.title }}</h1>
     <div class="tags-body">
         {% for blog in article.blogs.all %}
         <a href="{% url 'blog:articles_by_blog' blog.id %}"><div class="blog">{{ blog.name }}&nbsp;</div></a>
@@ -13,6 +13,13 @@
     <a href="{% url 'blog:update_article' article.id %}" class="edit-link">Редактировать</a>
     {% endif %}
     <h4><a href="{% url 'users:profile' article.author.get_username %}" class="alias-link">{{ article.author.get_username }}</a></h4>
+    {% if article.title_photo %}
+    <div class="row">
+        <div class="col-12 mx-auto text-center">
+            <img src="{{ article.title_photo.url }}" alt="title-photo">
+        </div>
+    </div>
+    {% endif %}
     <p>Язык: {{ article.language }}</p>
     <p>Описание: {{ article.description }}</p>
     {% load markdown_extras %}
