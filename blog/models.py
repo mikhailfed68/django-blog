@@ -31,13 +31,13 @@ class Article(TimeStampedModel):
     def get_absolute_url(self):
         return reverse('blog:article_detail', kwargs={'pk': self.pk})
 
-    def save(self):
+    def save(self, *args, **kwargs):
         "Make 'title_photo' into a thumbnail if it is not blank, no larger than the given size."
-        super().save()
+        super().save(*args, **kwargs)
 
         if self.title_photo:
             img = Image.open(self.title_photo.path)
-            MAX_SIZE = (510, 320)
+            MAX_SIZE = (500, 200)
             img.thumbnail(MAX_SIZE)
             img.save(self.title_photo.path)
 

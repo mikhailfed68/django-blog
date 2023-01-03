@@ -81,7 +81,7 @@ class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         user_form = CustomUserChangeForm(request.POST, instance=request.user)
-        profile_form = ChangeProfileForm(request.POST, instance=request.user.profile)
+        profile_form = ChangeProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
             profile_form.save()
