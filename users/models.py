@@ -24,7 +24,7 @@ def get_user_directory_path(instance, filename):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField('Фото профиля', upload_to=get_user_directory_path, default='default_profile_picture.jpg')
-    about_me = models.TextField('О себе', null=True)
+    about_me = models.TextField('О себе', blank=True, null=True)
     blogs = models.ManyToManyField(Blog, verbose_name='Следит за данными блогами', blank=True)
 
     def __str__(self):
