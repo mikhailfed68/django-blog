@@ -29,7 +29,11 @@
               <h5 class="card-title">{{ author.get_username }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ author.get_full_name }}</h6>
               <h6 class="card-subtitle mb-2 text-muted">Публикаций: {{ author.article__count }}</h6>
-              <p class="card-text">О себе будет немного</p>
+              {% if author.profile.about_me %}
+              <p class="card-text">О себе: {{ author.profile.about_me }}</p>
+              {% else %}
+              <br>
+              {% endif %}
               <a href="{% url 'users:profile' author.username %}" class="btn btn-outline-primary">Посмотреть</a>
               <p class="card-text"><small class="text-muted">Последнее обновление 3 мин. назад</small></p>
             </div>

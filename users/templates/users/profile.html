@@ -11,17 +11,20 @@
     <p><b>Псевдоним: </b>{{ author.get_username }}</p>
     <p><b>Полностью: </b>{{ author.get_full_name }}</p>
     <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
+    {% if author.profile.about_me %}
     <p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>
+    {% endif %}
 
-    {% if author.profile.tags.all %}
+    {% if author.profile.blogs.all %}
     <p>Следит за тегами:</p>
         <div class="tags-body">
-        {% for tag in author.profile.tags.all %}
-        <a href="{% url 'blog:articles_by_tag' tag.id %}"><div class="tag">{{ tag.name }}&nbsp;</div></a>
+        {% for blog in author.profile.blogs.all %}
+        <a href="{% url 'blog:articles_by_blog' blog.id %}"><div>{{ blog.name }}&nbsp;</div></a>
         {% endfor %}
     </div>
     {% endif %}
 
+    {% if author.article_set.exists %} 
     <h2 class="display-4">Статьи пользователя</h2>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for article in object_list %}
@@ -43,4 +46,5 @@
         </div>
         {% endfor %}
     </div>
+    {% endif %}
 {% endblock %}
