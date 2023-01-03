@@ -6,7 +6,7 @@
 <div>
 <h2 class="display-4">Блоги</h2>
 
-    <div class="btn-group">
+      <div class="btn-group">
         <button class="btn btn-outline-primary dropdown-toggle mt-2 mb-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           Сортировать
         </button>
@@ -15,6 +15,11 @@
             <li><a class="dropdown-item" href="{# utl 'blog:tags' #}?sort=top">Популярные</a></li>
         </ul>
       </div>
+      {% if user.is_authenticated %}
+      <a href="{% url 'blog:new_blog' %}" class="btn btn-outline-secondary mt-2 mb-3">
+        Создать блог
+      </a>
+      {% endif %}
 
     {% for blog in blogs %}
     <a href="{% url 'blog:articles_by_blog' blog.id %}"><div>{{ blog.name }}&nbsp;</div></a>

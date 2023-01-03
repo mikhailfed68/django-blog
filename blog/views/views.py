@@ -3,8 +3,12 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import CreateView, UpdateView, BaseDeleteView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import (
+    UserPassesTestMixin,
+    PermissionRequiredMixin,
+    LoginRequiredMixin,
 
+)
 from blog import models
 from blog.services.blog import (
     is_author_of_article,
@@ -32,34 +36,6 @@ class IndexListView(ListView):
 class ArticleDetailView(DetailView):
     "Returns the details of article."
     model = models.Article
-
-
-class BlogListView(ListView):
-    "Returns the list of blogs."
-    model = models.Blog
-    context_object_name = 'blogs'
-    paginate_by = 20
-
-    def get_queryset(self):
-        "If sort parameter exists, it'll retrun a sorted queryset."
-        sort = self.request.GET.get('sort')
-        if sort:
-            return get_tags_by_sort(sort)
-        return super().get_queryset()
-
-
-class BlogDetailView(SingleObjectMixin, ListView):
-    "Retruns the details of blog and the list of articles its blog." 
-    template_name = 'blog/articles_by_blog.html'
-    context_object_name = 'blog'
-    paginate_by = 10
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object(queryset=models.Blog.objects.all())
-        return super().get(request, *args, **kwargs)
-
-    def get_queryset(self):
-        return self.object.article_set.all()
 
 
 class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
@@ -113,3 +89,39 @@ class ArticleDestroyView(
 
     def test_func(self):
         return is_author_of_article(author=self.request.user, article_id=self.kwargs.get('pk'))
+
+
+class BlogCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    "Creates a new blog."
+    model = models.Blog
+    fields =  ['name', 'description']
+    template_name_suffix = '_create_form'
+    success_message = 'Новый блог успешно создан.'
+
+
+class BlogListView(ListView):
+    "Returns the list of blogs."
+    model = models.Blog
+    context_object_name = 'blogs'
+    paginate_by = 20
+
+    def get_queryset(self):
+        "If sort parameter exists, it'll retrun a sorted queryset."
+        sort = self.request.GET.get('sort')
+        if sort:
+            return get_tags_by_sort(sort)
+        return super().get_queryset()
+
+
+class BlogDetailView(SingleObjectMixin, ListView):
+    "Retruns the details of blog and the list of articles its blog." 
+    template_name = 'blog/articles_by_blog.html'
+    context_object_name = 'blog'
+    paginate_by = 10
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=models.Blog.objects.all())
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return self.object.article_set.all()

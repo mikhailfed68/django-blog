@@ -46,12 +46,15 @@ class Article(TimeStampedModel):
 
 
 class Blog(TimeStampedModel):
-    name = models.CharField('Блог', max_length=100, unique=True)
-    description = models.CharField(max_length=256)
+    name = models.CharField('Название', max_length=100, unique=True)
+    description = models.CharField('Описание', max_length=256)
 
     def __str__(self):
         return self.name
     
+    def get_absolute_url(self):
+        return reverse('blog:articles_by_blog', kwargs={'pk': self.pk})
+
     class Meta:
         ordering = ['name']
 
