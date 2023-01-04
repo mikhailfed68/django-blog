@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMi
 
 from users import models
 from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
-from users.services import get_users_by_sort, get_users_by_newest
+from users.services.main import get_users_by_sort, get_users_by_newest
 
 
 class SiqnUp(CreateView):
