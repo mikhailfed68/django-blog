@@ -46,8 +46,8 @@ class Article(TimeStampedModel):
 
 
 class Blog(TimeStampedModel):
-    name = models.CharField('Название', max_length=100, unique=True)
-    description = models.CharField('Описание', max_length=256)
+    name = models.CharField('Название', max_length=30, unique=True)
+    description = models.CharField('Описание', max_length=60)
 
     def __str__(self):
         return self.name
