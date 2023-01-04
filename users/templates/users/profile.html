@@ -8,7 +8,16 @@
     <a href="{% url 'blog:new_article' %}">Создать Статью</a>
     <p><a href="{% url 'users:update_user' user.get_username %}">Редактировать</a></p>
     {% endif %}
-    <p><b>Псевдоним: </b>{{ author.get_username }}</p>
+
+    <div>
+        <img
+        src="{{ author.profile.profile_picture.url }}"
+        class="img-fluid img-thumbnail rounded-pill"
+        alt="profile-picture"
+        width="75px"
+        height="75px"
+        > <b>{{ author.get_username }}</b>
+    </div>
     <p><b>Полностью: </b>{{ author.get_full_name }}</p>
     <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
     {% if author.profile.about_me %}
@@ -16,12 +25,14 @@
     {% endif %}
 
     {% if author.profile.blogs.all %}
-    <p>Следит за тегами:</p>
-        <div class="tags-body">
-        {% for blog in author.profile.blogs.all %}
-        <a href="{% url 'blog:articles_by_blog' blog.id %}"><div>{{ blog.name }}&nbsp;</div></a>
-        {% endfor %}
-    </div>
+    <p>Следит за блогами:</p>
+    <ul class="list-group list-group-flush flex-row">
+      {% for blog in author.profile.blogs.all %}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="bg-primary rounded-pill p-1 text-light fw-bold">{{ blog.name }}</div>
+        </li>
+      {% endfor %}
+      </ul>
     {% endif %}
 
     {% if author.article_set.exists %} 
