@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import (
 
 )
 from blog import models
+from blog.forms import ArticleForm
 from blog.services.blog import (
     is_author_of_article,
     get_articles_by_sort,
@@ -46,7 +47,7 @@ class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
     permission_required = 'blog.add_article'
 
     model = models.Article
-    fields = ['title', 'description', 'title_photo', 'body', 'language', 'blogs']
+    form_class = ArticleForm
     initial = {'language': get_preffered_language('Русский')}
     template_name = 'blog/new_article.html'
 
@@ -67,7 +68,7 @@ class ArticleUpdateView(
     permission_required = 'blog.change_article'
 
     model = models.Article
-    fields = ['title', 'description', 'title_photo', 'body', 'language', 'blogs']
+    form_class = ArticleForm
     template_name = 'blog/update_article.html'
 
     success_message = 'Статья успешно обновлена'
