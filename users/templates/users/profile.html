@@ -11,12 +11,18 @@
 
     <div>
         <img
+        {% if author.profile.profile_picture %}
         src="{{ author.profile.profile_picture.url }}"
+        {% else %}
+        {% load static %}
+        src="{% static 'users/images/default.jpg' %}"
+        {% endif %}
         class="img-fluid img-thumbnail rounded-pill"
         alt="profile-picture"
         width="75px"
         height="75px"
-        > <b>{{ author.get_username }}</b>
+        >
+        <b>{{ author.get_username }}</b>
     </div>
     <p><b>Полностью: </b>{{ author.get_full_name }}</p>
     <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
