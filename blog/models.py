@@ -2,9 +2,9 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 
-from PIL import Image
+from blog.services.blog import get_default_language
 
-from blog.services.blog import get_default_language, get_user_directory_path
+from common.utils import set_picture
 
 
 class TimeStampedModel(models.Model):
@@ -36,14 +36,10 @@ class Article(TimeStampedModel):
         return reverse('blog:article_detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
-        "Make 'title_photo' into a thumbnail if it is not blank, no larger than the given size."
+        "Turn the 'title_photo' into a specific thumbnail if it isn't blank."
         super().save(*args, **kwargs)
-
         if self.title_photo:
-            img = Image.open(self.title_photo.path)
-            MAX_SIZE = (500, 200)
-            img.thumbnail(MAX_SIZE)
-            img.save(self.title_photo.path)
+            set_picture(self.title_photo.path, (771, 482), type='rectangle')
 
     class Meta:
         ordering = ['-created_at']

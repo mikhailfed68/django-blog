@@ -1,11 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from PIL import Image
-
-from users.services import img
 from blog.models import Blog
 
+from common.utils import set_picture
 
 
 class User(AbstractUser):
@@ -20,7 +18,7 @@ def get_user_directory_path(instance, filename):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField('Фото профиля', upload_to=get_user_directory_path, default='default_profile_picture.jpg')
+    profile_picture = models.ImageField('Фото профиля', upload_to=get_user_directory_path, blank=True, null=True)
     about_me = models.CharField('О себе', max_length=60, blank=True, null=True)
     blogs = models.ManyToManyField(Blog, verbose_name='Следит за данными блогами', blank=True)
 
@@ -28,11 +26,7 @@ class Profile(models.Model):
         return self.user.get_username()
 
     def save(self, *args, **kwargs):
-        "Make 'title_photo' into a thumbnail if it is not blank."
+        "Turn the 'profile_picture' into a specific thumbnail if it isn't blank."
         super().save(*args, **kwargs)
-
         if self.profile_picture:
-            with Image.open(self.profile_picture.path) as image:
-                image.thumbnail((320, 320), Image.ANTIALIAS)  
-                image = img.crop_max_square(image)
-                image.save(self.profile_picture.path)
+            set_picture(self.profile_picture.path, (150, 150), type='square')
