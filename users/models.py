@@ -15,11 +15,7 @@ class User(AbstractUser):
 
 
 def get_user_directory_path(instance, filename):
-    """
-    Accepts two arguments and returns a Unix-style path
-    to be passed along to the storage system.
-    """
-    return f'users/user_{instance.id}/{filename}'
+    return f'users/user_{instance.user.id}/profile_picture/{filename}'
 
 
 class Profile(models.Model):

@@ -15,6 +15,10 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
+def get_user_directory_path(instance, filename):
+    return f'users/user_{instance.author.id}/article_{instance.id}/{filename}'
+
+
 class Article(TimeStampedModel):
     "Article of blog."
     title = models.CharField('Заголовок', max_length=100, unique=True)
