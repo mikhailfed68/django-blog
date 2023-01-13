@@ -5,11 +5,11 @@
 {% block content %}
     <h2 class="display-4">Об авторе</h2>
     {% if user.get_username == author.get_username %}
-    <a href="{% url 'blog:new_article' %}">Создать Статью</a>
-    <p><a href="{% url 'users:update_user' user.get_username %}">Редактировать</a></p>
+    <a href="{% url 'blog:new_article' %}" class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Создать Статью</a>
+    <a href="{% url 'users:update_user' user.get_username %}" class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Редактировать</a>    
     {% endif %}
 
-    <div>
+    <div class="mb-3">
         <img
         {% if author.profile.profile_picture %}
         src="{{ author.profile.profile_picture.url }}"
@@ -32,13 +32,15 @@
 
     {% if author.profile.blogs.all %}
     <p>Следит за блогами:</p>
-    <ul class="list-group list-group-flush flex-row">
-      {% for blog in author.profile.blogs.all %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="bg-primary rounded-pill p-1 text-light fw-bold">{{ blog.name }}</div>
-        </li>
-      {% endfor %}
-      </ul>
+      <div class="d-flex align-items-start flex-wrap">
+        {% for blog in author.profile.blogs.all %}
+        <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
+            <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
+                {{ blog.name }}
+            </div>
+        </a>
+        {% endfor %}
+      </div>
     {% endif %}
 
     {% if author.article_set.exists %} 
