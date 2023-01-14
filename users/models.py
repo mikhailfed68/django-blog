@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 
 from blog.models import Blog
@@ -10,7 +11,12 @@ class User(AbstractUser):
     """Модель представляющая зарегистрированного пользователя."""
     def __str__(self):
         return self.get_username()
+    
+    def get_absolute_url(self):
+        return reverse('users:profile', kwargs={'username': self.username})
 
+    class Meta:
+        ordering = ['username']
 
 def get_user_directory_path(instance, filename):
     return f'users/user_{instance.user.id}/profile_picture/{filename}'

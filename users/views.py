@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMi
 from users import models
 from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
 from users.services.main import get_users_by_sort, get_users_by_newest
-
+from users.filters import UserFilter
 
 class SiqnUp(CreateView):
     model = models.User
@@ -51,15 +51,17 @@ class ProfileDetailView(SingleObjectMixin, ListView):
 
 class UserListView(ListView):
     "Rerturn the registred users list."
-    context_object_name = 'authors'
-    paginate_by = 10
+    model = models.User
+    paginate_by = 3
 
-    def get_queryset(self):
-        "If sort parameter exists, it'll retrun a sorted queryset"
-        sort = self.request.GET.get('sort')
-        if sort:
-            return get_users_by_sort(sort)
-        return get_users_by_newest()
+    def paginate_queryset(self, queryset, page_size):
+        return super().paginate_queryset(self.filter.qs, self.paginate_by)
+
+    def get_context_data(self, **kwargs):
+        self.filter = UserFilter(self.request.GET)
+        context = super().get_context_data(**kwargs)
+        context['filter'] = self.filter
+        return context
 
 
 class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
