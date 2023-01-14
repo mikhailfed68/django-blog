@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'bootstrap5',
+    'django_filters',
 
     'users',
     'blog',
