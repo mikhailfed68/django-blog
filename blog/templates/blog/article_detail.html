@@ -4,10 +4,14 @@
 
 {% block content %}
 <h2 class="display-4">{{ article.title }}</h1>
+    {% if user.get_username == article.author.get_username and perms.blog.change_article %}
+    <a href="{% url 'blog:update_article' article.id %}" class="btn btn-outline-secondary  btn-sm">Редактировать</a>
+    {% endif %}
+
     <div class="m-3">
       <img
-      {% if author.profile.profile_picture %}
-      src="{{ author.profile.profile_picture.url }}"
+      {% if article.author.profile.profile_picture %}
+      src="{{ article.author.profile.profile_picture.url }}"
       {% else %}
       {% load static %}
       src="{% static 'users/images/default.jpg' %}"
@@ -19,9 +23,7 @@
       >
       <b><a href="{% url 'users:profile' article.author.get_username %}">{{ article.author.get_username }}</a></b>
     </div>
-    {% if user.get_username == article.author.get_username and perms.blog.change_article %}
-    <a href="{% url 'blog:update_article' article.id %}" class="btn btn-outline-secondary  btn-sm">Редактировать</a>
-    {% endif %}
+
     {% if article.title_photo %}
     <div class="row">
         <div class="col-12 mx-auto text-center">
