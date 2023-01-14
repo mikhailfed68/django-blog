@@ -7,10 +7,11 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin,
     PermissionRequiredMixin,
     LoginRequiredMixin,
-
 )
+
 from blog import models
 from blog.forms import ArticleForm
+from blog.filters import BlogFilter
 from blog.services.blog import (
     is_author_of_article,
     get_articles_by_sort,
@@ -103,15 +104,16 @@ class BlogCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 class BlogListView(ListView):
     "Returns the list of blogs."
     model = models.Blog
-    context_object_name = 'blogs'
-    paginate_by = 20
+    paginate_by = 2
 
-    def get_queryset(self):
-        "If sort parameter exists, it'll retrun a sorted queryset."
-        sort = self.request.GET.get('sort')
-        if sort:
-            return get_tags_by_sort(sort)
-        return super().get_queryset()
+    def paginate_queryset(self, queryset, page_size):
+        return super().paginate_queryset(self.filter.qs, self.paginate_by)
+
+    def get_context_data(self, **kwargs):
+        self.filter = BlogFilter(self.request.GET)
+        context = super().get_context_data(**kwargs)
+        context['filter'] = self.filter
+        return context
 
 
 class BlogDetailView(SingleObjectMixin, ListView):

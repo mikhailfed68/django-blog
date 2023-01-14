@@ -2,6 +2,8 @@
 
 {% block title %}Блоги{% endblock %}
 
+{% load bootstrap5 %}
+
 {% block content %}
 <div>
 <h2 class="display-4">Блоги</h2>
@@ -21,12 +23,15 @@
     </a>
     {% endif %}
 
+    <form method="get">
+      {% bootstrap_form filter.form %}
+    </form>
 
     <ul class="list-group list-group-flush">
       <li class="list-group-item d-flex justify-content-end align-items-start">
         <div>Подписчиков</div> <div class="ms-4">Публикаций</div>
       </li>
-      {% for blog in blogs %}
+      {% for blog in blog_list %}
       <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 mt-1 me-auto text-break">
               <a href="{% url 'blog:articles_by_blog' blog.pk %}">
