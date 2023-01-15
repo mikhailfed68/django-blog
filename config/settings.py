@@ -29,12 +29,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'django.contrib.humanize',
+
     'bootstrap5',
     'django_filters',
 
     'users',
     'blog',
-    'search.apps.SearchConfig',
 ]
 
 MIDDLEWARE = [

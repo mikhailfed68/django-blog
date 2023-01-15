@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from django.http import Http404
 
 from blog import models
@@ -67,3 +68,18 @@ def get_preffered_language(language):
 def is_author_of_article(author, article_id):
     article = get_article_by_id(article_id)
     return article.author == author
+
+
+def get_articles_for_search_query(search_query, queryset):
+    """
+    Returns articles by search query if one exists,
+    otherwise it returns a queryset aguments.
+    """
+    search_query = search_query.get('search_query')
+    if search_query:
+        return models.Article.objects.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(body__icontains=search_query)
+        )
+    return queryset

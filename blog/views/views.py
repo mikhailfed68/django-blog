@@ -11,12 +11,13 @@ from django.contrib.auth.mixins import (
 
 from blog import models
 from blog.forms import ArticleForm
-from blog.filters import BlogFilter
+from blog import filters
 from blog.services.blog import (
     is_author_of_article,
     get_articles_by_sort,
     get_tags_by_sort,
     get_preffered_language,
+    get_articles_for_search_query,
 )
 
 
@@ -28,11 +29,8 @@ class IndexListView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        "If sort parameter exists, it'll retruns a sorted queryset."
-        sort = self.request.GET.get('sort')
-        if sort:
-            return get_articles_by_sort(sort)
-        return super().get_queryset()
+        queryset = super().get_queryset()
+        return get_articles_for_search_query(self.request.GET, queryset)
 
 
 class ArticleDetailView(DetailView):
@@ -110,7 +108,7 @@ class BlogListView(ListView):
         return super().paginate_queryset(self.filter.qs, self.paginate_by)
 
     def get_context_data(self, **kwargs):
-        self.filter = BlogFilter(self.request.GET)
+        self.filter = filters.BlogFilter(self.request.GET)
         context = super().get_context_data(**kwargs)
         context['filter'] = self.filter
         return context

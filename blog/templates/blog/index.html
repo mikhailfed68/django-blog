@@ -2,8 +2,8 @@
 
 {% block content %}
     <section>
-        <h2 class="display-4">Недавние статьи</h2>
-
+      <h2 class="display-4">Недавние статьи</h2>
+      {% if articles %}
       <div class="btn-group">
         <button class="btn btn-outline-primary dropdown-toggle mt-2 mb-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           Сортировать
@@ -35,5 +35,8 @@
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        <p>Статьи не найдены</p>
+        {% endif %}
     </section>
 {% endblock %}
