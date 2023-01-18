@@ -25,13 +25,9 @@
     </div>
 
     {% if article.title_photo %}
-    <div class="row">
-        <div class="col-12 mx-auto text-center">
-            <img src="{{ article.title_photo.url }}" alt="title-photo">
-        </div>
-    </div>
-
+    <img src="{{ article.title_photo.url }}" class="img-fluid rounded mx-auto d-block" alt="title-photo">
     {% endif %}
+
     <div class="d-flex align-items-start flex-wrap">
       {% for blog in article.blogs.all %}
       <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
