@@ -5,6 +5,7 @@ import markdown as md
 import bleach
 from bleach_allowlist import markdown_attrs, markdown_tags
 
+
 register = template.Library()
 
 
