@@ -1,8 +1,9 @@
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 
 from blog import models
+
 
 def get_articles_sort_new():
     'Returns articles sorted by newest.'
@@ -83,3 +84,8 @@ def get_articles_for_search_query(search_query, queryset):
             Q(body__icontains=search_query)
         )
     return queryset
+
+
+def get_blogs_with_counters():
+    "Returns a blog list with article and profile counters for each blog."
+    return models.Blog.objects.annotate(Count('article', distinct=True), Count('profile', distinct=True)).order_by('name')
