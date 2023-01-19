@@ -2,8 +2,6 @@ from functools import wraps
 
 import django_filters
 
-from blog.models import Blog
-
 
 # Используя django-filter я не нашел стандартного способа
 # выполнить сортировку более чем по одному полю и так же
@@ -12,31 +10,30 @@ from blog.models import Blog
 # Поэтому был написан декоратор для функции
 # (которая передается в параметр 'method' фильтра).
 # Декоратор запоминает предыдущие входные параметры функции,
-# и передает их с текущими парметрами в эту функцию,
-# что позволяет строить в ней желаемое упорядочивание, например:
+# и передает их с текущими параметрами в эту функцию,
+# это позволяет строить в ней желаемое упорядочивание, например:
 # "order_by('-profile__count', 'article__count')".
 class BlogFilter(django_filters.FilterSet):
     "Blog filter for searching and ordering by subscribers or articles."
-    ORDER = [
-        ('desc', 'По убыванию'),
-        ('asc', 'По возрастанию'),
-    ]
+    ORDER = [('desc', 'По убыванию'), ('asc', 'По возрастанию')]
 
-    name = django_filters.CharFilter(label='Название блога', lookup_expr='icontains')
-    profile__count = django_filters.ChoiceFilter(
+    name = django_filters.CharFilter(
+        label='Название блога',
+        field_name='name',
+        lookup_expr='icontains',
+    )
+    subscriber_counter = django_filters.ChoiceFilter(
+        field_name='profile__count',
         label='По подписчикам',
         choices=ORDER,
         method='filter_by_count',
     )
-    article__count = django_filters.ChoiceFilter(
+    article_counter = django_filters.ChoiceFilter(
+        field_name='article__count',
         label='По публикациям',
         choices=ORDER,
         method='filter_by_count',
     )
-
-    class Meta:
-        model = Blog
-        fields = ['name']
 
     def memorize(filter_func):
         """
@@ -73,4 +70,3 @@ class BlogFilter(django_filters.FilterSet):
             elif param == 'desc':
                 ordering.append(f'-{counter}')
         return queryset.order_by(*ordering)
-        return queryset

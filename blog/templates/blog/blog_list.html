@@ -15,12 +15,15 @@
     {% endif %}
 
     <form method="get">
-      <div class="d-flex align-items-center">
-        <div>{% bootstrap_field filter.form.name bound_css_class='' %}</div>
-        <div class="mt-3 ms-2"><input type="submit" class="btn btn-outline-primary" value="Найти"></div>
+      <div class="d-flex align-items-start flex-column">
+        <div class="d-flex justify-content-start align-items-center">
+          <div>{% bootstrap_field filter.form.name bound_css_class='' %}</div>
+          <div class="mt-3 ms-2"><input type="submit" class="btn btn-outline-primary" value="Найти"></div>
+          {{ filter.form.order }}
+        </div>
         <div class="d-flex justify-content-start align-items-start">
-          <div>{% bootstrap_field filter.form.profile__count bound_css_class='form-select-sm' %}</div>
-          <div class="ms-2">{% bootstrap_field filter.form.article__count bound_css_class='form-select-sm' %}</div>
+          <div>{% bootstrap_field filter.form.subscriber_counter bound_css_class='form-select-sm' %}</div>
+          <div class="ms-2">{% bootstrap_field filter.form.article_counter bound_css_class='form-select-sm' %}</div>
         </div>
       </div>
     </form>
