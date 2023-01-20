@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section>
+    <h2 class="display-4">Ваша личная лента</h2>
+
+    {% if user.profile.blogs.all %}
+    <p>Блоги на которые вы подписаны:</p>
+      <div class="d-flex align-items-start flex-wrap mb-5">
+        {% for blog in user.profile.blogs.all %}
+        <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
+            <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
+                {{ blog.name }}
+            </div>
+        </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if article_list %}
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          {% for article in article_list %}
+          <div class="col">
+              <article class="card h-100">
+                  {% if article.title_photo %}
+                  <img src="{{ article.title_photo.url }}" class="card-img-top h-100" alt="title-photo">
+                  {% endif %}
+                  <div class="card-body">
+                      <h5 class="card-title">{{ article.title }}</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">{{ article.created_at|date:"j E" }}</h4>
+                      <p class="card-text text-truncate">{{ article.description|truncatewords:10 }}</p>
+                      <a href="{% url 'blog:article_detail' article.id %}" class="btn btn-outline-primary">Читать</a>
+                  </div>
+                  <div class="card-footer">
+                      {% load humanize %}
+                      <small class="text-muted"> Обновлено {{ article.updated_at|naturaltime }}</small>
+                  </div>
+              </article>
+          </div>
+          {% endfor %}
+      </div>
+      {% else %}
+      <p>Вы еще не на что не подписаны</p>
+      {% endif %}
+  </section>
+{% endblock %}

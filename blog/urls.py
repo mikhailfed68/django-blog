@@ -8,6 +8,7 @@ app_name = 'blog'
 urlpatterns = [
     path('articles/', views.IndexListView.as_view(), name='index'),
     path('', RedirectView.as_view(pattern_name='blog:index', permanent=False)),
+    path('feed/', views.PersonalNewsFeedView.as_view(), name='feed'),
     path('articles/<int:pk>/', views.ArticleDetailView.as_view(), name='article_detail'),
     path('articles/new/', views.ArticleCreateView.as_view(), name='new_article'),
     path('articles/<int:pk>/edit/', views.ArticleUpdateView.as_view(), name='update_article'),

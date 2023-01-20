@@ -92,3 +92,10 @@ def get_blogs_with_counters():
         Count('article', distinct=True),
         Count('profile', distinct=True)
     ).order_by('name')
+
+
+def get_user_personal_news_feed(user):
+    "Retruns the user personal news feed by his blogs."
+    user_blogs = user.profile.blogs.all()
+    user_feed_articles = models.Article.objects.filter(blogs__in=user_blogs).distinct()
+    return user_feed_articles

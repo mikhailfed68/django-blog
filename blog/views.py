@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import CreateView, UpdateView, BaseDeleteView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import (
     UserPassesTestMixin,
     PermissionRequiredMixin,
@@ -17,6 +18,7 @@ from blog.services.blog import (
     get_preffered_language,
     get_articles_for_search_query,
     get_blogs_with_counters,
+    get_user_personal_news_feed,
 )
 
 
@@ -30,6 +32,16 @@ class IndexListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return get_articles_for_search_query(self.request.GET, queryset)
+
+
+class PersonalNewsFeedView(LoginRequiredMixin, ListView):
+    "Returns personal news feed for current logged-in user."
+    model = models.Article
+    template_name = 'blog/user_news_feed.html'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return get_user_personal_news_feed(self.request.user)
 
 
 class ArticleDetailView(DetailView):
