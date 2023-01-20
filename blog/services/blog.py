@@ -88,4 +88,7 @@ def get_articles_for_search_query(search_query, queryset):
 
 def get_blogs_with_counters():
     "Returns a blog list with article and profile counters for each blog."
-    return models.Blog.objects.annotate(Count('article', distinct=True), Count('profile', distinct=True)).order_by('name')
+    return models.Blog.objects.annotate(
+        Count('article', distinct=True),
+        Count('profile', distinct=True)
+    ).order_by('name')
