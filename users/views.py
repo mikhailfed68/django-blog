@@ -11,8 +11,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 
 from users import models
+from users.services.main import get_users_with_counters
 from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
-from users.services.main import get_users_by_sort, get_users_by_newest
 from users.filters import UserFilter
 
 class SiqnUp(CreateView):
@@ -54,11 +54,14 @@ class UserListView(ListView):
     model = models.User
     paginate_by = 3
 
-    def paginate_queryset(self, queryset, page_size):
-        return super().paginate_queryset(self.filter.qs, self.paginate_by)
+    def get_queryset(self):
+        self.filter = UserFilter(
+            self.request.GET,
+            queryset=get_users_with_counters(),
+        )
+        return self.filter.qs
 
     def get_context_data(self, **kwargs):
-        self.filter = UserFilter(self.request.GET)
         context = super().get_context_data(**kwargs)
         context['filter'] = self.filter
         return context
