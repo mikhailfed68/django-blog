@@ -17,6 +17,8 @@ bleach = "^5.0.1"
 bleach-allowlist = "^1.0.3"
 pillow = "^9.3.0"
 django-filter = "^22.1"
+redis = "^4.4.2"
+hiredis = "^2.1.1"
 
 
 [tool.poetry.group.dev.dependencies]
