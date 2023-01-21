@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 
 
-class RemoveEmptyQuerystring:
+class RemoveEmptyQueryString:
     """
     If the incoming url has empty get parameters in the query string,
     the middleware removes it and redirects the request without empty params.
