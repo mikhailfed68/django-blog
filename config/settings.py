@@ -45,7 +45,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'common.middleware.common.RemoveEmptyQuerystring',
+    'common.middleware.common.RemoveEmptyQueryString',
+    'users.middleware.UserActiveMidlleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -157,3 +158,7 @@ MEDIA_URL = 'media/'
 
 # Set the default value for ChoiceFilter.empty_label.
 FILTERS_EMPTY_CHOICE_LABEL = 'Не выбрано'
+
+USER_ONLINE_TIMEOUT = 60 # 1 minute
+
+USER_LAST_SEEN_TIMEOUT = 259200 # 3 days

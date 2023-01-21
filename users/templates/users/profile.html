@@ -22,8 +22,19 @@
         width="75px"
         height="75px"
         >
-        <b>{{ author.get_username }}</b>
+        <b>{{ author.get_username }}</b> {% if author.is_online %}<span class="text-success">Online</span>{% endif %}
     </div>
+    <div class="mt-2 mb-5">
+        {% if not author.is_online %}
+        {% if author.last_seen %}
+            {% load humanize %}
+        <span>Был в сети: {{ author.last_seen|naturaltime }}</span>
+        {% else %}
+        <span>Был в сети: Давно</span>
+        {% endif %}
+    {% endif %}
+    </div>
+
     <p><b>Полностью: </b>{{ author.get_full_name }}</p>
     <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
     {% if author.profile.about_me %}

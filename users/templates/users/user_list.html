@@ -41,10 +41,17 @@
           >
           <div class="ms-2 mt-1 me-auto text-break">
             <a href="{% url 'users:profile' author.username %}">
-              <div class="fw-bold text-break">{{ author.get_username }}</div>
+              <div class="fw-bold text-break">
+                {{ author.get_username }}
+              </div>
             </a>
+                {% if author.is_online %}
+                <span class="text-success">Онлайн</span>
+                {% else %}
+                <span class="text-secondary">Не в сети</span>
+                {% endif %}
             <div>{{ author.get_full_name }}</div>
-            {{ author.profile.about_me }}
+            <div>{{ author.profile.about_me }}</div>
           </div>
           <span class="badge bg-secondary rounded-pill ms-5">{{ author.article_set.count }}</span>
         </li>
