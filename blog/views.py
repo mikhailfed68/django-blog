@@ -119,6 +119,7 @@ class BlogListView(ListView):
         self.filter = filters.BlogFilter(
             self.request.GET,
             queryset=get_blogs_with_counters(),
+            request=self.request,
         )
         return self.filter.qs
 

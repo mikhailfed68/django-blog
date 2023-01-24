@@ -58,6 +58,7 @@ class UserListView(ListView):
         self.filter = UserFilter(
             self.request.GET,
             queryset=get_users_with_counters(),
+            request=self.request,
         )
         return self.filter.qs
 

@@ -1,11 +1,10 @@
 import django_filters
 
-# For more information, go to common.django_filters.utils module.
-from common.django_filters.utils import ORDER, order_by_params
-
 
 class BlogFilter(django_filters.FilterSet):
     "Blog filter for searching and ordering by subscribers or articles."
+    ORDER = [('desc', 'По убыванию'), ('asc', 'По возрастанию')]
+
     name = django_filters.CharFilter(
         label='Название блога',
         field_name='name',
@@ -24,6 +23,22 @@ class BlogFilter(django_filters.FilterSet):
         method='order_by_count',
     )
 
-    def order_by_count(self, queryset, name, value, **kwargs):
-        "Uses a universal filter function to order blogs"
-        return order_by_params(self, queryset, name, value, **kwargs)
+    def order_by_count(self, queryset, name, value):
+        """
+        Returns a filtered queryset sorted by get parameters
+        with a choices (asc or desc).
+        """
+        ordering_param = {
+            counter:param
+            for (counter, param) in self.request.GET.items()
+            if counter in ('by_article_count', 'by_subscriber_count')
+        }
+
+        ordering = []
+        for counter, param in ordering_param.items():
+            field_of_param = 'profile__count' if counter == 'by_subscriber_count' else 'article__count'
+            if param == 'asc':
+                ordering.append(field_of_param)
+            elif param == 'desc':
+                ordering.append(f'-{field_of_param}')
+        return queryset.order_by(*ordering)

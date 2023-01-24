@@ -1,10 +1,9 @@
 import django_filters
 
-# For more information, go to common.django_filters.utils module.
-from common.django_filters.utils import ORDER,  order_by_params
-
 
 class UserFilter(django_filters.FilterSet):
+    ORDER = [('desc', 'По убыванию'), ('asc', 'По возрастанию')]
+
     username = django_filters.CharFilter(
         label='Username',
         field_name='username',
@@ -17,6 +16,10 @@ class UserFilter(django_filters.FilterSet):
         method='order_by_count',
     )
 
-    def order_by_count(self, queryset, name, value, **kwargs):
-        "Uses a universal filter function to order users"
-        return order_by_params(self, queryset, name, value, **kwargs)
+    def order_by_count(self, queryset, name, value):
+        """
+        Returns a filtered queryset sorted by get parameter
+        with a choices (asc or desc).
+        """
+        ordering = name if value == 'asc' else f'-{name}'
+        return queryset.order_by(ordering)
