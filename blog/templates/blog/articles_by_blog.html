@@ -19,7 +19,8 @@
                         <a href="{% url 'blog:article_detail' article.id %}" class="btn btn-outline-primary">Читать</a>
                     </div>
                     <div class="card-footer">
-                        <small class="text-muted">Обновлено 5 мин. назад</small>
+                        {% load humanize %}
+                        <small class="text-muted"> Обновлено {{ article.updated_at|naturaltime }}</small>
                     </div>
                 </article>
             </div>
