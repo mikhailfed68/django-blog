@@ -5,13 +5,39 @@
 {% block content %}
     <section>
         <h2 class="display-4">Статьи в блоге<div>{{ blog.name }}</div></h2>
+
+        {% if user.is_authenticated %}
+            {% if blog in user.profile.blogs.all %}
+                <form action="{% url 'users:delete_blog_from_profile' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="blog_id" value="{{ blog.id }}">
+                    <input type="hidden" name="blog_name" value="{{ blog.name }}">
+                    <button class="btn btn-outline-secondary mb-2">Отписаться</button>    
+                </form>
+            {% else %}
+                <form action="{% url 'users:add_blog_to_profile' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="blog_id" value="{{ blog.id }}">
+                    <input type="hidden" name="blog_name" value="{{ blog.name }}">
+                    <button class="btn btn-outline-secondary mb-2">Подписаться</button>    
+                </form>
+            {% endif %}
+        {% endif %}
+
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for article in object_list %}
             <div class="col">
                 <article class="card h-100">
+                    <img
                     {% if article.title_photo %}
-                    <img src="{{ article.title_photo.url }}" class="card-img-top h-100" alt="image">
+                    src="{{ article.title_photo.url }}"
+                    class="card-img-top h-100"
+                    alt="title-photo"
+                    {% else %}
+                    {% load static %}
+                    src="{% static 'blog/placeholder/default.jpeg' %}"
                     {% endif %}
+                    >
                     <div class="card-body">
                         <h5 class="card-title">{{ article.title }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ article.created_at|date:"j E" }}</h4>

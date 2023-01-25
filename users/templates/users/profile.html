@@ -60,9 +60,16 @@
         {% for article in object_list %}
         <div class="col">
             <article class="card h-100">
+                <img
                 {% if article.title_photo %}
-                <img src="{{ article.title_photo.url }}" class="card-img-top h-100" alt="image">
+                src="{{ article.title_photo.url }}"
+                class="card-img-top h-100"
+                alt="title-photo"
+                {% else %}
+                {% load static %}
+                src="{% static 'blog/placeholder/default.jpeg' %}"
                 {% endif %}
+                >
                 <div class="card-body">
                     <h5 class="card-title">{{ article.title }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ article.created_at|date:"j E" }}</h4>
