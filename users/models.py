@@ -14,6 +14,13 @@ from common.utils import set_picture
 
 class User(AbstractUser):
     "A user model."
+    email = models.EmailField(
+        'Почта',
+        help_text='Почта должна быть уникальной.',
+        error_messages={'unique': 'Электронная почта уже используется.'},
+        unique=True,
+    )
+
     def __str__(self):
         return self.get_username()
     
