@@ -6,12 +6,17 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import BaseDeleteView
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.models import Group
-from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin, LoginRequiredMixin
 
 from users import models
-from users.services.main import get_users_with_counters
+from users.services.main import (
+    get_users_with_counters,
+    add_blogs_to_current_user,
+    remove_blogs_from_current_user,
+)
 from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
 from users.filters import UserFilter
 
@@ -116,3 +121,25 @@ class UserDestroyView(
     def test_func(self):
         "Verify user identity by session user object"
         return self.request.user.get_username() == self.kwargs.get('username')
+
+
+class AddBlogToUserView( LoginRequiredMixin, SuccessMessageMixin, View):
+    "Add blog to profile of current user."
+
+    def post(self, request, *args, **kwargs):
+        blog_id = request.POST.get('blog_id')
+        blog_name = request.POST.get('blog_name')
+        add_blogs_to_current_user(request, blog_id)
+        messages.success(request, f'Вы подписались на блог {blog_name}')
+        return redirect('blog:articles_by_blog', pk=blog_id)
+
+
+class RemoveBlogFromUserView(LoginRequiredMixin, View):
+    "Remove blog from profile of current user."
+
+    def post(self, request, *args, **kwargs):
+        blog_id = request.POST.get('blog_id')
+        blog_name = request.POST.get('blog_name')
+        remove_blogs_from_current_user(request, blog_id)
+        messages.success(request, f'Вы отписались от блога {blog_name}')
+        return redirect('blog:articles_by_blog', pk=blog_id)

@@ -5,7 +5,7 @@ class UserFilter(django_filters.FilterSet):
     ORDER = [('desc', 'По убыванию'), ('asc', 'По возрастанию')]
 
     username = django_filters.CharFilter(
-        label='Username',
+        label='Никнейм',
         field_name='username',
         lookup_expr='icontains',
     )
