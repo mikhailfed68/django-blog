@@ -1,5 +1,6 @@
-from pathlib import Path
+import json
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -162,3 +163,8 @@ FILTERS_EMPTY_CHOICE_LABEL = 'Не выбрано'
 USER_ONLINE_TIMEOUT = 60 # 1 minute
 
 USER_LAST_SEEN_TIMEOUT = 259200 # 3 days
+
+# The settings for base group of users on the site.
+BASE_GROUP = os.getenv('BASE_GROUP')
+
+PERMISSIONS_FOR_BASE_GROUP = json.loads(os.getenv('PERMISSIONS_FOR_BASE_GROUP'))

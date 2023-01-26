@@ -1,5 +1,19 @@
 from django.db.models import Count
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group, Permission
+
+
+def add_user_to_base_group_or_create_one(user):
+    """
+    Add user to base group of users on site
+    or creates such group with needed permissons.
+    """
+    group, created = Group.objects.get_or_create(name=settings.BASE_GROUP)
+    if created:
+        permissions = Permission.objects.filter(codename__in=settings.PERMISSIONS_FOR_BASE_GROUP)
+        group.permissions.set(permissions)
+    user.groups.add(group)
 
 
 def get_users_with_counters():
@@ -9,9 +23,9 @@ def get_users_with_counters():
     ).order_by('username')
 
 
-def add_blogs_to_current_user(request, *blogs):
-    request.user.profile.blogs.add(*blogs)
+def add_blogs_to_current_user(request, *args):
+    request.user.profile.blogs.add(*args)
 
 
-def remove_blogs_from_current_user(request, *blogs):
-    request.user.profile.blogs.remove(*blogs)
+def remove_blogs_from_current_user(request, *args):
+    request.user.profile.blogs.remove(*args)

@@ -8,17 +8,22 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 
 from django.contrib.auth import login, get_user_model
-from django.contrib.auth.models import Group
-from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import (
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+    LoginRequiredMixin,
+)
 
 from users import models
+from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
+from users.filters import UserFilter
 from users.services.main import (
+    add_user_to_base_group_or_create_one,
     get_users_with_counters,
     add_blogs_to_current_user,
     remove_blogs_from_current_user,
 )
-from users.forms import SignUpForm, CustomUserChangeForm, ChangeProfileForm
-from users.filters import UserFilter
+
 
 class SiqnUp(CreateView):
     model = models.User
@@ -28,7 +33,7 @@ class SiqnUp(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        user.groups.add(Group.objects.get(name='base_members_of_blog'))
+        add_user_to_base_group_or_create_one(user)
         login(self.request, user)
         messages.success(self.request, 'Вы успешно зарегестрированы!')
         return redirect(self.success_url)
@@ -123,7 +128,7 @@ class UserDestroyView(
         return self.request.user.get_username() == self.kwargs.get('username')
 
 
-class AddBlogToUserView( LoginRequiredMixin, SuccessMessageMixin, View):
+class AddBlogToUserView(LoginRequiredMixin, SuccessMessageMixin, View):
     "Add blog to profile of current user."
 
     def post(self, request, *args, **kwargs):
