@@ -750,7 +750,7 @@ typing_extensions = ">=4.0,<5.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10.4"
-content-hash = "596a7edcdfe2138a4eddf68ab8ebaf79ccd8da691a94fea718288e9ac896024b"
+content-hash = "bcb56b861133d79d52b94d9d608f7ba976b8805d178759b62798241ac59edb08"
 
 [metadata.files]
 asgiref = [
