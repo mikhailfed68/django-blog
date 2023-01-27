@@ -80,7 +80,7 @@ class UserListView(ListView):
 
 class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
     "Update User data as well as his Profile data"
-    permission_required = 'users.change_user'
+    permission_required = 'users.change_profile'
 
     def test_func(self):
         "Verify user identity by session user object"
@@ -114,7 +114,7 @@ class UserDestroyView(
         UserPassesTestMixin, PermissionRequiredMixin,
         SuccessMessageMixin, BaseDeleteView):
     "This view delete user"
-    permission_required = 'users.delete_user'
+    permission_required = 'users.delete_profile'
 
     model = get_user_model()
     slug_field = 'username'

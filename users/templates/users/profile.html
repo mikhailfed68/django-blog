@@ -34,8 +34,9 @@
         {% endif %}
     {% endif %}
     </div>
-
+    {% if author.get_full_name %}
     <p><b>Полностью: </b>{{ author.get_full_name }}</p>
+    {% endif %}
     <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
     {% if author.profile.about_me %}
     <p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>

@@ -19,7 +19,7 @@
 
   <!-- Кнопка-триггер модального окна -->
   <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-      Удалить
+      Удалить аккаунт
   </button>
 
 <!-- Модальное окно -->
@@ -46,4 +46,6 @@
       </div>
     </div>
   </div>
+
+  <a href="{% url 'password_change' %}" class="btn btn-secondary ms-2">Изменить пароль</a>
 {% endblock %}
