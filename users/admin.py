@@ -2,16 +2,20 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 from users.models import User, Profile
+from users.forms import ChangeProfileForm
 
 
 class ProfileInLine(admin.StackedInline):
     model = Profile
-    can_delete = False
+    form = ChangeProfileForm # adding validation for profile_picture field
     verbose_name_plural = 'Профили'
+    can_delete = False
+    max_num = 1
+    autocomplete_fields  = ('blogs',)
 
 
+@admin.register(User)
 class UserAdmin(BaseUserAdmin):
+    search_fields = ('useranme',)
+    autocomplete_fields = ('groups',)
     inlines = (ProfileInLine,)
-
-
-admin.site.register(User, UserAdmin)
