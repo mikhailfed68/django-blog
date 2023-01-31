@@ -23,9 +23,9 @@ def get_users_with_counters():
     ).order_by('username')
 
 
-def add_blogs_to_current_user(request, *args):
-    request.user.profile.blogs.add(*args)
+def add_blogs_to_current_user(request, *objs):
+    request.user.profile.blogs.add(*objs)
 
 
-def remove_blogs_from_current_user(request, *args):
-    request.user.profile.blogs.remove(*args)
+def remove_blogs_from_current_user(request, *objs):
+    request.user.profile.blogs.remove(*objs)
