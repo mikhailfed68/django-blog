@@ -1,5 +1,11 @@
-.env
 __pycache__
+*.pyc
 media
+staticfiles/
 dump.rdb
-static
+
+env/
+.env/
+*.env
+venv/
+.venv/
