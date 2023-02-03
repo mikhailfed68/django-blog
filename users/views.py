@@ -26,6 +26,7 @@ from users.services.main import (
 
 
 class SiqnUp(CreateView):
+    "Registers the user on the site."
     model = models.User
     form_class = SignUpForm
     template_name = 'registration/signup.html'
@@ -41,8 +42,8 @@ class SiqnUp(CreateView):
 
 class ProfileDetailView(SingleObjectMixin, ListView):
     """
-    Return the user profile by the 'username' slug,
-    as well as all of its published articles list.
+    Return the user profile by the 'username' slug
+    and its published articles list.
     """
     template_name = 'users/profile.html'
     context_object_name = 'author'
