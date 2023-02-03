@@ -51,14 +51,16 @@
                 <span class="text-secondary">Не в сети</span>
                 {% endif %}
             <div>{{ author.get_full_name }}</div>
+            {% if author.profile.about_me %}
             <div>{{ author.profile.about_me }}</div>
+            {% endif %}
           </div>
           <span class="badge bg-secondary rounded-pill ms-5">{{ author.article_set.count }}</span>
         </li>
         {% endfor %}
       </ul>
       {% else %}
-      <p>По вашему запросу ничего не найдено</p>
+      <p>Ничего не найдено</p>
       {% endif %}
     </section>
 {% endblock %}
