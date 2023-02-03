@@ -14,9 +14,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = json.loads(os.getenv('DEBUG'))
 
-ALLOWED_HOSTS = [os.getenv('HOST')]
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
 
-CSRF_TRUSTED_ORIGINS = [os.getenv('HOST')]
+CSRF_TRUSTED_ORIGINS = [os.getenv('CSRF_TRUSTED_ORIGINS')]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
