@@ -16,6 +16,8 @@ DEBUG = json.loads(os.getenv('DEBUG'))
 
 ALLOWED_HOSTS = [os.getenv('HOST')]
 
+CSRF_TRUSTED_ORIGINS = [os.getenv('HOST')]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
