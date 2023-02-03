@@ -5,7 +5,7 @@
 {% block content %}
     <h2 class="display-4">Об авторе</h2>
     {% if user.get_username == author.get_username %}
-    <a href="{% url 'blog:new_article' %}" class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Создать Статью</a>
+    <a href="{% url 'blog:new_article' %}" class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Создать статью</a>
     <a href="{% url 'users:update_user' user.get_username %}" class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Редактировать</a>    
     {% endif %}
 
