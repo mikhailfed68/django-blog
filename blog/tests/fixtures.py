@@ -7,7 +7,7 @@ def create_test_blog(name, description='testing'):
     'name' argument is identifier added to
     name to provide unique constraints.
     """
-    return Blog.objects.create(name=f'test_{name}', description=description)
+    return Blog.objects.create(name=name, description=description)
 
 
 def create_test_language(language):
@@ -16,7 +16,7 @@ def create_test_language(language):
     'name' argument is identifier added to
     name to provide unique constraints.
     """
-    return Language.objects.create(language=f'test_{language}')
+    return Language.objects.create(language=language)
 
 
 def create_test_article(name, author):
@@ -25,10 +25,11 @@ def create_test_article(name, author):
     'name' argument is identifier added to
     name to provide unique constraints.
     """
+    language, is_created = Language.objects.get_or_create(language='Testing')
     return Article.objects.create(
-        title=f'test_{name}',
-        description=f'test_{name}',
-        body=f'test_{name}',
+        title=name,
+        description=name,
+        body=name,
         author=author,
-        language=create_test_language(1)
+        language=language,
     )
