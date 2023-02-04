@@ -28,9 +28,9 @@
         {% if not author.is_online %}
         {% if author.last_seen %}
             {% load humanize %}
-        <span>Был в сети: {{ author.last_seen|naturaltime }}</span>
+        <span>Был(-а) в сети: {{ author.last_seen|naturaltime }}</span>
         {% else %}
-        <span>Был в сети: Давно</span>
+        <span>Был(-а) в сети: Давно</span>
         {% endif %}
     {% endif %}
     </div>
@@ -42,7 +42,7 @@
     <p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>
     {% endif %}
 
-    {% if author.profile.blogs.all %}
+    {% if author.profile.blogs.exists %}
     <p>Следит за блогами:</p>
       <div class="d-flex align-items-start flex-wrap">
         {% for blog in author.profile.blogs.all %}
