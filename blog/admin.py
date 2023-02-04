@@ -11,12 +11,7 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ('created_at', 'updated_at')
     list_per_page = 20
 
-    exclude = ('author',)
     autocomplete_fields = ('author', 'language', 'blogs')
-
-    def save_model(self, request, obj, form, change):
-        obj.author = request.user
-        super().save_model(request, obj, form, change)
 
 
 @admin.register(Language)
