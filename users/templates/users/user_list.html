@@ -27,18 +27,15 @@
         </li>
         {% for author in user_list %}
         <li class="list-group-item d-flex justify-content-between align-items-start">
-          <img
-          {% if author.profile.profile_picture %}
-          src="{{ author.profile.profile_picture.url }}"
-          {% else %}
-          {% load static %}
-          src="{% static 'users/images/default.jpg' %}"
-          {% endif %}
-          class="img-fluid rounded-pill"
-          alt="profile-picture"
-          width="65px"
-          height="65px"
-          >
+
+          {% load thumbnail %}
+          {% thumbnail author.profile.profile_picture "75x75" crop="center" as im %}
+              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
+          {% empty %}
+              {% load static %}
+              <img src="{% static 'users/images/default.jpg' %}" width="75" height="75" class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
+          {% endthumbnail %}
+    
           <div class="ms-2 mt-1 me-auto text-break">
             <a href="{% url 'users:profile' author.username %}">
               <div class="fw-bold text-break">

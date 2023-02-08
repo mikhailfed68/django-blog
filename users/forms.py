@@ -25,6 +25,10 @@ class ChangeProfileForm(forms.ModelForm):
                 raise ValidationError(
                     "Слишком маленькое изображение, минимальная высота и ширина - 150 пикселей."
                 )
+            elif (width > 250) or (height > 250):
+                 raise ValidationError(
+                    "Слишком большое изображение, максимальная высота и ширина - 250 пикселей."
+                )
         return picture
 
 

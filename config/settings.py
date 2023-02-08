@@ -30,7 +30,9 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
 
     'bootstrap5',
+    'sorl.thumbnail',
     'django_filters',
+    'storages',
 
     'users',
     'blog',
@@ -154,6 +156,21 @@ AUTH_USER_MODEL = 'users.User'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 MEDIA_URL = 'media/'
+
+# ----Yandex s3 api----
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'custom_storage.MediaYandexCloudStorage'
+
+    YANDEX_OBJECT_STORAGE_BUCKET_NAME = os.getenv('YANDEX_OBJECT_STORAGE_BUCKET_NAME')
+
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+
+    AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL')
+
+    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+
 
 # Set the default value for ChoiceFilter.empty_label.
 FILTERS_EMPTY_CHOICE_LABEL = 'Не выбрано'

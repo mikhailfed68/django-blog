@@ -4,8 +4,6 @@ from django.conf import settings
 
 from blog.services.blog import get_default_language
 
-from common.utils import set_picture
-
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField('Создано', auto_now_add=True)
@@ -55,12 +53,6 @@ class Article(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse('blog:article_detail', kwargs={'pk': self.pk})
-
-    def save(self, *args, **kwargs):
-        "Turn the 'title_photo' into a specific thumbnail if it isn't blank."
-        super().save(*args, **kwargs)
-        if self.title_photo:
-            set_picture(self.title_photo.path, (771, 482), type='rectangle')
 
     class Meta:
         ordering = ['-created_at']

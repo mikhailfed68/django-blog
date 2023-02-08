@@ -9,8 +9,6 @@ from django.contrib.auth.models import AbstractUser
 
 from blog.models import Blog
 
-from common.utils import set_picture
-
 
 class User(AbstractUser):
     "A user model."
@@ -56,9 +54,3 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.get_username()
-
-    def save(self, *args, **kwargs):
-        "Turn the 'profile_picture' into a specific thumbnail if it isn't blank."
-        super().save(*args, **kwargs)
-        if self.profile_picture:
-            set_picture(self.profile_picture.path, (150, 150), type='square')
