@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-blog"
-version = "0.1.0"
+version = "1.0.0"
 description = "It is a simple article blog for everyone"
 authors = ["Michael Fedorov <mikhailfedorov1939@gmail.com>"]
 readme = "README.md"
