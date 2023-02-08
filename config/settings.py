@@ -30,7 +30,9 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
 
     'bootstrap5',
+    'sorl.thumbnail',
     'django_filters',
+    'storages',
 
     'users',
     'blog',
