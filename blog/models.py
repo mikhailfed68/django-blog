@@ -1,3 +1,6 @@
+import datetime
+from django.utils import timezone
+
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
@@ -53,6 +56,10 @@ class Article(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse('blog:article_detail', kwargs={'pk': self.pk})
+
+    def was_updated_recently(self):
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.updated_at
 
     class Meta:
         ordering = ['-created_at']
