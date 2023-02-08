@@ -15,8 +15,12 @@ class ArticleForm(forms.ModelForm):
 
         if title_photo:
             width, height = get_image_dimensions(title_photo)
-            if (width < 771) or (height < 482):
+            if (width < 619) or (height < 349):
                 raise ValidationError(
-                    "Слишком маленькое изображение, минимальная высота и ширина - 771 и 482 пикселей."
+                    "Слишком маленькое изображение, минимальная высота и ширина - 619 и 349 пикселей."
+                )
+            elif (width > 1980) or (height > 1080):
+                raise ValidationError(
+                    "Слишком большое изображение, максимальная высота и ширина - 1980 и 1080 пикселей."
                 )
         return title_photo
