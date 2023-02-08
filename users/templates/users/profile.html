@@ -10,18 +10,14 @@
     {% endif %}
 
     <div class="mb-3">
-        <img
-        {% if author.profile.profile_picture %}
-        src="{{ author.profile.profile_picture.url }}"
-        {% else %}
-        {% load static %}
-        src="{% static 'users/images/default.jpg' %}"
-        {% endif %}
-        class="img-fluid img-thumbnail rounded-pill"
-        alt="profile-picture"
-        width="75px"
-        height="75px"
-        >
+        {% load thumbnail %}
+        {% thumbnail author.profile.profile_picture "75x75" crop="center" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
+        {% empty %}
+            {% load static %}
+            <img src="{% static 'users/images/default.jpg' %}" width="75" height="75" class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
+        {% endthumbnail %}
+
         <b>{{ author.get_username }}</b> {% if author.is_online %}<span class="text-success">Online</span>{% endif %}
     </div>
     <div class="mt-2 mb-5">
@@ -61,16 +57,15 @@
         {% for article in object_list %}
         <div class="col">
             <article class="card h-100">
-                <img
-                {% if article.title_photo %}
-                src="{{ article.title_photo.url }}"
-                class="card-img-top h-100"
-                alt="title-photo"
-                {% else %}
-                {% load static %}
-                src="{% static 'blog/placeholder/default.jpeg' %}"
-                {% endif %}
-                >
+
+                {% load thumbnail %}
+                {% thumbnail article.title_photo "619x349" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="card-img-top h-100" alt="title-photo">
+                {% empty %}
+                    {% load static %}
+                    <img src="{% static 'blog/placeholder/default.jpeg' %}" width="619" height="349" class="card-img-top h-100" alt="title-photo">
+                {% endthumbnail %}
+
                 <div class="card-body">
                     <h5 class="card-title">{{ article.title }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ article.created_at|date:"j E" }}</h4>
