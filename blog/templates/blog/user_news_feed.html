@@ -1,52 +1,22 @@
-{% extends "base.html" %}
+{% extends "blog/base_article_list.html" %}
 
-{% block content %}
-<section>
-    <h2 class="display-4">Ваша личная лента</h2>
+{% block othercontent %}
+  <h2 class="display-4">Ваша личная лента</h2>
 
-    {% if user.profile.blogs.all %}
-    <p>Блоги на которые вы подписаны:</p>
-      <div class="d-flex align-items-start flex-wrap mb-5">
-        {% for blog in user.profile.blogs.all %}
-        <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
-            <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
-                {{ blog.name }}
-            </div>
-        </a>
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    {% if article_list %}
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-          {% for article in article_list %}
-          <div class="col">
-              <article class="card h-100">
-
-                {% load thumbnail %}
-                {% thumbnail article.title_photo "619x349" crop="center" as im %}
-                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="card-img-top h-100" alt="title-photo">
-                {% empty %}
-                    {% load static %}
-                    <img src="{% static 'blog/placeholder/default.jpeg' %}" width="619" height="349" class="card-img-top h-100" alt="title-photo">
-                {% endthumbnail %}
-
-                  <div class="card-body">
-                      <h5 class="card-title">{{ article.title }}</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">{{ article.created_at|date:"j E" }}</h4>
-                      <p class="card-text text-truncate">{{ article.description|truncatewords:10 }}</p>
-                      <a href="{% url 'blog:article_detail' article.id %}" class="btn btn-outline-primary">Читать</a>
-                  </div>
-                  <div class="card-footer">
-                      {% load humanize %}
-                      <small class="text-muted"> Обновлено {{ article.updated_at|naturaltime }}</small>
-                  </div>
-              </article>
+  {% if user.profile.blogs.all %}
+  <p>Блоги на которые вы подписаны:</p>
+    <div class="d-flex align-items-start flex-wrap mb-5">
+      {% for blog in user.profile.blogs.all %}
+      <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
+          <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
+              {{ blog.name }}
           </div>
-          {% endfor %}
-      </div>
-      {% else %}
+      </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if not object_list %}
       <p>Еще ничего не опубликовано</p>
-      {% endif %}
-  </section>
+  {% endif %}
 {% endblock %}

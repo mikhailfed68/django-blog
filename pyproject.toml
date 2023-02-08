@@ -1,10 +1,9 @@
 [tool.poetry]
 name = "django-blog"
-version = "1.0.0"
+version = "1.0.1"
 description = "It is a simple article blog for everyone"
 authors = ["Michael Fedorov <mikhailfedorov1939@gmail.com>"]
 readme = "README.md"
-packages = [{include = "config"}]
 
 [tool.poetry.dependencies]
 python = "^3.10.4"

@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "blog/base_article_list.html" %}
 
-{% block content %}
+{% block othercontent %}
     <section>
       <h2 class="display-4">Недавние статьи</h2>
-      {% if articles %}
+    {% if articles %}
       <div class="btn-group">
         <button class="btn btn-outline-primary dropdown-toggle mt-2 mb-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           Сортировать
@@ -13,36 +13,8 @@
             <li><a class="dropdown-item" href="{% url 'blog:index' %}?sort=top">Популярные</a></li>
         </ul>
       </div>
-
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {% for article in articles %}
-            <div class="col">
-                <article class="card h-100">
-
-                    {% load thumbnail %}
-                    {% thumbnail article.title_photo "619x349" crop="center" as im %}
-                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="card-img-top h-100" alt="title-photo">
-                    {% empty %}
-                        {% load static %}
-                        <img src="{% static 'blog/placeholder/default.jpeg' %}" width="619" height="349" class="card-img-top h-100" alt="title-photo">
-                    {% endthumbnail %}
-
-                    <div class="card-body">
-                        <h5 class="card-title">{{ article.title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ article.created_at|date:"j E" }}</h4>
-                        <p class="card-text text-truncate">{{ article.description|truncatewords:10 }}</p>
-                        <a href="{% url 'blog:article_detail' article.id %}" class="btn btn-outline-primary">Читать</a>
-                    </div>
-                    <div class="card-footer">
-                        {% load humanize %}
-                        <small class="text-muted"> Обновлено {{ article.updated_at|naturaltime }}</small>
-                    </div>
-                </article>
-            </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <p>Статьи не найдены</p>
-        {% endif %}
+    {% else %}
+        <p>Ничего нет</p>
+    {% endif %}
     </section>
 {% endblock %}
