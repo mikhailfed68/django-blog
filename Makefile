@@ -1,33 +1,20 @@
-all:
-	code . && sleep 7 && make start
-
-install:
-	poetry install
+format:
+	poetry run isort .
+	poetry run black .
 
 lint:
-	poetry run flake8 blog
+	poetry run flake8 .
 
 test:
-	poetry run pytest blog
+	poetry run python3 manage.py test
 
-test-cov:
-	poetry run pytest --cov=blog
-
-check-pyproject:
+check-all: format lint test
 	poetry check
 
-check: check-pyproject lint test
-
-build: check
-	poetry build
-
-start: startdb
+start:
 	poetry run python3 manage.py runserver
 
-startdb:
-	cat ~/.password_root | sudo --stdin service postgresql start
-
-shell: startdb
+shell:
 	poetry run python3 manage.py shell
 
-.PHONY: install lint test check build start startdb shell
+.PHONY: lint test check start startdb shell
