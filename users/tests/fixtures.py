@@ -2,7 +2,7 @@ from users.models import User
 
 
 def get_test_user_passwd():
-    return 'testTestTestDefault'
+    return "testTestTestDefault"
 
 
 def create_test_user(name, password=get_test_user_passwd()):
@@ -11,4 +11,6 @@ def create_test_user(name, password=get_test_user_passwd()):
     'name' argument is identifier added to
     username and email to provide unique constraints.
     """
-    return User.objects.create_user(username=name, email=f'{name}@test.ru', password=password)
+    return User.objects.create_user(
+        username=name, email=f"{name}@test.ru", password=password
+    )

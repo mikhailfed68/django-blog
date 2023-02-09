@@ -1,7 +1,7 @@
-from blog.models import Blog, Article, Language
+from blog.models import Article, Blog, Language
 
 
-def create_test_blog(name, description='testing'):
+def create_test_blog(name, description="testing"):
     """
     Creates blog with 'test' fields.
     'name' argument is identifier added to
@@ -25,7 +25,7 @@ def create_test_article(name, author):
     'name' argument is identifier added to
     name to provide unique constraints.
     """
-    language, is_created = Language.objects.get_or_create(language='Testing')
+    language, is_created = Language.objects.get_or_create(language="Testing")
     return Article.objects.create(
         title=name,
         description=name,

@@ -1,10 +1,8 @@
+import bleach
+import markdown as md
+from bleach_allowlist import markdown_attrs, markdown_tags
 from django import template
 from django.template.defaultfilters import stringfilter
-
-import markdown as md
-import bleach
-from bleach_allowlist import markdown_attrs, markdown_tags
-
 
 register = template.Library()
 
@@ -13,12 +11,12 @@ register = template.Library()
 @stringfilter
 def markdown(value):
     """
-    Принимает размеченный murkdown текст и возвращает
-    очищенную html разметку с разрешенными элементами для murkdown.
-    Неразрешенные элементы будут экранированы.
+    Accepts murkdown text and returns
+    cleaned html markup with allowed elements for murkdown.
+    Prohibited elements will be escape.
     """
     return bleach.clean(
-        md.markdown(value, extensions=['markdown.extensions.fenced_code']),
+        md.markdown(value, extensions=["markdown.extensions.fenced_code"]),
         markdown_tags,
         markdown_attrs,
     )

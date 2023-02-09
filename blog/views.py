@@ -1,32 +1,31 @@
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
-from django.views.generic.detail import SingleObjectMixin
-from django.views.generic.edit import CreateView, UpdateView, BaseDeleteView
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import (
-    UserPassesTestMixin,
-    PermissionRequiredMixin,
     LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
 )
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import BaseDeleteView, CreateView, UpdateView
 
-from blog import models
+from blog import filters, models
 from blog.forms import ArticleForm
-from blog import filters
 from blog.services.blog import (
-    is_author_of_article,
-    get_preffered_language,
     get_articles_for_search_query,
     get_blogs_with_counters,
+    get_preffered_language,
     get_user_personal_news_feed,
+    is_author_of_article,
 )
 
 
 class IndexListView(ListView):
-    "Returns the list of articles to the main page"
+    """Returns the list of articles to the main page"""
+
     model = models.Article
-    template_name = 'blog/index.html'
-    context_object_name = 'articles'
+    template_name = "blog/index.html"
+    context_object_name = "articles"
     paginate_by = 6
 
     def get_queryset(self):
@@ -35,9 +34,10 @@ class IndexListView(ListView):
 
 
 class PersonalNewsFeedView(LoginRequiredMixin, ListView):
-    "Returns personal news feed for current logged-in user."
+    """Returns personal news feed for current logged-in user."""
+
     model = models.Article
-    template_name = 'blog/user_news_feed.html'
+    template_name = "blog/user_news_feed.html"
     paginate_by = 5
 
     def get_queryset(self):
@@ -45,23 +45,25 @@ class PersonalNewsFeedView(LoginRequiredMixin, ListView):
 
 
 class ArticleDetailView(DetailView):
-    "Returns the details of article."
+    """Returns the details of article."""
+
     model = models.Article
 
 
 class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     """
     Returns a form for creation an article by GET request
-    or creates an new article by POST request.    
+    or creates an new article by POST request.
     """
-    permission_required = 'blog.add_article'
+
+    permission_required = "blog.add_article"
 
     model = models.Article
     form_class = ArticleForm
-    initial = {'language': get_preffered_language('Русский')}
-    template_name = 'blog/new_article.html'
+    initial = {"language": get_preffered_language("Русский")}
+    template_name = "blog/new_article.html"
 
-    success_message = 'Статья успешно создана!'
+    success_message = "Статья успешно создана!"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -69,49 +71,57 @@ class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
 
 
 class ArticleUpdateView(
-        UserPassesTestMixin, PermissionRequiredMixin,
-        SuccessMessageMixin, UpdateView):
+    UserPassesTestMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
     """
     Returns a form for updating an article by GET request
     or updates an article by POST request.
     """
-    permission_required = 'blog.change_article'
+
+    permission_required = "blog.change_article"
 
     model = models.Article
     form_class = ArticleForm
-    template_name = 'blog/update_article.html'
+    template_name = "blog/update_article.html"
 
-    success_message = 'Статья успешно обновлена'
+    success_message = "Статья успешно обновлена"
 
     def test_func(self):
-        return is_author_of_article(author=self.request.user, article_id=self.kwargs.get('pk'))
+        return is_author_of_article(
+            author=self.request.user, article_id=self.kwargs.get("pk")
+        )
 
 
 class ArticleDestroyView(
-        UserPassesTestMixin, PermissionRequiredMixin,
-        SuccessMessageMixin, BaseDeleteView):
-    "Deletes the article from database."
-    permission_required = 'blog.delete_article'
+    UserPassesTestMixin, PermissionRequiredMixin, SuccessMessageMixin, BaseDeleteView
+):
+    """Deletes the article from database."""
+
+    permission_required = "blog.delete_article"
 
     model = models.Article
-    success_url = reverse_lazy('blog:index')
+    success_url = reverse_lazy("blog:index")
 
-    success_message = 'Статья успешно удалена'
+    success_message = "Статья успешно удалена"
 
     def test_func(self):
-        return is_author_of_article(author=self.request.user, article_id=self.kwargs.get('pk'))
+        return is_author_of_article(
+            author=self.request.user, article_id=self.kwargs.get("pk")
+        )
 
 
 class BlogCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
-    "Creates a new blog."
+    """Creates a new blog."""
+
     model = models.Blog
-    fields =  ['name', 'description']
-    template_name_suffix = '_create_form'
-    success_message = 'Новый блог успешно создан.'
+    fields = ["name", "description"]
+    template_name_suffix = "_create_form"
+    success_message = "Новый блог успешно создан."
 
 
 class BlogListView(ListView):
-    "Returns the list of blogs."
+    """Returns the list of blogs."""
+
     model = models.Blog
     paginate_by = 3
 
@@ -125,14 +135,15 @@ class BlogListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filter'] = self.filter
+        context["filter"] = self.filter
         return context
 
 
 class BlogDetailView(SingleObjectMixin, ListView):
-    "Retruns the details of blog and the list of articles its blog." 
-    template_name = 'blog/articles_by_blog.html'
-    context_object_name = 'blog'
+    """Retruns the details of blog and the list of articles its blog."""
+
+    template_name = "blog/articles_by_blog.html"
+    context_object_name = "blog"
     paginate_by = 10
 
     def get(self, request, *args, **kwargs):
