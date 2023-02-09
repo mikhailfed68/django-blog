@@ -1,22 +1,22 @@
 {% extends "blog/base_article_list.html" %}
 
 {% block othercontent %}
-  <h2 class="display-4">Ваша личная лента</h2>
+<h2 class="display-4">Ваша личная лента</h2>
 
-  {% if user.profile.blogs.all %}
-  <p>Блоги на которые вы подписаны:</p>
-    <div class="d-flex align-items-start flex-wrap mb-5">
-      {% for blog in user.profile.blogs.all %}
-      <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
-          <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
-              {{ blog.name }}
-          </div>
-      </a>
-      {% endfor %}
+{% if user.profile.blogs.all %}
+<p>Блоги на которые вы подписаны:</p>
+<div class="d-flex align-items-start flex-wrap mb-5">
+  {% for blog in user.profile.blogs.all %}
+  <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
+    <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
+      {{ blog.name }}
     </div>
-  {% endif %}
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
 
-  {% if not object_list %}
-      <p>Еще ничего не опубликовано</p>
-  {% endif %}
+{% if not object_list %}
+<p>Еще ничего не опубликовано</p>
+{% endif %}
 {% endblock %}

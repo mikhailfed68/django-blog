@@ -1,27 +1,27 @@
 {% extends "base.html" %}
 
-{% block title %}Редактирование статьи |  {{ article.author.get_username }}{% endblock %}
+{% block title %}Редактирование статьи | {{ article.author.get_username }}{% endblock %}
 
 {% block content %}
 <h2 class="display-4">Редактирование статьи</h4>
-<form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% load bootstrap5 %}
     {% bootstrap_form form %}
     {% buttons %}
     <button type="submit" class="btn btn-primary">
-        Сохранить
+      Сохранить
     </button>
     {% endbuttons %}
-</form>
+  </form>
 
-<!-- Кнопка-триггер модального окна -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <!-- Кнопка-триггер модального окна -->
+  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Удалить
-</button>
+  </button>
 
-<!-- Модальное окно -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- Модальное окно -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -38,7 +38,7 @@
           <form action="{% url 'blog:destroy_article' article.pk %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">
-                Удалить
+              Удалить
             </button>
           </form>
 
@@ -46,4 +46,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
+  {% endblock %}

@@ -3,55 +3,58 @@
 {% block title %} Автор | {{ author.get_username }} {% endblock %}
 
 {% block othercontent %}
-    <h2 class="display-4">Об авторе</h2>
-    {% if user.get_username == author.get_username %}
-    <a href="{% url 'blog:new_article' %}" class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Создать статью</a>
-    <a href="{% url 'users:update_user' user.get_username %}" class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Редактировать</a>    
-    {% endif %}
+<h2 class="display-4">Об авторе</h2>
+{% if user.get_username == author.get_username %}
+<a href="{% url 'blog:new_article' %}" class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Создать статью</a>
+<a href="{% url 'users:update_user' user.get_username %}"
+  class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Редактировать</a>
+{% endif %}
 
-    <div class="mb-3">
-        {% load thumbnail %}
-        {% thumbnail author.profile.profile_picture "75x75" crop="center" as im %}
-            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
-        {% empty %}
-            {% load static %}
-            <img src="{% static 'users/images/default.jpg' %}" width="75" height="75" class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
-        {% endthumbnail %}
+<div class="mb-3">
+  {% load thumbnail %}
+  {% thumbnail author.profile.profile_picture "75x75" crop="center" as im %}
+  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-fluid img-thumbnail rounded-pill"
+    alt="profile-picture">
+  {% empty %}
+  {% load static %}
+  <img src="{% static 'users/images/default.jpg' %}" width="75" height="75" class="img-fluid img-thumbnail rounded-pill"
+    alt="profile-picture">
+  {% endthumbnail %}
 
-        <b>{{ author.get_username }}</b> {% if author.is_online %}<span class="text-success">Online</span>{% endif %}
+  <b>{{ author.get_username }}</b> {% if author.is_online %}<span class="text-success">Online</span>{% endif %}
+</div>
+<div class="mt-2 mb-5">
+  {% if not author.is_online %}
+  {% if author.last_seen %}
+  {% load humanize %}
+  <span>Был(-а) в сети: {{ author.last_seen|naturaltime }}</span>
+  {% else %}
+  <span>Был(-а) в сети: Давно</span>
+  {% endif %}
+  {% endif %}
+</div>
+{% if author.get_full_name %}
+<p><b>Полностью: </b>{{ author.get_full_name }}</p>
+{% endif %}
+<p><b>Публикаций: </b>{{ author.article_set.count }}</p>
+{% if author.profile.about_me %}
+<p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>
+{% endif %}
+
+{% if author.profile.blogs.exists %}
+<p>Следит за блогами:</p>
+<div class="d-flex align-items-start flex-wrap">
+  {% for blog in author.profile.blogs.all %}
+  <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
+    <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
+      {{ blog.name }}
     </div>
-    <div class="mt-2 mb-5">
-        {% if not author.is_online %}
-        {% if author.last_seen %}
-            {% load humanize %}
-        <span>Был(-а) в сети: {{ author.last_seen|naturaltime }}</span>
-        {% else %}
-        <span>Был(-а) в сети: Давно</span>
-        {% endif %}
-    {% endif %}
-    </div>
-    {% if author.get_full_name %}
-    <p><b>Полностью: </b>{{ author.get_full_name }}</p>
-    {% endif %}
-    <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
-    {% if author.profile.about_me %}
-    <p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>
-    {% endif %}
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
 
-    {% if author.profile.blogs.exists %}
-    <p>Следит за блогами:</p>
-      <div class="d-flex align-items-start flex-wrap">
-        {% for blog in author.profile.blogs.all %}
-        <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
-            <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
-                {{ blog.name }}
-            </div>
-        </a>
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    {% if author.article_set.exists %} 
-    <h2 class="display-4">Статьи пользователя</h2>
-    {% endif %}
+{% if author.article_set.exists %}
+<h2 class="display-4">Статьи пользователя</h2>
+{% endif %}
 {% endblock %}

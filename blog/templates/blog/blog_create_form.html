@@ -3,16 +3,16 @@
 
 {% block content %}
 <div class="row">
-    <h2 class="display-4">Создание нового блога</h1>
+  <h2 class="display-4">Создание нового блога</h1>
     <form method="post">
-        {% csrf_token %}
-        {% load bootstrap5 %}
-        {% bootstrap_form form %}
-        {% buttons %}
-        <button type="submit" class="btn btn-primary">
-            Создать
-        </button>
-        {% endbuttons %}
+      {% csrf_token %}
+      {% load bootstrap5 %}
+      {% bootstrap_form form %}
+      {% buttons %}
+      <button type="submit" class="btn btn-primary">
+        Создать
+      </button>
+      {% endbuttons %}
     </form>
 </div>
 {% endblock %}

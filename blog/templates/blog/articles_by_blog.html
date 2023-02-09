@@ -3,23 +3,24 @@
 {% block title %}Блоги | {{ blog.name }}{% endblock %}
 
 {% block othercontent %}
-    <h2 class="display-4">Статьи в блоге<div>{{ blog.name }}</div></h2>
+<h2 class="display-4">Статьи в блоге<div>{{ blog.name }}</div>
+</h2>
 
-    {% if user.is_authenticated %}
-        {% if blog in user.profile.blogs.all %}
-            <form action="{% url 'users:delete_blog_from_profile' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="blog_id" value="{{ blog.id }}">
-                <input type="hidden" name="blog_name" value="{{ blog.name }}">
-                <button class="btn btn-outline-secondary mb-2">Отписаться</button>    
-            </form>
-        {% else %}
-            <form action="{% url 'users:add_blog_to_profile' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="blog_id" value="{{ blog.id }}">
-                <input type="hidden" name="blog_name" value="{{ blog.name }}">
-                <button class="btn btn-outline-secondary mb-2">Подписаться</button>    
-            </form>
-        {% endif %}
-    {% endif %}
+{% if user.is_authenticated %}
+{% if blog in user.profile.blogs.all %}
+<form action="{% url 'users:delete_blog_from_profile' %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="blog_id" value="{{ blog.id }}">
+  <input type="hidden" name="blog_name" value="{{ blog.name }}">
+  <button class="btn btn-outline-secondary mb-2">Отписаться</button>
+</form>
+{% else %}
+<form action="{% url 'users:add_blog_to_profile' %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="blog_id" value="{{ blog.id }}">
+  <input type="hidden" name="blog_name" value="{{ blog.name }}">
+  <button class="btn btn-outline-secondary mb-2">Подписаться</button>
+</form>
+{% endif %}
+{% endif %}
 {% endblock %}

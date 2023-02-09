@@ -3,19 +3,19 @@
 {% block title %}Вход{% endblock %}
 
 {% block content %}
-    <h2 class="display-4">Вход</h2>
+<h2 class="display-4">Вход</h2>
 
-    <form method="post" action="{% url 'login' %}">
-      {% csrf_token %}
-      {% load bootstrap5 %}
-      {% bootstrap_form form %}
-      <input type="hidden" name="next" value="{{ next }}"/>
-      {% buttons %}
-      <button type="submit" class="btn btn-primary">
-        Войти
-      </button>
-      {% endbuttons %}
-    </form>
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  {% load bootstrap5 %}
+  {% bootstrap_form form %}
+  <input type="hidden" name="next" value="{{ next }}" />
+  {% buttons %}
+  <button type="submit" class="btn btn-primary">
+    Войти
+  </button>
+  {% endbuttons %}
+</form>
 
 <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
 
