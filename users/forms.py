@@ -3,7 +3,9 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
 
-from users.models import Profile, User
+from blog.forms import BlogsWidget
+
+from .models import Profile, User
 
 
 class SignUpForm(UserCreationForm):
@@ -23,6 +25,9 @@ class ChangeProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ["profile_picture", "about_me", "blogs"]
+        widgets = {
+            "blogs": BlogsWidget,
+        }
 
     def clean_profile_picture(self):
         picture = self.cleaned_data.get("profile_picture", False)

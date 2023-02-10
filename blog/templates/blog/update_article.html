@@ -2,7 +2,12 @@
 
 {% block title %}Редактирование статьи | {{ article.author.get_username }}{% endblock %}
 
+{% block style %}
+{{ form.media.css }}
+{% endblock %}
+
 {% block content %}
+{{ form.media.css }}
 <h2 class="display-4">Редактирование статьи</h4>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -14,6 +19,8 @@
     </button>
     {% endbuttons %}
   </form>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  {{ form.media.js }}
 
   <!-- Кнопка-триггер модального окна -->
   <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
