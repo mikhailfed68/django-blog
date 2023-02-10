@@ -16,7 +16,7 @@ from django.views.generic.edit import BaseDeleteView
 from users import models
 from users.filters import UserFilter
 from users.forms import ChangeProfileForm, CustomUserChangeForm, SignUpForm
-from users.services.main import (
+from users.services import (
     add_authors_to_user,
     add_blogs_to_user,
     add_user_to_base_group_or_create_one,
