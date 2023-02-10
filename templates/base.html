@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}Главная{% endblock %}</title>
-    {% load static %}
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon/favicon.ico' %}">
+  <title>{% block title %}Главная{% endblock %}</title>
+  {% load static %}
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon/favicon.ico' %}">
 
-    {# Load the tag library #}
-    {% load bootstrap5 %}
+  {# Load the tag library #}
+  {% load bootstrap5 %}
 
-    {# Load CSS and JavaScript #}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
+  {# Load CSS and JavaScript #}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
 
-    {% block style %}{% endblock %}
+  {% block style %}{% endblock %}
 </head>
+
 <body class="d-flex flex-column min-vh-100">
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded" aria-label="Eleventh navbar example">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'blog:index' %}">Incognito</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample09"
+          aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -51,12 +54,12 @@
           <form method="get" action="{% url 'blog:index' %}" class="me-2 mb-2 mb-sm-2 mb-md-2 mt-lg-2">
             <input type="text" name='search_query' placeholder='Найти статью' class='form-control' aria-label='Search'>
           </form>
-            {% if user.is_authenticated %}
+          {% if user.is_authenticated %}
           <div>
-              <a class="btn btn-outline-primary me-2" href="{% url 'logout' %}">Выйти</a>
+            <a class="btn btn-outline-primary me-2" href="{% url 'logout' %}">Выйти</a>
             {% else %}
-              <a class="btn btn-outline-primary me-2" href="{% url 'users:signup' %}">Регистрация</a>
-              <a class="btn btn-outline-primary me-2" href="{% url 'login' %}?next={{request.path}}">Вход</a>
+            <a class="btn btn-outline-primary me-2" href="{% url 'users:signup' %}">Регистрация</a>
+            <a class="btn btn-outline-primary me-2" href="{% url 'login' %}?next={{request.path}}">Вход</a>
             {% endif %}
           </div>
         </div>
@@ -68,50 +71,65 @@
   {% bootstrap_messages %}
 
   <main class="container mt-2 mb-5">
-      {% block search %}{% endblock %}
+    {% block search %}{% endblock %}
 
-      {% block content %}{% endblock %}
+    {% block content %}{% endblock %}
 
-      {% block pagination %}
-          {% if is_paginated %}
-          {% load url_replacer %}
-          <nav aria-label="Search results pages" class="mt-4">
-              <ul class="pagination justify-content-center">
-                  {% if page_obj.has_previous %}
-                  <li class="page-item"><a class="page-link" href="?{% replace_param page=page_obj.previous_page_number %}">Предыдущая</a></li>
-                  <li class="page-item"><a class="page-link" href="?{% replace_param page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a></li>
-                  {% else %}
-                  <li class="page-item disabled"><a class="page-link" href="">Предыдущая</a></li>
-                  {% endif %}
+    {% block pagination %}
+    {% if is_paginated %}
+    {% load url_replacer %}
+    <nav aria-label="Search results pages" class="mt-4">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link"
+            href="?{% replace_param page=page_obj.previous_page_number %}">Предыдущая</a></li>
+        <li class="page-item">
+          <a class="page-link" href="?{% replace_param page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="">Предыдущая</a></li>
+        {% endif %}
 
-                  <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+        <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
 
-                  {% if page_obj.has_next %}
-                  <li class="page-item"><a class="page-link" href="?{% replace_param page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a></li>
-                  <li class="page-item"><a class="page-link" href="?{% replace_param page=page_obj.next_page_number %}">Следующая</a></li>
-                  {% else %}
-                  <li class="page-item disabled"><a class="page-link" href="">Следующая</a></li>
-                  {% endif %}
-              </ul>
-            </nav>
-          {% endif %}
-      {% endblock %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?{% replace_param page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+        </li>
+        <li class="page-item"><a class="page-link"
+            href="?{% replace_param page=page_obj.next_page_number %}">Следующая</a></li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="">Следующая</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+    {% endblock %}
   </main>
 
   <footer class="footer mt-auto py-3 bg-light">
     <div class="container" class="border-top">
       <div class="col-md-4 d-flex align-items-center">
         <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
-          <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+          <svg class="bi" width="30" height="24">
+            <use xlink:href="#bootstrap" />
+          </svg>
         </a>
         <span class="text-muted">&copy; 2022 M. Fedorov</span>
       </div>
       <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-        <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-        <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-        <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
+        <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24">
+              <use xlink:href="#twitter" />
+            </svg></a></li>
+        <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24">
+              <use xlink:href="#instagram" />
+            </svg></a></li>
+        <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24">
+              <use xlink:href="#facebook" />
+            </svg></a></li>
       </ul>
     </div>
   </footer>
 </body>
+
 </html>

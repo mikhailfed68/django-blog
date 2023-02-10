@@ -1,10 +1,10 @@
-from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.test import TestCase
 
+from blog.tests.fixtures import create_test_article, create_test_blog
 from users.services import main
 from users.tests.fixtures import create_test_user
-from blog.tests.fixtures import create_test_blog, create_test_article
 
 
 class AddingBaseGoupTests(TestCase):
@@ -12,6 +12,7 @@ class AddingBaseGoupTests(TestCase):
     Checks the function to add user to base group of site members
     and creates a group if one does not exists.
     """
+
     def setUp(self):
         self.user_1 = create_test_user(1)
         self.user_2 = create_test_user(2)
@@ -24,21 +25,23 @@ class AddingBaseGoupTests(TestCase):
 
 
 class RetrievingUsers(TestCase):
-    "Checks the function of retrieving a specific users list."
+    """Checks the function of retrieving a specific users list."""
+
     def test_get_users_with_counters(self):
-        "Checks if the 'article__count' field exists for user objects"
+        """Checks if the 'article__count' field exists for user objects"""
         user_1 = create_test_user(1)
         user_2 = create_test_user(2)
         create_test_article(1, user_1)
         user_qs = main.get_users_with_counters()
 
         self.assertQuerysetEqual(user_qs, [user_1, user_2])
-        self.assertTrue(hasattr(user_qs[0], 'article__count'))
+        self.assertTrue(hasattr(user_qs[0], "article__count"))
         self.assertEqual(user_qs[0].article__count, 1)
 
 
 class AddingAndRemovingBlogsTests(TestCase):
-    "Checks the addition and deletion of blogs to the user."
+    """Checks the addition and deletion of blogs to the user."""
+
     def setUp(self):
         class FakeRequest:
             "Instantiates a stub for request."
@@ -55,11 +58,13 @@ class AddingAndRemovingBlogsTests(TestCase):
 
         self.assertQuerysetEqual(
             self.request.user.profile.blogs.all(),
-            [self.blog_1, self.blog_2, self.blog_3]
+            [self.blog_1, self.blog_2, self.blog_3],
         )
 
     def test_remove_blogs_from_current_user(self):
-        main.add_blogs_to_current_user(self.request, self.blog_1, self.blog_2, self.blog_3)
+        main.add_blogs_to_current_user(
+            self.request, self.blog_1, self.blog_2, self.blog_3
+        )
         main.remove_blogs_from_current_user(self.request, self.blog_2, self.blog_3)
 
         self.assertQuerysetEqual(self.request.user.profile.blogs.all(), [self.blog_1])

@@ -1,20 +1,21 @@
 {% extends "blog/base_article_list.html" %}
 
 {% block othercontent %}
-    <section>
-      <h2 class="display-4">Недавние статьи</h2>
-    {% if articles %}
-      <div class="btn-group">
-        <button class="btn btn-outline-primary dropdown-toggle mt-2 mb-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Сортировать
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'blog:index' %}?sort=new">Новые</a></li>
-            <li><a class="dropdown-item" href="{% url 'blog:index' %}?sort=top">Популярные</a></li>
-        </ul>
-      </div>
-    {% else %}
-        <p>Ничего нет</p>
-    {% endif %}
-    </section>
+<section>
+  <h2 class="display-4">Недавние статьи</h2>
+  {% if articles %}
+  <div class="btn-group">
+    <button class="btn btn-outline-primary dropdown-toggle mt-2 mb-3" type="button" data-bs-toggle="dropdown"
+      aria-expanded="false">
+      Сортировать
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="{% url 'blog:index' %}?sort=new">Новые</a></li>
+      <li><a class="dropdown-item" href="{% url 'blog:index' %}?sort=top">Популярные</a></li>
+    </ul>
+  </div>
+  {% else %}
+  <p>Ничего нет</p>
+  {% endif %}
+</section>
 {% endblock %}

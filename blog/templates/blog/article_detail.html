@@ -4,39 +4,41 @@
 
 {% block content %}
 <h2 class="display-4">{{ article.title }}</h1>
-    {% if user.get_username == article.author.get_username and perms.blog.change_article %}
-    <a href="{% url 'blog:update_article' article.id %}" class="btn btn-outline-secondary  btn-sm">Редактировать</a>
-    {% endif %}
+  {% if user.get_username == article.author.get_username and perms.blog.change_article %}
+  <a href="{% url 'blog:update_article' article.id %}" class="btn btn-outline-secondary  btn-sm">Редактировать</a>
+  {% endif %}
 
-    <div class="m-3">
+  <div class="m-3">
 
-      {% load thumbnail %}
-      {% thumbnail article.author.profile.profile_picture "75x75" crop="center" as im %}
-          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
-      {% empty %}
-          {% load static %}
-          <img src="{% static 'users/images/default.jpg' %}" width="75" height="75" class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
-      {% endthumbnail %}
+    {% load thumbnail %}
+    {% thumbnail article.author.profile.profile_picture "75x75" crop="center" as im %}
+    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-fluid img-thumbnail rounded-pill"
+      alt="profile-picture">
+    {% empty %}
+    {% load static %}
+    <img src="{% static 'users/images/default.jpg' %}" width="75" height="75"
+      class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
+    {% endthumbnail %}
 
-      <b><a href="{% url 'users:profile' article.author.get_username %}">{{ article.author.get_username }}</a></b>
-    </div>
+    <b><a href="{% url 'users:profile' article.author.get_username %}">{{ article.author.get_username }}</a></b>
+  </div>
 
-    {% if article.title_photo %}
-    <img src="{{ article.title_photo.url }}" class="img-fluid rounded mx-auto d-block" alt="title-photo">
-    {% endif %}
+  {% if article.title_photo %}
+  <img src="{{ article.title_photo.url }}" class="img-fluid rounded mx-auto d-block" alt="title-photo">
+  {% endif %}
 
-    <div class="d-flex align-items-start flex-wrap">
-      {% for blog in article.blogs.all %}
-      <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
-        <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
-            {{ blog.name }}
-        </div>
-      </a>
-      {% endfor %}
-    </div>
+  <div class="d-flex align-items-start flex-wrap">
+    {% for blog in article.blogs.all %}
+    <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
+      <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
+        {{ blog.name }}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
 
-    <p><b>Язык: </b>{{ article.language }}</p>
-    <p><b>Описание: </b>{{ article.description }}</p>
-    {% load markdown_extras %}
-    <p>{{ article.body|markdown|safe }}</p>
-{% endblock %}
+  <p><b>Язык: </b>{{ article.language }}</p>
+  <p><b>Описание: </b>{{ article.description }}</p>
+  {% load markdown_extras %}
+  <p>{{ article.body|markdown|safe }}</p>
+  {% endblock %}
