@@ -20,6 +20,7 @@ from users.services import (
     add_authors_to_user,
     add_blogs_to_user,
     add_user_to_base_group_or_create_one,
+    get_user_following_list,
     get_users_with_counters,
     remove_authors_from_user,
     remove_blogs_from_user,
@@ -70,12 +71,32 @@ class UserListView(ListView):
     """Rerturn the registred users list."""
 
     model = models.User
-    paginate_by = 3
+    paginate_by = 5
 
     def get_queryset(self):
         self.filter = UserFilter(
             self.request.GET,
             queryset=get_users_with_counters(),
+            request=self.request,
+        )
+        return self.filter.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
+        return context
+
+
+class UserFollowingListView(LoginRequiredMixin, ListView):
+    """Returns a followng list of current user."""
+
+    model = models.User
+    paginate_by = 5
+
+    def get_queryset(self):
+        self.filter = UserFilter(
+            self.request.GET,
+            queryset=get_user_following_list(self.request.user),
             request=self.request,
         )
         return self.filter.qs
