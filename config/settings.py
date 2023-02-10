@@ -45,7 +45,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.contrib.admindocs.middleware.XViewMiddleware",
-    "common.middleware.common.RemoveEmptyQueryString",
+    "common.middleware.RemoveEmptyQueryString",
     "users.middleware.UserActiveMidlleware",
 ]
 
@@ -158,7 +158,7 @@ MEDIA_URL = "media/"
 
 # ----Yandex s3 api----
 if not DEBUG:
-    DEFAULT_FILE_STORAGE = "custom_storage.MediaYandexCloudStorage"
+    DEFAULT_FILE_STORAGE = "common.custom_storage.MediaYandexCloudStorage"
 
     YANDEX_OBJECT_STORAGE_BUCKET_NAME = os.getenv("YANDEX_OBJECT_STORAGE_BUCKET_NAME")
 
