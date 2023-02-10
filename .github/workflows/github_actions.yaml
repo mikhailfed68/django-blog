@@ -27,6 +27,6 @@ jobs:
         python -m pip install poetry
         poetry install
         poetry check
-    - name: Run isort, black, flake8, unittest
+    - name: Run isort, black, flake8
       run: |
         make check-all

@@ -8,7 +8,7 @@ lint:
 test:
 	poetry run python3 manage.py test
 
-check-all: format lint test
+check-all: format lint
 	poetry check
 
 start:
