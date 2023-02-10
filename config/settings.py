@@ -183,9 +183,9 @@ if not DEBUG:
 # Set the default value for ChoiceFilter.empty_label
 FILTERS_EMPTY_CHOICE_LABEL = "Не выбрано"
 
-USER_ONLINE_TIMEOUT = 60  # 1 minute
+USER_ONLINE_TIMEOUT = json.loads(os.getenv("USER_ONLINE_TIMEOUT"))
 
-USER_LAST_SEEN_TIMEOUT = 259200  # 3 days
+USER_LAST_SEEN_TIMEOUT = json.loads(os.getenv("USER_LAST_SEEN_TIMEOUT"))
 
 # ----The settings for base group of users on the site----
 BASE_GROUP = os.getenv("BASE_GROUP")

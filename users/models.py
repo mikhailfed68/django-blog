@@ -20,6 +20,9 @@ class User(AbstractUser):
         unique=True,
     )
 
+    class Meta:
+        ordering = ["username"]
+
     def __str__(self):
         return self.get_username()
 
@@ -37,9 +40,6 @@ class User(AbstractUser):
                 return False
             return True
         return False
-
-    class Meta:
-        ordering = ["username"]
 
 
 def get_user_directory_path(instance, filename):

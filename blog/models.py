@@ -20,14 +20,14 @@ class Blog(TimeStampedModel):
     name = models.CharField("Название", max_length=30, unique=True)
     description = models.CharField("Описание", max_length=60)
 
+    class Meta:
+        ordering = ["name"]
+
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse("blog:articles_by_blog", kwargs={"pk": self.pk})
-
-    class Meta:
-        ordering = ["name"]
 
 
 class Language(models.Model):
@@ -57,6 +57,9 @@ class Article(TimeStampedModel):
     )
     blogs = models.ManyToManyField(Blog, verbose_name="Блоги", blank=True)
 
+    class Meta:
+        ordering = ["-created_at"]
+
     def __str__(self):
         return self.title
 
@@ -66,6 +69,3 @@ class Article(TimeStampedModel):
     def was_updated_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.updated_at
-
-    class Meta:
-        ordering = ["-created_at"]
