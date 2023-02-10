@@ -16,6 +16,6 @@ class ProfileInLine(admin.StackedInline):
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    search_fields = ("useranme",)
+    search_fields = ("username",)
     autocomplete_fields = ("groups",)
     inlines = (ProfileInLine,)
