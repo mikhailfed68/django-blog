@@ -8,7 +8,7 @@
 
 {% if user.is_authenticated %}
 {% if blog in user.profile.blogs.all %}
-<form action="{% url 'users:delete_blog_from_profile' %}" method="post">
+<form action="{% url 'users:remove_blog_from_profile' %}" method="post">
   {% csrf_token %}
   <input type="hidden" name="blog_id" value="{{ blog.id }}">
   <input type="hidden" name="blog_name" value="{{ blog.name }}">

@@ -61,7 +61,10 @@ class Profile(models.Model):
         Blog, verbose_name="Следит за данными блогами", blank=True
     )
     following = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="followers", verbose_name="Следит за данными авторами", blank=True
+        settings.AUTH_USER_MODEL,
+        related_name="followers",
+        verbose_name="Следит за данными авторами",
+        blank=True,
     )
 
     def __str__(self):

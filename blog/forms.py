@@ -1,7 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
-
 from django_select2 import forms as s2forms
 
 from blog.models import Article

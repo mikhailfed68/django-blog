@@ -30,19 +30,21 @@ def get_users_with_counters():
     )
 
 
-def add_blogs_to_current_user(request, *objs):
-    request.user.profile.blogs.add(*objs)
+def add_blogs_to_user(user, *blogs):
+    """Add blogs to user's blog list."""
+    user.profile.blogs.add(*blogs)
 
 
-def remove_blogs_from_current_user(request, *objs):
-    request.user.profile.blogs.remove(*objs)
+def remove_blogs_from_user(user, *blogs):
+    """Remove blogs from user's blog list."""
+    user.profile.blogs.remove(*blogs)
 
 
-def add_author_to_user_profile(user, author):
-    """Add author to user's following list."""
-    user.profile.following.add(author)
+def add_authors_to_user(user, *authors):
+    """Add authors to user's following list."""
+    user.profile.following.add(*authors)
 
 
-def remove_author_from_user_profile(user, author):
-    """Remove author to user's following list."""
-    user.profile.following.remove(author)
+def remove_authors_from_user(user, *authors):
+    """Remove authors from user's following list."""
+    user.profile.following.remove(*authors)
