@@ -21,6 +21,8 @@ from users.services.main import (
     add_user_to_base_group_or_create_one,
     get_users_with_counters,
     remove_blogs_from_current_user,
+    add_author_to_user_profile,
+    remove_author_from_user_profile,
 )
 
 
@@ -158,3 +160,25 @@ class RemoveBlogFromUserView(LoginRequiredMixin, View):
         remove_blogs_from_current_user(request, blog_id)
         messages.success(request, f"Вы отписались от блога {blog_name}")
         return redirect("blog:articles_by_blog", pk=blog_id)
+
+
+class AddAuthorToProfileView(LoginRequiredMixin, View):
+    """Add the author to user's following list for current authenticated user."""
+
+    def post(self, request, *args, **kwargs):
+        author_id = request.POST.get("author_id")
+        author_username = request.POST.get("author_username")
+        add_author_to_user_profile(request.user, author_id)
+        messages.success(request, f"Вы подписались на {author_username}")
+        return redirect("users:profile", username=author_username)
+
+
+class RemoveAuthorFromProfileView(LoginRequiredMixin, View):
+    """Add the author to user's following list for current authenticated user."""
+
+    def post(self, request, *args, **kwargs):
+        author_id = request.POST.get("author_id")
+        author_username = request.POST.get("author_username")
+        remove_author_from_user_profile(request.user, author_id)
+        messages.success(request, f"Вы отписались от {author_username}")
+        return redirect("users:profile", username=author_username)

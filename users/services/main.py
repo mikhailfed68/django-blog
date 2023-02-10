@@ -35,3 +35,13 @@ def add_blogs_to_current_user(request, *objs):
 
 def remove_blogs_from_current_user(request, *objs):
     request.user.profile.blogs.remove(*objs)
+
+
+def add_author_to_user_profile(user, author):
+    """Add author to user's following list."""
+    user.profile.following.add(author)
+
+
+def remove_author_from_user_profile(user, author):
+    """Remove author to user's following list."""
+    user.profile.following.remove(author)
