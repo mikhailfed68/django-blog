@@ -19,11 +19,12 @@ def add_user_to_base_group_or_create_one(user):
 
 
 def get_users_with_counters():
-    "Returns a user list with article counter for each user."
+    "Returns a user list with article and followers counters for each user."
     return (
         get_user_model()
         .objects.annotate(
             Count("article", distinct=True),
+            Count("followers", distinct=True),
         )
         .order_by("username")
     )
