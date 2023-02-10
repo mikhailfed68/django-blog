@@ -132,16 +132,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = "static/"
-
-STATIC_ROOT = BASE_DIR / "static"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "assets",  # place for favicon.ico
-]
 
 # We have enabled the static file collection while deploying the app
 # Type 1 to disable
@@ -161,12 +151,27 @@ LOGIN_URL = "login"
 
 AUTH_USER_MODEL = "users.User"
 
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+STATIC_ROOT = BASE_DIR / "static"
+
+STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "assets",  # place for favicon.ico
+]
 MEDIA_ROOT = BASE_DIR / "media"
 
 MEDIA_URL = "media/"
 
 # ----Yandex s3 api----
-if not DEBUG:
+ENABLED_YANDEX_STORAGE = json.loads(os.getenv("ENABLED_YANDEX_STORAGE"))
+
+if ENABLED_YANDEX_STORAGE:
+    STATICFILES_STORAGE = "common.custom_storage.StaticYandexCloudStorage"
+
     DEFAULT_FILE_STORAGE = "common.custom_storage.MediaYandexCloudStorage"
 
     YANDEX_OBJECT_STORAGE_BUCKET_NAME = os.getenv("YANDEX_OBJECT_STORAGE_BUCKET_NAME")
