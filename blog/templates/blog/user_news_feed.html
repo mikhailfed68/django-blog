@@ -3,6 +3,10 @@
 {% block othercontent %}
 <h2 class="display-4">Ваша личная лента</h2>
 
+{% if user.profile.following.exists %}
+<a href="{% url 'users:following' %}" class="btn btn-outline-primary mb-5">Посмотреть подписки</a>
+{% endif %}
+
 {% if user.profile.blogs.all %}
 <p>Блоги на которые вы подписаны:</p>
 <div class="d-flex align-items-start flex-wrap mb-5">

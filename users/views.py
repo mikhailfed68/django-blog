@@ -16,11 +16,14 @@ from django.views.generic.edit import BaseDeleteView
 from users import models
 from users.filters import UserFilter
 from users.forms import ChangeProfileForm, CustomUserChangeForm, SignUpForm
-from users.services.main import (
-    add_blogs_to_current_user,
+from users.services import (
+    add_authors_to_user,
+    add_blogs_to_user,
     add_user_to_base_group_or_create_one,
+    get_user_following_list,
     get_users_with_counters,
-    remove_blogs_from_current_user,
+    remove_authors_from_user,
+    remove_blogs_from_user,
 )
 
 
@@ -68,12 +71,32 @@ class UserListView(ListView):
     """Rerturn the registred users list."""
 
     model = models.User
-    paginate_by = 3
+    paginate_by = 5
 
     def get_queryset(self):
         self.filter = UserFilter(
             self.request.GET,
             queryset=get_users_with_counters(),
+            request=self.request,
+        )
+        return self.filter.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
+        return context
+
+
+class UserFollowingListView(LoginRequiredMixin, ListView):
+    """Returns a followng list of current user."""
+
+    model = models.User
+    paginate_by = 5
+
+    def get_queryset(self):
+        self.filter = UserFilter(
+            self.request.GET,
+            queryset=get_user_following_list(self.request.user),
             request=self.request,
         )
         return self.filter.qs
@@ -122,7 +145,7 @@ class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
 class UserDestroyView(
     UserPassesTestMixin, PermissionRequiredMixin, SuccessMessageMixin, BaseDeleteView
 ):
-    """This view delete user."""
+    """Delete user."""
 
     permission_required = "users.delete_profile"
 
@@ -138,23 +161,45 @@ class UserDestroyView(
         return self.request.user.get_username() == self.kwargs.get("username")
 
 
-class AddBlogToUserView(LoginRequiredMixin, SuccessMessageMixin, View):
-    """Add blog to profile of current user."""
+class AddBlogToProfileView(LoginRequiredMixin, SuccessMessageMixin, View):
+    """Add blog to profile of current authenticated user."""
 
     def post(self, request, *args, **kwargs):
         blog_id = request.POST.get("blog_id")
         blog_name = request.POST.get("blog_name")
-        add_blogs_to_current_user(request, blog_id)
+        add_blogs_to_user(request.user, blog_id)
         messages.success(request, f"Вы подписались на блог {blog_name}")
         return redirect("blog:articles_by_blog", pk=blog_id)
 
 
-class RemoveBlogFromUserView(LoginRequiredMixin, View):
-    """Remove blog from profile of current user."""
+class RemoveBlogFromProfileView(LoginRequiredMixin, View):
+    """Remove blog from profile of current authenticated user."""
 
     def post(self, request, *args, **kwargs):
         blog_id = request.POST.get("blog_id")
         blog_name = request.POST.get("blog_name")
-        remove_blogs_from_current_user(request, blog_id)
+        remove_blogs_from_user(request.user, blog_id)
         messages.success(request, f"Вы отписались от блога {blog_name}")
         return redirect("blog:articles_by_blog", pk=blog_id)
+
+
+class AddAuthorToProfileView(LoginRequiredMixin, View):
+    """Add author to user's following list for current authenticated user."""
+
+    def post(self, request, *args, **kwargs):
+        author_id = request.POST.get("author_id")
+        author_username = request.POST.get("author_username")
+        add_authors_to_user(request.user, author_id)
+        messages.success(request, f"Вы подписались на {author_username}")
+        return redirect("users:profile", username=author_username)
+
+
+class RemoveAuthorFromProfileView(LoginRequiredMixin, View):
+    """Add author to user's following list for current authenticated user."""
+
+    def post(self, request, *args, **kwargs):
+        author_id = request.POST.get("author_id")
+        author_username = request.POST.get("author_username")
+        remove_authors_from_user(request.user, author_id)
+        messages.success(request, f"Вы отписались от {author_username}")
+        return redirect("users:profile", username=author_username)

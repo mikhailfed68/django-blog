@@ -2,10 +2,19 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
+from django_select2 import forms as s2forms
 
 from blog.forms import BlogsWidget
 
 from .models import Profile, User
+
+
+class AuthorsWidget(s2forms.ModelSelect2MultipleWidget):
+    search_fields = [
+        "username__icontains",
+        "first_name__icontains",
+        "last_name__icontains",
+    ]
 
 
 class SignUpForm(UserCreationForm):
@@ -24,9 +33,10 @@ class SignUpForm(UserCreationForm):
 class ChangeProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ["profile_picture", "about_me", "blogs"]
+        fields = ["profile_picture", "about_me", "blogs", "following"]
         widgets = {
             "blogs": BlogsWidget,
+            "following": AuthorsWidget,
         }
 
     def clean_profile_picture(self):

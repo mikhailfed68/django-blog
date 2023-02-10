@@ -10,6 +10,26 @@
   class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Редактировать</a>
 {% endif %}
 
+
+{% if user.get_username != author.get_username %}
+{% if author not in user.profile.following.all %}
+<form action="{% url 'users:add_author_to_profile' %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="author_id" value="{{ author.id }}">
+  <input type="hidden" name="author_username" value="{{ author.username }}">
+  <button class="btn btn-outline-secondary mb-2">Подписаться</button>
+</form>
+{% else %}
+<form action="{% url 'users:remove_author_from_profile' %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="author_id" value="{{ author.id }}">
+  <input type="hidden" name="author_username" value="{{ author.username }}">
+  <button class="btn btn-outline-secondary mb-2">Отписаться</button>
+</form>
+{% endif %}
+{% endif %}
+
+
 <div class="mb-3">
   {% load thumbnail %}
   {% thumbnail author.profile.profile_picture "75x75" crop="center" as im %}
@@ -23,6 +43,7 @@
 
   <b>{{ author.get_username }}</b> {% if author.is_online %}<span class="text-success">Online</span>{% endif %}
 </div>
+
 <div class="mt-2 mb-5">
   {% if not author.is_online %}
   {% if author.last_seen %}
@@ -33,9 +54,12 @@
   {% endif %}
   {% endif %}
 </div>
+
 {% if author.get_full_name %}
 <p><b>Полностью: </b>{{ author.get_full_name }}</p>
 {% endif %}
+<p><b>Подписчиков: </b>{{ author.followers.count }}</p>
+<p><b>Подписок: </b>{{ author.profile.following.count }}</p>
 <p><b>Публикаций: </b>{{ author.article_set.count }}</p>
 {% if author.profile.about_me %}
 <p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>

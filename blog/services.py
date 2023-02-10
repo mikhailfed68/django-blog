@@ -42,14 +42,23 @@ def get_articles_for_search_query(search_query, queryset):
 
 
 def get_blogs_with_counters():
-    """Returns a blog list with article and profile counters for each blog."""
+    """
+    Returns a blog list with article
+    and profile counters for each blog.
+    """
     return models.Blog.objects.annotate(
         Count("article", distinct=True), Count("profile", distinct=True)
     ).order_by("name")
 
 
 def get_user_personal_news_feed(user):
-    """Retruns the user personal news feed by his blogs."""
+    """
+    Retruns the user personal news feed
+    by his blogs and author following list.
+    """
     user_blogs = user.profile.blogs.all()
-    user_feed_articles = models.Article.objects.filter(blogs__in=user_blogs).distinct()
+    user_following_list = user.profile.following.all()
+    user_feed_articles = models.Article.objects.filter(
+        Q(blogs__in=user_blogs) | Q(author__in=user_following_list)
+    ).distinct()
     return user_feed_articles

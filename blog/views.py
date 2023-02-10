@@ -11,7 +11,7 @@ from django.views.generic.edit import BaseDeleteView, CreateView, UpdateView
 
 from blog import filters, models
 from blog.forms import ArticleForm
-from blog.services.blog import (
+from blog.services import (
     get_articles_for_search_query,
     get_blogs_with_counters,
     get_preffered_language,

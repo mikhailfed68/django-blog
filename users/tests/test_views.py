@@ -58,7 +58,7 @@ class AdddingAndRemovingBlogsViewTests(TestCase):
             secure=True,
         )
         remove_blog_resp = self.client.post(
-            reverse("users:delete_blog_from_profile"),
+            reverse("users:remove_blog_from_profile"),
             data=self.user_input,
             follow=True,
             secure=True,
@@ -82,7 +82,7 @@ class AdddingAndRemovingBlogsViewTests(TestCase):
             secure=True,
         )
         remove_blog_resp = self.client.post(
-            reverse("users:delete_blog_from_profile"),
+            reverse("users:remove_blog_from_profile"),
             data=self.user_input,
             follow=True,
             secure=True,
@@ -97,7 +97,7 @@ class AdddingAndRemovingBlogsViewTests(TestCase):
         self.assertRedirects(
             remove_blog_resp,
             expected_url="{}?next={}".format(
-                reverse("login"), reverse("users:delete_blog_from_profile")
+                reverse("login"), reverse("users:remove_blog_from_profile")
             ),
         )
 
@@ -109,7 +109,7 @@ class AdddingAndRemovingBlogsViewTests(TestCase):
             secure=True,
         )
         remove_blog_resp = self.client.post(
-            reverse("users:delete_blog_from_profile"),
+            reverse("users:remove_blog_from_profile"),
             data=self.user_input,
             follow=True,
             secure=True,
@@ -125,7 +125,7 @@ class AdddingAndRemovingBlogsViewTests(TestCase):
             secure=True,
         )
         remove_blog_resp = self.client.post(
-            reverse("users:delete_blog_from_profile"),
+            reverse("users:remove_blog_from_profile"),
             data=self.user_input,
             follow=True,
             secure=True,
@@ -153,7 +153,7 @@ class AdddingAndRemovingBlogsViewTests(TestCase):
             secure=True,
         )
         self.client.post(
-            reverse("users:delete_blog_from_profile"),
+            reverse("users:remove_blog_from_profile"),
             data=self.user_input,
             follow=True,
             secure=True,
@@ -225,3 +225,144 @@ class ProfileDetailViewTests(TestCase):
         ]
         other_articles.reverse()
         self.assertNotIn(other_articles, self.resp.context["object_list"])
+
+
+class AdddingAndRemovingAuthorsViewTests(TestCase):
+    """Checks AddAuthorToUserView and RemoveAuthorFromUserView."""
+
+    def setUp(self):
+        self.user = create_test_user("1")
+        self.author_1 = create_test_user("2")
+        self.client.force_login(self.user)
+        self.user_input = dict(
+            author_id=self.author_1.id, author_username=self.author_1.username
+        )
+
+    def test_views_use_redirect(self):
+        add_author_resp = self.client.post(
+            reverse("users:add_author_to_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+        remove_author_resp = self.client.post(
+            reverse("users:remove_author_from_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+
+        self.assertRedirects(
+            add_author_resp,
+            expected_url=reverse(
+                "users:profile", kwargs={"username": self.author_1.username}
+            ),
+        )
+        self.assertRedirects(
+            remove_author_resp,
+            expected_url=reverse(
+                "users:profile", kwargs={"username": self.author_1.username}
+            ),
+        )
+
+    def test_views_deny_anonymous(self):
+        self.client.logout()
+        add_author_resp = self.client.post(
+            reverse("users:add_author_to_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+        remove_author_resp = self.client.post(
+            reverse("users:remove_author_from_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+
+        self.assertRedirects(
+            add_author_resp,
+            expected_url="{}?next={}".format(
+                reverse("login"), reverse("users:add_author_to_profile")
+            ),
+        )
+        self.assertRedirects(
+            remove_author_resp,
+            expected_url="{}?next={}".format(
+                reverse("login"), reverse("users:remove_author_from_profile")
+            ),
+        )
+
+    def test_responses_have_reqiered_buttons(self):
+        add_author_resp = self.client.post(
+            reverse("users:add_author_to_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+        remove_author_resp = self.client.post(
+            reverse("users:remove_author_from_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+        self.assertContains(add_author_resp, "Отписаться")
+        self.assertContains(remove_author_resp, "Подписаться")
+
+    def test_responses_have_succses_message(self):
+        add_author_resp = self.client.post(
+            reverse("users:add_author_to_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+        remove_author_resp = self.client.post(
+            reverse("users:remove_author_from_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+
+        self.assertContains(
+            add_author_resp, f"Вы подписались на {self.author_1.username}"
+        )
+        self.assertContains(
+            remove_author_resp, f"Вы отписались от {self.author_1.username}"
+        )
+
+    def test_view_adds_author_to_user_profile(self):
+        self.client.post(
+            reverse("users:add_author_to_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+        self.author_2 = create_test_user("3")
+        self.client.post(
+            reverse("users:add_author_to_profile"),
+            data=dict(
+                author_id=self.author_2.id, author_username=self.author_2.username
+            ),
+            follow=True,
+            secure=True,
+        )
+        self.assertQuerysetEqual(
+            self.user.profile.following.all(), [self.author_1, self.author_2]
+        )
+        self.assertQuerysetEqual(self.author_1.followers.all(), [self.user.profile])
+
+    def test_view_removes_author_from_user_profile(self):
+        self.client.post(
+            reverse("users:add_author_to_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+        self.client.post(
+            reverse("users:remove_author_from_profile"),
+            data=self.user_input,
+            follow=True,
+            secure=True,
+        )
+        self.assertQuerysetEqual(self.user.profile.following.all(), [])
+        self.assertQuerysetEqual(self.author_1.followers.all(), [])

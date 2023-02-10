@@ -5,7 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-from blog.services.blog import get_default_language
+from blog.services import get_default_language
 
 
 class TimeStampedModel(models.Model):
