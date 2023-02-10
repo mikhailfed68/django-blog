@@ -91,7 +91,7 @@ CACHES = {
     },
     "select2": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
+        "LOCATION": os.getenv("REDIS_URL2"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
@@ -159,8 +159,6 @@ LOGOUT_REDIRECT_URL = "/"
 
 LOGIN_URL = "login"
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
 AUTH_USER_MODEL = "users.User"
 
 MEDIA_ROOT = BASE_DIR / "media"
@@ -193,3 +191,13 @@ USER_LAST_SEEN_TIMEOUT = 259200  # 3 days
 BASE_GROUP = os.getenv("BASE_GROUP")
 
 PERMISSIONS_FOR_BASE_GROUP = json.loads(os.getenv("PERMISSIONS_FOR_BASE_GROUP"))
+
+EMAIL_USE_TLS = json.loads(os.getenv("EMAIL_USE_TLS"))
+
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT"))
