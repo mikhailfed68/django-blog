@@ -11,7 +11,7 @@ class BlogFilter(django_filters.FilterSet):
         field_name="name",
         lookup_expr="icontains",
     )
-    by_subscriber_count = django_filters.ChoiceFilter(
+    by_followers_count = django_filters.ChoiceFilter(
         field_name="profile__count",
         label="По подписчикам",
         choices=ORDER,
@@ -32,14 +32,14 @@ class BlogFilter(django_filters.FilterSet):
         ordering_param = {
             counter: param
             for (counter, param) in self.request.GET.items()
-            if counter in ("by_article_count", "by_subscriber_count")
+            if counter in ("by_article_count", "by_followers_count")
         }
 
         ordering = []
         for counter, param in ordering_param.items():
             field_of_param = (
                 "profile__count"
-                if counter == "by_subscriber_count"
+                if counter == "by_followers_count"
                 else "article__count"
             )
             if param == "asc":
