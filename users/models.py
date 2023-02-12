@@ -12,9 +12,13 @@ from blog.models import Blog
 
 class User(AbstractUser):
     """A user model."""
+
     username = models.CharField(
         "Имя пользователя",
-        help_text="Обязательное поле. Не более 10 символов. Только буквы, цифры и символы @/./+/-/_.",
+        help_text="""
+        Обязательное поле. Не более 10 символов.
+        только буквы, цифры и символы @/./+/-/_.
+        """,
         unique=True,
         max_length=10,
     )

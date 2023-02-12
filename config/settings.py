@@ -132,7 +132,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-
 # We have enabled the static file collection while deploying the app
 # Type 1 to disable
 DISABLE_COLLECTSTATIC = 0
