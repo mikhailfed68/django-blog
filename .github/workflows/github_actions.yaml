@@ -41,7 +41,7 @@ jobs:
         poetry check
     - name: Run flake8
       run: |
-        flake8 .
+        poetry run flake8 .
     - name: Run tests
       env:
         DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
