@@ -55,11 +55,11 @@ for the application to work correctly
 
 ALLOWED_HOSTS
 Values are specified as a string, separated by a space
-_f.e. '127.0.0.1 localhost'_
+_By default set to '127.0.0.1 .localhost [::1]'_
 
 CSRF_TRUSTED_ORIGINS
 Values are specified as a string, separated by a space
-_f.e. 'http://127.0.0.1'_
+__By default set to 'http://127.0.0.1'_
 
 SECRET_KEY
 
