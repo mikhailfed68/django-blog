@@ -49,9 +49,9 @@ Create an .env file for the values of the environment variables
 
 `touch .env`
 
-Now, you have to setup nessesary environment variables
+Now, you have to setup environment variables:
 
-See [Environment variables](#environment-variables) section.
+>See [Environment variables](#environment-variables) section.
 
 When you have configured variables, run the remaining commands:
 
