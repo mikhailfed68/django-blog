@@ -13,9 +13,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = json.loads(os.getenv("DEBUG", "false"))
 
-ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(" ")
 
-CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS")]
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS").split(" ")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -194,9 +194,16 @@ USER_ONLINE_TIMEOUT = json.loads(os.getenv("USER_ONLINE_TIMEOUT", "60"))
 USER_LAST_SEEN_TIMEOUT = json.loads(os.getenv("USER_LAST_SEEN_TIMEOUT", "86400"))
 
 # ----The settings for base group of users on the site----
-BASE_GROUP = os.getenv("BASE_GROUP")
+BASE_GROUP = os.getenv("BASE_GROUP", "base_members_of_site")
 
-PERMISSIONS_FOR_BASE_GROUP = json.loads(os.getenv("PERMISSIONS_FOR_BASE_GROUP"))
+PERMISSIONS_FOR_BASE_GROUP = json.loads(os.getenv("PERMISSIONS_FOR_BASE_GROUP", "false"))
+
+if not PERMISSIONS_FOR_BASE_GROUP:
+    PERMISSIONS_FOR_BASE_GROUP = [
+        "add_article", "change_article", "delete_article",
+        "view_article", "add_blog", "view_blog", "view_language",
+        "change_profile", "delete_profile", "view_profile",
+    ]
 
 EMAIL_USE_TLS = json.loads(os.getenv("EMAIL_USE_TLS", "true"))
 
