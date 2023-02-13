@@ -40,9 +40,11 @@ jobs:
         poetry install
         poetry check
     -name: Activate virtual environment
-      run: poetry shell
+      run: |
+        poetry shell
     - name: Run flake8
-      run: flake8 .
+      run: |
+        flake8 .
     - name: Run tests
       env:
         DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
