@@ -71,6 +71,7 @@ postgresql://[user[:password]@][host][:port][/dbname]
 
 REDIS_URL
 redis://host:port
+
 ---
 BASE_GROUP
 _By default to set to 'base_members_of_site'_
@@ -84,6 +85,7 @@ _By default set to the following list:
 ["add_article", "change_article", "delete_article", "view_article", "add_blog", "view_blog", "view_language", "change_profile", "delete_profile", "view_profile"]_
 Contains a list of permissions that
 will be granted to newly registered users.
+
 ---
 USER_ONLINE_TIMEOUT
 _By default set to 60 seconds_
@@ -92,6 +94,7 @@ Time during which the user will be considered online
 USER_LAST_SEEN_TIMEOUT
 _By default set to 86400 seconds (1 day)_
 Time during which the date of the last visit of the user will be stored
+
 ---
 ENABLED_YANDEX_STORAGE
 _By default set to False_
@@ -111,6 +114,7 @@ AWS_S3_ENDPOINT_URL
 _f.e. 'https://storage.yandexcloud.net'_
 AWS_S3_REGION_NAME
 _f.e. 'ru-central1-a'_
+
 ---
 Define to send a password reset email:
 EMAIL_USE_TLS
