@@ -97,7 +97,7 @@ redis://host:port
 ---
 **BASE_GROUP**
 
-_By default to set to 'base_members_of_site'_
+_By default set to 'base_members_of_site'_
 
 The name of the group that will be automatically
 created when the user first registers on the site.
@@ -141,7 +141,7 @@ if you want to use it_
 
 Your backet name in Object Storage
 
-_Read more in django-storages docs_
+_Read more in django-storages docs also_
 
 **AWS_ACCESS_KEY_ID**
 
