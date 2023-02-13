@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = json.loads(os.getenv("DEBUG"))
+DEBUG = json.loads(os.getenv("DEBUG", False))
 
 ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 
@@ -166,7 +166,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "media/"
 
 # ----Yandex s3 api----
-ENABLED_YANDEX_STORAGE = json.loads(os.getenv("ENABLED_YANDEX_STORAGE"))
+ENABLED_YANDEX_STORAGE = json.loads(os.getenv("ENABLED_YANDEX_STORAGE", False))
 
 if ENABLED_YANDEX_STORAGE:
     STATICFILES_STORAGE = "common.custom_storage.StaticYandexCloudStorage"
@@ -187,16 +187,16 @@ if ENABLED_YANDEX_STORAGE:
 # Set the default value for ChoiceFilter.empty_label
 FILTERS_EMPTY_CHOICE_LABEL = "Не выбрано"
 
-USER_ONLINE_TIMEOUT = json.loads(os.getenv("USER_ONLINE_TIMEOUT"))
+USER_ONLINE_TIMEOUT = json.loads(os.getenv("USER_ONLINE_TIMEOUT", 60))
 
-USER_LAST_SEEN_TIMEOUT = json.loads(os.getenv("USER_LAST_SEEN_TIMEOUT"))
+USER_LAST_SEEN_TIMEOUT = json.loads(os.getenv("USER_LAST_SEEN_TIMEOUT", 86400))
 
 # ----The settings for base group of users on the site----
 BASE_GROUP = os.getenv("BASE_GROUP")
 
 PERMISSIONS_FOR_BASE_GROUP = json.loads(os.getenv("PERMISSIONS_FOR_BASE_GROUP"))
 
-EMAIL_USE_TLS = json.loads(os.getenv("EMAIL_USE_TLS"))
+EMAIL_USE_TLS = json.loads(os.getenv("EMAIL_USE_TLS", True))
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 
@@ -204,4 +204,4 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
-EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT"))
+EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT", 25))

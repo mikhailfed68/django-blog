@@ -43,6 +43,10 @@ jobs:
       run: poetry run flake8 .
     - name: Run tests
       env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        DEBUG: True
+        BASE_GROUP: ${{ secrets.BASE_GROUP }}
+        PERMISSIONS_FOR_BASE_GROUP: ${{ secrets.PERMISSIONS_FOR_BASE_GROUP }}
         DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
       run: |
         poetry run python3 manage.py test
