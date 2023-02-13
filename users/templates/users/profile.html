@@ -10,7 +10,7 @@
   class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Редактировать</a>
 {% endif %}
 
-
+{% if user.is_authenticated %}
 {% if user.get_username != author.get_username %}
 {% if author not in user.profile.following.all %}
 <form action="{% url 'users:add_author_to_profile' %}" method="post">
@@ -28,7 +28,7 @@
 </form>
 {% endif %}
 {% endif %}
-
+{% endif %}
 
 <div class="mb-3">
   {% load thumbnail %}

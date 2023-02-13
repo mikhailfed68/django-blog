@@ -1,4 +1,4 @@
-name: Django CI
+name: Django-CI
 
 on:
   push:
@@ -15,6 +15,29 @@ jobs:
       matrix:
         python-version: [3.10.4]
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+        - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+      redis:
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+            --health-cmd "redis-cli ping"
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+        ports:
+            - 6379:6379
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -27,6 +50,16 @@ jobs:
         python -m pip install poetry
         poetry install
         poetry check
-    - name: Run isort, black, flake8
+    - name: Run flake8
+      run: poetry run flake8 .
+    - name: Run tests
+      env:
+        CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        DEBUG: True
+        BASE_GROUP: ${{ secrets.BASE_GROUP }}
+        PERMISSIONS_FOR_BASE_GROUP: ${{ secrets.PERMISSIONS_FOR_BASE_GROUP }}
+        REDIS_URL: redis://localhost:6379
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
       run: |
-        make check-all
+        poetry run python3 manage.py test

@@ -11,11 +11,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = json.loads(os.getenv("DEBUG"))
+DEBUG = json.loads(os.getenv("DEBUG", "false"))
 
-ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1 .localhost [::1]").split(" ")
 
-CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS")]
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://127.0.0.1").split(" ")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     "django.contrib.humanize",
     "django.contrib.admindocs",
+    "debug_toolbar",
     "django_select2",
     "bootstrap5",
     "sorl.thumbnail",
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -132,7 +134,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-
 # We have enabled the static file collection while deploying the app
 # Type 1 to disable
 DISABLE_COLLECTSTATIC = 0
@@ -167,7 +168,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "media/"
 
 # ----Yandex s3 api----
-ENABLED_YANDEX_STORAGE = json.loads(os.getenv("ENABLED_YANDEX_STORAGE"))
+ENABLED_YANDEX_STORAGE = json.loads(os.getenv("ENABLED_YANDEX_STORAGE", "false"))
 
 if ENABLED_YANDEX_STORAGE:
     STATICFILES_STORAGE = "common.custom_storage.StaticYandexCloudStorage"
@@ -188,16 +189,23 @@ if ENABLED_YANDEX_STORAGE:
 # Set the default value for ChoiceFilter.empty_label
 FILTERS_EMPTY_CHOICE_LABEL = "Не выбрано"
 
-USER_ONLINE_TIMEOUT = json.loads(os.getenv("USER_ONLINE_TIMEOUT"))
+USER_ONLINE_TIMEOUT = json.loads(os.getenv("USER_ONLINE_TIMEOUT", "60"))
 
-USER_LAST_SEEN_TIMEOUT = json.loads(os.getenv("USER_LAST_SEEN_TIMEOUT"))
+USER_LAST_SEEN_TIMEOUT = json.loads(os.getenv("USER_LAST_SEEN_TIMEOUT", "86400"))
 
 # ----The settings for base group of users on the site----
-BASE_GROUP = os.getenv("BASE_GROUP")
+BASE_GROUP = os.getenv("BASE_GROUP", "base_members_of_site")
 
-PERMISSIONS_FOR_BASE_GROUP = json.loads(os.getenv("PERMISSIONS_FOR_BASE_GROUP"))
+PERMISSIONS_FOR_BASE_GROUP = json.loads(os.getenv("PERMISSIONS_FOR_BASE_GROUP", "false"))
 
-EMAIL_USE_TLS = json.loads(os.getenv("EMAIL_USE_TLS"))
+if not PERMISSIONS_FOR_BASE_GROUP:
+    PERMISSIONS_FOR_BASE_GROUP = [
+        "add_article", "change_article", "delete_article",
+        "view_article", "add_blog", "view_blog", "view_language",
+        "change_profile", "delete_profile", "view_profile",
+    ]
+
+EMAIL_USE_TLS = json.loads(os.getenv("EMAIL_USE_TLS", "true"))
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 
@@ -205,4 +213,8 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
-EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT"))
+EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT", "25"))
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
