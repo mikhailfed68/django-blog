@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     "django.contrib.humanize",
     "django.contrib.admindocs",
+    "debug_toolbar",
     "django_select2",
     "bootstrap5",
     "sorl.thumbnail",
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -205,3 +207,7 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT", "25"))
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
