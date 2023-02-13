@@ -141,7 +141,7 @@ if you want to use it_
 
 Your backet name in Object Storage
 
-_Read more in django-storages docs also_
+_For more information, read django-storages docs also_
 
 **AWS_ACCESS_KEY_ID**
 
