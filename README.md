@@ -25,13 +25,13 @@ You can also follow interesting authors or blogs in your personal feed by subscr
 
 ## For developers
 If you want to install this project on your local machine manually, you need to do the following:
-- Clone the repository and go to it:
+Clone the repository and go to it:
 
 `git clone https://github.com/MichaelFed68/django-blog.git`
 
 `cd django-blog`
 
-- Activate the virtual environment and install requirements:
+Activate the virtual environment and install requirements:
 
 `python3 -m pip install poetry`
 
@@ -41,25 +41,25 @@ If you want to install this project on your local machine manually, you need to 
 
 `poetry shell`
 
-- Create a media directory for uploaded files and images;
+Create a media directory for uploaded files and images;
 
 `mkdir media`
 
-- Create an .env file for the values of the environment variables
+Create an .env file for the values of the environment variables
 
 `touch .env`
 
-- Now, you have to setup nessesary environment variables
+Now, you have to setup nessesary environment variables
 
 See [Environment variables](#environment-variables) section.
 
-- When you have configured variables, run the remaining commands:
+When you have configured variables, run the remaining commands:
 
 `./manage.py collectstatic`
 
 `./manage.py migrate —no-checks`
 
-- And run server to make sure everything works
+And run server to make sure everything works
 
 `./manage.py runserver`
 
