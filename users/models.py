@@ -24,7 +24,7 @@ class User(AbstractUser):
         max_length=10,
     )
     email = models.EmailField(
-        "Электронный адресс",
+        "Электронный адрес",
         help_text="Почта должна быть уникальной.",
         error_messages={"unique": "Электронная почта уже используется."},
         unique=True,
