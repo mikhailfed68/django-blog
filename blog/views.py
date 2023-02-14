@@ -38,7 +38,7 @@ class PersonalNewsFeedView(LoginRequiredMixin, ListView):
 
     model = models.Article
     template_name = "blog/user_news_feed.html"
-    paginate_by = 5
+    paginate_by = 6
 
     def get_queryset(self):
         return get_user_personal_news_feed(self.request.user)
@@ -123,7 +123,7 @@ class BlogListView(ListView):
     """Returns the list of blogs."""
 
     model = models.Blog
-    paginate_by = 3
+    paginate_by = 5
 
     def get_queryset(self):
         self.filter = filters.BlogFilter(

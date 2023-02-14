@@ -6,6 +6,7 @@ from django.core.cache import cache
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from sorl import thumbnail
 
 from blog.models import Blog
 
@@ -23,7 +24,7 @@ class User(AbstractUser):
         max_length=10,
     )
     email = models.EmailField(
-        "Электронный адресс",
+        "Электронный адрес",
         help_text="Почта должна быть уникальной.",
         error_messages={"unique": "Электронная почта уже используется."},
         unique=True,
@@ -62,7 +63,7 @@ class Profile(models.Model):
     """
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(
+    profile_picture = thumbnail.ImageField(
         "Фото профиля", upload_to=get_user_directory_path, blank=True, null=True
     )
     about_me = models.CharField("О себе", max_length=60, blank=True, null=True)

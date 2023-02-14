@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "storages",
     "users",
     "blog",
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 MIDDLEWARE = [
@@ -163,6 +164,7 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / "assets",  # place for favicon.ico
 ]
+
 MEDIA_ROOT = BASE_DIR / "media"
 
 MEDIA_URL = "media/"
@@ -196,13 +198,22 @@ USER_LAST_SEEN_TIMEOUT = json.loads(os.getenv("USER_LAST_SEEN_TIMEOUT", "86400")
 # ----The settings for base group of users on the site----
 BASE_GROUP = os.getenv("BASE_GROUP", "base_members_of_site")
 
-PERMISSIONS_FOR_BASE_GROUP = json.loads(os.getenv("PERMISSIONS_FOR_BASE_GROUP", "false"))
+PERMISSIONS_FOR_BASE_GROUP = json.loads(
+    os.getenv("PERMISSIONS_FOR_BASE_GROUP", "false")
+)
 
 if not PERMISSIONS_FOR_BASE_GROUP:
     PERMISSIONS_FOR_BASE_GROUP = [
-        "add_article", "change_article", "delete_article",
-        "view_article", "add_blog", "view_blog", "view_language",
-        "change_profile", "delete_profile", "view_profile",
+        "add_article",
+        "change_article",
+        "delete_article",
+        "view_article",
+        "add_blog",
+        "view_blog",
+        "view_language",
+        "change_profile",
+        "delete_profile",
+        "view_profile",
     ]
 
 EMAIL_USE_TLS = json.loads(os.getenv("EMAIL_USE_TLS", "true"))
