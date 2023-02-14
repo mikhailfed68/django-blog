@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.cache import cache
 from django.test import TestCase
 from django.utils import timezone
 
@@ -11,6 +12,9 @@ class ArticleModelTest(TestCase):
     def setUp(self):
         self.user = create_test_user("1")
         self.article = create_test_article("1", self.user)
+
+    def tearDown(self):
+        cache.clear()
 
     def test_was_updated_recently_with_new_article(self):
         """

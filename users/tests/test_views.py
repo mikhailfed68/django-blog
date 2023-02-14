@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.cache import cache
 from django.test import TestCase
 from django.urls import reverse
 
@@ -25,6 +26,9 @@ class SignUpTests(TestCase):
         )
         self.created_user = User.objects.get(username=self.user_input.get("username"))
 
+    def tearDown(self):
+        cache.clear()
+
     def test_registration_of_new_user(self):
         self.assertRedirects(self.resp, expected_url=reverse("blog:index"))
         self.assertEqual(
@@ -49,6 +53,9 @@ class AdddingAndRemovingBlogsViewTests(TestCase):
         self.user = create_test_user("1")
         self.client.force_login(self.user)
         self.user_input = dict(blog_id=self.blog.id, blog_name=self.blog.name)
+
+    def tearDown(self):
+        cache.clear()
 
     def test_views_use_redirect(self):
         add_blog_resp = self.client.post(
@@ -177,6 +184,9 @@ class ProfileDetailViewTests(TestCase):
             secure=True,
         )
 
+    def tearDown(self):
+        cache.clear()
+
     def test_response_status_code(self):
         self.assertEqual(self.resp.status_code, 200)
 
@@ -237,6 +247,9 @@ class AdddingAndRemovingAuthorsViewTests(TestCase):
         self.user_input = dict(
             author_id=self.author_1.id, author_username=self.author_1.username
         )
+
+    def tearDown(self):
+        cache.clear()
 
     def test_views_use_redirect(self):
         add_author_resp = self.client.post(
