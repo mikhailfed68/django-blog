@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from sorl import thumbnail
 
 from blog.services import get_default_language
 
@@ -44,7 +45,7 @@ def get_user_directory_path(instance, filename):
 class Article(TimeStampedModel):
     "Article of blog."
     title = models.CharField("Заголовок", max_length=100, unique=True)
-    title_photo = models.ImageField(
+    title_photo = thumbnail.ImageField(
         "Фото", upload_to=get_user_directory_path, blank=True, null=True
     )
     description = models.CharField("Описание", max_length=100)
