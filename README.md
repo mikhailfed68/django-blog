@@ -55,8 +55,6 @@ Now, you have to setup environment variables:
 
 When you have configured variables, run the remaining commands:
 
-`./manage.py collectstatic`
-
 `./manage.py migrate —no-checks`
 
 And run server to make sure everything works
