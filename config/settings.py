@@ -180,7 +180,6 @@ MEDIA_URL = "media/"
 ENABLED_YANDEX_STORAGE = json.loads(os.getenv("ENABLED_YANDEX_STORAGE", "false"))
 
 if ENABLED_YANDEX_STORAGE:
-    STATICFILES_STORAGE = "common.custom_storage.StaticYandexCloudStorage"
 
     DEFAULT_FILE_STORAGE = "common.custom_storage.MediaYandexCloudStorage"
 
