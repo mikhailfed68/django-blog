@@ -39,6 +39,5 @@
 
   <p><b>Язык: </b>{{ article.language }}</p>
   <p><b>Описание: </b>{{ article.description }}</p>
-  {% load markdown_extras %}
-  <p>{{ article.body|markdown|safe }}</p>
+  <p>{{ article.body|safe }}</p>
   {% endblock %}

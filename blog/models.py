@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.utils import timezone
 from sorl import thumbnail
 
+from tinymce.models import HTMLField
+
 from blog.services import get_default_language
 
 
@@ -49,7 +51,7 @@ class Article(TimeStampedModel):
         "Фото", upload_to=get_user_directory_path, blank=True, null=True
     )
     description = models.CharField("Описание", max_length=100)
-    body = models.TextField("Содержание")
+    body = HTMLField("Содержание")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.CASCADE
     )

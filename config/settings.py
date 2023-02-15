@@ -33,15 +33,16 @@ INSTALLED_APPS = [
     "sorl.thumbnail",
     "django_filters",
     "storages",
+    'tinymce',
+    "django_cleanup.apps.CleanupConfig",
     "users",
     "blog",
-    "django_cleanup.apps.CleanupConfig",
 ]
 
 MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.cache.UpdateCacheMiddleware",
-    "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.http.ConditionalGetMiddleware",
@@ -71,7 +72,6 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
             "libraries": {
-                "markdown_extras": "templatetags.markdown_extras",
                 "url_replacer": "templatetags.url_replacer",
             },
         },
