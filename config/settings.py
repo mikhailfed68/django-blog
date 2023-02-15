@@ -239,6 +239,6 @@ INTERNAL_IPS = [
 
 TINY_API_KEY = os.getenv("TINY_API_KEY", "no-api-key")
 
-INYMCE_JS_URL = f"https://cdn.tiny.cloud/1/{TINY_API_KEY}/tinymce/6/tinymce.min.js"
+TINYMCE_JS_URL = f"https://cdn.tiny.cloud/1/{TINY_API_KEY}/tinymce/6/tinymce.min.js"
 
 TINYMCE_COMPRESSOR = False
