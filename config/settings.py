@@ -236,9 +236,3 @@ EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT", "25"))
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-
-TINY_API_KEY = os.getenv("TINY_API_KEY", "no-api-key")
-
-TINYMCE_JS_URL = f"https://cdn.tiny.cloud/1/{TINY_API_KEY}/tinymce/6/tinymce.min.js"
-
-TINYMCE_COMPRESSOR = False
