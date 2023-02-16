@@ -26,8 +26,6 @@ def is_author_of_article(author, article_id):
     return article.author == author
 
 
-
-
 def get_blogs_with_counters():
     """
     Returns a blog list with article
@@ -43,7 +41,9 @@ def get_blogs_with_counters():
 
 
 def get_articles_for_cards():
-    return models.Article.objects.order_by('-created_at').defer("body", "author_id", "language_id")
+    return models.Article.objects.order_by("-created_at").defer(
+        "body", "author_id", "language_id"
+    )
 
 
 def get_articles_for_search_query(search_query):
@@ -64,7 +64,7 @@ def get_user_personal_news_feed(user):
     user_following_list = user.profile.following.all().values("id")
 
     return (
-        get_articles_for_cards().filter(
-            Q(blogs__in=user_blogs) | Q(author__in=user_following_list)
-        ).distinct()
+        get_articles_for_cards()
+        .filter(Q(blogs__in=user_blogs) | Q(author__in=user_following_list))
+        .distinct()
     )

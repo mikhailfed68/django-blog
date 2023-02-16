@@ -29,9 +29,9 @@ def get_users_with_counters():
             Count("article", distinct=True),
             Count("followers", distinct=True),
         )
-        .select_related('profile')
+        .select_related("profile")
         .order_by("date_joined")
-        .only("username", "first_name", "last_name", 'profile')
+        .only("username", "first_name", "last_name", "profile")
     )
 
 
@@ -41,8 +41,8 @@ def get_users_for_profile():
     and followers counters for each user.
     """
     return get_users_with_counters().annotate(
-            following__count=Count('profile__following', distinct=True),
-        )
+        following__count=Count("profile__following", distinct=True),
+    )
 
 
 def get_user_following_list(user):
@@ -55,7 +55,9 @@ def get_user_following_list(user):
             Count("article", distinct=True),
             Count("followers", distinct=True),
         )
-        .order_by("date_joined").select_related("profile").only("username", "first_name", "last_name", "profile")
+        .order_by("date_joined")
+        .select_related("profile")
+        .only("username", "first_name", "last_name", "profile")
     )
 
 

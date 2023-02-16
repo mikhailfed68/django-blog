@@ -12,10 +12,10 @@ from django.views.generic.edit import BaseDeleteView, CreateView, UpdateView
 from blog import filters, models
 from blog.forms import ArticleForm
 from blog.services import (
+    get_articles_for_cards,
     get_articles_for_search_query,
     get_blogs_with_counters,
     get_preffered_language,
-    get_articles_for_cards,
     get_user_personal_news_feed,
     is_author_of_article,
 )
