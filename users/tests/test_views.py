@@ -176,7 +176,7 @@ class ProfileDetailViewTests(TestCase):
         self.user = create_test_user("1")
         self.another_user = create_test_user("2")
         self.articles = [
-            create_test_article(str(name), self.user) for name in range(13)
+            create_test_article(str(name), self.user) for name in range(6)
         ]
         self.articles.reverse()
         self.resp = self.client.get(
@@ -214,9 +214,9 @@ class ProfileDetailViewTests(TestCase):
         self.assertContains(resp, "Создать статью")
         self.assertContains(resp, "Редактировать")
 
-    def test_pagination_is_ten(self):
+    def test_pagination_is_three(self):
         self.assertIs(self.resp.context["is_paginated"], True)
-        self.assertEqual(len(self.resp.context["object_list"]), 10)
+        self.assertEqual(len(self.resp.context["object_list"]), 3)
 
     def test_pagination_lists_all_articles(self):
         """Get second page and confirm it has exactly remaining 3 items."""
@@ -360,7 +360,8 @@ class AdddingAndRemovingAuthorsViewTests(TestCase):
             secure=True,
         )
         self.assertQuerysetEqual(
-            self.user.profile.following.all(), [self.author_1, self.author_2]
+            self.user.profile.following.all().order_by('date_joined'),
+            [self.author_1, self.author_2],
         )
         self.assertQuerysetEqual(self.author_1.followers.all(), [self.user.profile])
 
