@@ -29,8 +29,20 @@ def get_users_with_counters():
             Count("article", distinct=True),
             Count("followers", distinct=True),
         )
-        .order_by("username")
+        .select_related('profile')
+        .order_by("date_joined")
+        .only("username", "first_name", "last_name", 'profile')
     )
+
+
+def get_users_for_profile():
+    """
+    Returns a user list with article
+    and followers counters for each user.
+    """
+    return get_users_with_counters().annotate(
+            following__count=Count('profile__following', distinct=True),
+        )
 
 
 def get_user_following_list(user):
@@ -38,10 +50,13 @@ def get_user_following_list(user):
     Returns a followng list with article
     and followers counters for each user.
     """
-    return user.profile.following.annotate(
-        Count("article", distinct=True),
-        Count("followers", distinct=True),
-    ).order_by("username")
+    return (
+        user.profile.following.annotate(
+            Count("article", distinct=True),
+            Count("followers", distinct=True),
+        )
+        .order_by("date_joined").select_related("profile").only("username", "first_name", "last_name", "profile")
+    )
 
 
 def add_blogs_to_user(user, *blogs):

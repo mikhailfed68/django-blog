@@ -3,8 +3,9 @@
 {% block title %}Блоги | {{ blog.name }}{% endblock %}
 
 {% block othercontent %}
-<h2 class="display-4">Статьи в блоге<div>{{ blog.name }}</div>
-</h2>
+<h2 class="display-4">Статьи в блоге<div>{{ blog.name }}</div></h2>
+<small>Создан {{ blog.created_at|date:"j E" }}</small>
+<p>{{ blog.description }}</p>
 
 {% if user.is_authenticated %}
 {% if blog in user.profile.blogs.all %}

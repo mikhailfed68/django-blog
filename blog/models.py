@@ -23,9 +23,6 @@ class Blog(TimeStampedModel):
     name = models.CharField("Название", max_length=30, unique=True)
     description = models.CharField("Описание", max_length=60)
 
-    class Meta:
-        ordering = ["name"]
-
     def __str__(self):
         return self.name
 

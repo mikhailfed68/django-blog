@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db.models import Count
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import (
@@ -22,6 +23,7 @@ from users.services import (
     add_user_to_base_group_or_create_one,
     get_user_following_list,
     get_users_with_counters,
+    get_users_for_profile,
     remove_authors_from_user,
     remove_blogs_from_user,
 )
@@ -53,18 +55,20 @@ class ProfileDetailView(SingleObjectMixin, ListView):
     context_object_name = "author"
     slug_field = "username"
     slug_url_kwarg = "username"
-    paginate_by = 10
+    paginate_by = 3
 
     def get(self, request, *args, **kwargs):
         """
         Assigning the desired User object to
         object atrribute for further processing.
         """
-        self.object = self.get_object(queryset=get_user_model().objects.all())
+        self.object = self.get_object(
+            queryset=get_users_for_profile(),
+        )
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return self.object.article_set.all()
+        return self.object.article_set.all().defer('language_id', 'body')
 
 
 class UserListView(ListView):
