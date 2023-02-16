@@ -21,7 +21,6 @@
     </div>
   </form>
 
-  {% if user_list %}
   <ul class="list-group list-group-flush">
     <li class="list-group-item d-flex justify-content-end align-items-start">
       <div style="font-size: small;">Подписчики</div>
@@ -43,7 +42,7 @@
       <div class="ms-2 mt-1 me-auto text-break">
         <a href="{% url 'users:profile' author.username %}">
           <div class="fw-bold text-break">
-            {{ author.get_username }}
+            {{ author.username }}
           </div>
         </a>
         {% if author.is_online %}
@@ -59,10 +58,9 @@
       <span class="badge bg-secondary rounded-pill ms-5 me-2">{{ author.followers__count }}</span>
       <span class="badge bg-secondary rounded-pill ms-5">{{ author.article__count }}</span>
     </li>
+    {% empty %}
+    <p class="mt-3">Пока ничего нет</p>
     {% endfor %}
   </ul>
-  {% else %}
-  <p>Ничего не найдено</p>
-  {% endif %}
 </section>
 {% endblock %}

@@ -3,11 +3,8 @@
 {% block othercontent %}
 <h2 class="display-4">Ваша личная лента</h2>
 
-{% if user.profile.following.exists %}
 <a href="{% url 'users:following' %}" class="btn btn-outline-primary mb-5">Посмотреть подписки</a>
-{% endif %}
 
-{% if user.profile.blogs.all %}
 <p>Блоги на которые вы подписаны:</p>
 <div class="d-flex align-items-start flex-wrap mb-5">
   {% for blog in user.profile.blogs.all %}
@@ -16,11 +13,8 @@
       {{ blog.name }}
     </div>
   </a>
+  {% empty %}
+  <li>Еще не подписаны</li>
   {% endfor %}
 </div>
-{% endif %}
-
-{% if not object_list %}
-<p>Еще ничего не опубликовано</p>
-{% endif %}
 {% endblock %}

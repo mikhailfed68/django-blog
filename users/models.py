@@ -30,9 +30,6 @@ class User(AbstractUser):
         unique=True,
     )
 
-    class Meta:
-        ordering = ["username"]
-
     def __str__(self):
         return self.get_username()
 

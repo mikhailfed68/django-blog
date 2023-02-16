@@ -15,6 +15,7 @@ from blog.services import (
     get_articles_for_search_query,
     get_blogs_with_counters,
     get_preffered_language,
+    get_articles_for_cards,
     get_user_personal_news_feed,
     is_author_of_article,
 )
@@ -29,8 +30,10 @@ class IndexListView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        return get_articles_for_search_query(self.request.GET, queryset)
+        search_query = self.request.GET.get("search_query")
+        if search_query:
+            return get_articles_for_search_query(search_query)
+        return get_articles_for_cards()
 
 
 class PersonalNewsFeedView(LoginRequiredMixin, ListView):

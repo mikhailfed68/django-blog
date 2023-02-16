@@ -26,19 +26,6 @@ def is_author_of_article(author, article_id):
     return article.author == author
 
 
-def get_articles_for_search_query(search_query, queryset):
-    """
-    Returns articles by search query if one exists,
-    otherwise it returns a queryset arguments.
-    """
-    search_query = search_query.get("search_query")
-    if search_query:
-        return models.Article.objects.filter(
-            Q(title__icontains=search_query)
-            | Q(description__icontains=search_query)
-            | Q(body__icontains=search_query)
-        )
-    return queryset
 
 
 def get_blogs_with_counters():
@@ -46,9 +33,26 @@ def get_blogs_with_counters():
     Returns a blog list with article
     and profile counters for each blog.
     """
-    return models.Blog.objects.annotate(
-        Count("article", distinct=True), Count("profile", distinct=True)
-    ).order_by("name")
+    return (
+        models.Blog.objects.annotate(
+            Count("article", distinct=True), Count("profile", distinct=True)
+        )
+        .order_by("created_at")
+        .only("name", "description")
+    )
+
+
+def get_articles_for_cards():
+    return models.Article.objects.order_by('-created_at').defer("body", "author_id", "language_id")
+
+
+def get_articles_for_search_query(search_query):
+    """Returns articles by search query."""
+    return get_articles_for_cards().filter(
+        Q(title__icontains=search_query)
+        | Q(description__icontains=search_query)
+        | Q(body__icontains=search_query)
+    )
 
 
 def get_user_personal_news_feed(user):
@@ -56,9 +60,11 @@ def get_user_personal_news_feed(user):
     Retruns the user personal news feed
     by his blogs and author following list.
     """
-    user_blogs = user.profile.blogs.all()
-    user_following_list = user.profile.following.all()
-    user_feed_articles = models.Article.objects.filter(
-        Q(blogs__in=user_blogs) | Q(author__in=user_following_list)
-    ).distinct()
-    return user_feed_articles
+    user_blogs = user.profile.blogs.all().values("id")
+    user_following_list = user.profile.following.all().values("id")
+
+    return (
+        get_articles_for_cards().filter(
+            Q(blogs__in=user_blogs) | Q(author__in=user_following_list)
+        ).distinct()
+    )

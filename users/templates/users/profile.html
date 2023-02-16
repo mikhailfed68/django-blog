@@ -58,27 +58,12 @@
 {% if author.get_full_name %}
 <p><b>Полностью: </b>{{ author.get_full_name }}</p>
 {% endif %}
-<p><b>Подписчиков: </b>{{ author.followers.count }}</p>
-<p><b>Подписок: </b>{{ author.profile.following.count }}</p>
-<p><b>Публикаций: </b>{{ author.article_set.count }}</p>
+<p><b>Подписчиков: </b>{{ author.followers__count }}</p>
+<p><b>Подписок: </b>{{ author.profile.following__count }}</p>
+<p><b>Публикаций: </b>{{ author.article__count }}</p>
 {% if author.profile.about_me %}
 <p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>
 {% endif %}
 
-{% if author.profile.blogs.exists %}
-<p>Следит за блогами:</p>
-<div class="d-flex align-items-start flex-wrap">
-  {% for blog in author.profile.blogs.all %}
-  <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
-    <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
-      {{ blog.name }}
-    </div>
-  </a>
-  {% endfor %}
-</div>
-{% endif %}
 
-{% if author.article_set.exists %}
-<h2 class="display-4">Статьи пользователя</h2>
-{% endif %}
 {% endblock %}
