@@ -19,8 +19,15 @@ from blog.services import (
     get_user_personal_news_feed,
     is_author_of_article,
 )
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import condition
 
 
+def latest_article(request):
+   return models.Article.objects.latest("-created_at").created_at
+
+
+@method_decorator(condition(last_modified_func=latest_article), name='dispatch')
 class IndexListView(ListView):
     """Returns the list of articles to the main page"""
 
