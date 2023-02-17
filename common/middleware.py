@@ -39,6 +39,6 @@ class UpdateVaryForConditionalGetMiddleware:
     def process_template_response(self, request, response):
         if request.method != "GET":
             return response
-        patch_vary_headers(response, ['If-None-Match'])
+        patch_vary_headers(response, ['If-None-Match', 'Etag'])
         print(response.headers)
         return response
