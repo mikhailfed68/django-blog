@@ -19,8 +19,8 @@ from blog.services import (
     get_user_personal_news_feed,
     is_author_of_article,
 )
-from django.utils.decorators import method_decorator
-from django.views.decorators.http import condition
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.http import condition
 
 
 # def latest_article(request):
