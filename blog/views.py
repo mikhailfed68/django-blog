@@ -23,14 +23,20 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import condition
 
 
-def latest_article(request):
-    try:
-        return models.Article.objects.latest("created_at").created_at
-    except models.Article.DoesNotExist:
-        return None
+# def latest_article(request):
+#     try:
+#         return models.Article.objects.latest("created_at").created_at
+#     except models.Article.DoesNotExist:
+#         return None
 
 
-@method_decorator(condition(last_modified_func=latest_article), name='dispatch')
+# def last_update_article(request, pk):
+#     try:
+#         return models.Article.objects.get(pk=pk).updated_at
+#     except models.Article.DoesNotExist:
+#         return None
+
+
 class IndexListView(ListView):
     """Returns the list of articles to the main page"""
 
