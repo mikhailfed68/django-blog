@@ -26,7 +26,6 @@ class RemoveEmptyQueryString:
 
 
 class UpdateVaryForConditionalGetMiddleware:
-
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -39,6 +38,6 @@ class UpdateVaryForConditionalGetMiddleware:
     def process_template_response(self, request, response):
         if request.method != "GET":
             return response
-        patch_vary_headers(response, ['If-None-Match', 'Etag'])
+        patch_vary_headers(response, ["If-None-Match", "Etag"])
         print(response.headers)
         return response

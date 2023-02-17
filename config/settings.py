@@ -41,11 +41,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.middleware.cache.UpdateCacheMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.gzip.GZipMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "common.middleware.UpdateVaryForConditionalGetMiddleware",
     "django.middleware.http.ConditionalGetMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -55,6 +55,7 @@ MIDDLEWARE = [
     "django.contrib.admindocs.middleware.XViewMiddleware",
     "common.middleware.RemoveEmptyQueryString",
     "users.middleware.UserActiveMidlleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -125,6 +126,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+CACHE_MIDDLEWARE_SECONDS = json.loads(os.getenv("CACHE_MIDDLEWARE_SECONDS", "30"))
+CACHE_MIDDLEWARE_ALIAS = "default"
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/

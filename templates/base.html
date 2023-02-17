@@ -20,7 +20,9 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+  {% load cache %}
   <header>
+    {% cache 84600 nav request.user %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded" aria-label="Eleventh navbar example">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'blog:index' %}">Incognito</a>
@@ -65,6 +67,7 @@
         </div>
       </div>
     </nav>
+    {% endcache %}
   </header>
 
   {# Display django.contrib.messages as Bootstrap alerts #}
@@ -106,7 +109,7 @@
     {% endif %}
     {% endblock %}
   </main>
-
+  {% cache 84600 footer %}
   <footer class="footer mt-auto py-3 bg-light">
     <div class="container" class="border-top">
       <div class="col-md-4 d-flex align-items-center">
@@ -130,6 +133,7 @@
       </ul>
     </div>
   </footer>
+  {% endcache %}
 </body>
 
 </html>

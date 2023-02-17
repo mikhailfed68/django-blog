@@ -175,9 +175,7 @@ class ProfileDetailViewTests(TestCase):
     def setUp(self):
         self.user = create_test_user("1")
         self.another_user = create_test_user("2")
-        self.articles = [
-            create_test_article(str(name), self.user) for name in range(6)
-        ]
+        self.articles = [create_test_article(str(name), self.user) for name in range(6)]
         self.articles.reverse()
         self.resp = self.client.get(
             reverse("users:profile", kwargs={"username": self.user.username}),
@@ -360,7 +358,7 @@ class AdddingAndRemovingAuthorsViewTests(TestCase):
             secure=True,
         )
         self.assertQuerysetEqual(
-            self.user.profile.following.all().order_by('date_joined'),
+            self.user.profile.following.all().order_by("date_joined"),
             [self.author_1, self.author_2],
         )
         self.assertQuerysetEqual(self.author_1.followers.all(), [self.user.profile])

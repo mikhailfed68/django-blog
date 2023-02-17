@@ -19,22 +19,6 @@ from blog.services import (
     get_user_personal_news_feed,
     is_author_of_article,
 )
-# from django.utils.decorators import method_decorator
-# from django.views.decorators.http import condition
-
-
-# def latest_article(request):
-#     try:
-#         return models.Article.objects.latest("created_at").created_at
-#     except models.Article.DoesNotExist:
-#         return None
-
-
-# def last_update_article(request, pk):
-#     try:
-#         return models.Article.objects.get(pk=pk).updated_at
-#     except models.Article.DoesNotExist:
-#         return None
 
 
 class IndexListView(ListView):

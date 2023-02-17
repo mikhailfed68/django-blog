@@ -52,7 +52,7 @@ class AddingAndRemovingBlogsTests(TestCase):
         services.add_blogs_to_user(self.user, self.blog_2, self.blog_3)
 
         self.assertQuerysetEqual(
-            self.user.profile.blogs.all().order_by('created_at'),
+            self.user.profile.blogs.all().order_by("created_at"),
             [self.blog_2, self.blog_3],
         )
 
@@ -75,7 +75,7 @@ class AddingAndRemovingAuthorTests(TestCase):
         services.add_authors_to_user(self.user, self.author_1, self.author_2)
 
         self.assertQuerysetEqual(
-            self.user.profile.following.all().order_by('date_joined'),
+            self.user.profile.following.all().order_by("date_joined"),
             [self.author_1, self.author_2],
         )
 

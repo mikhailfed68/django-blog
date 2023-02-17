@@ -17,4 +17,8 @@ start:
 shell:
 	poetry run python3 manage.py shell
 
+cls:
+	poetry run python3 manage.py collectstatic
+
+
 .PHONY: lint test check start startdb shell
