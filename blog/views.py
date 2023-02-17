@@ -24,7 +24,10 @@ from django.views.decorators.http import condition
 
 
 def latest_article(request):
-    return models.Article.objects.latest("-created_at").created_at
+    try:
+        return models.Article.objects.latest("-created_at").created_at
+    except models.Article.DoesNotExist:
+        return None
 
 
 @method_decorator(condition(last_modified_func=latest_article), name='dispatch')
