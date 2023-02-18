@@ -12,6 +12,7 @@ class MediaYandexCloudStorage(S3Boto3Storage):
 
     bucket_name = settings.YANDEX_OBJECT_STORAGE_BUCKET_NAME
     location = "media"
+    default_acl = "public-read"
     file_overwrite = False
 
 
@@ -20,4 +21,5 @@ class StaticYandexCloudStorage(S3Boto3Storage):
 
     bucket_name = settings.YANDEX_OBJECT_STORAGE_BUCKET_NAME
     location = "static"
+    default_acl = "public-read"
     file_overwrite = False
