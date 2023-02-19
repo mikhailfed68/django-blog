@@ -59,11 +59,11 @@
 <p><b>Полностью: </b>{{ author.get_full_name }}</p>
 {% endif %}
 <p><b>Подписчиков: </b>{{ author.followers__count }}</p>
-<p><b>Подписок: </b>{{ author.profile.following__count }}</p>
+<p><b>Подписок: </b>{{ author.following__count }}</p>
 <p><b>Публикаций: </b>{{ author.article__count }}</p>
 {% if author.profile.about_me %}
 <p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>
 {% endif %}
 
-
+<h2 class="display-4 mb-2">Статьи пользователя</h2>
 {% endblock %}
