@@ -9,7 +9,7 @@
   <h2 class="display-4">Блоги</h2>
 
   {% if user.is_authenticated %}
-  <a href="{% url 'blog:new_blog' %}" class="btn btn-outline-secondary mt-2 mb-3">
+  <a href="{% url 'blog:new_blog' %}" target="_blank" class="btn btn-outline-secondary mt-2 mb-3">
     Создать блог
   </a>
   {% endif %}

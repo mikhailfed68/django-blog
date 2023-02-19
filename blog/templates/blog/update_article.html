@@ -21,12 +21,25 @@
     {% endbuttons %}
   </form>
 
-  <!-- Кнопка-триггер модального окна -->
-  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Удалить
-  </button>
 
-  <!-- Модальное окно -->
+  <div class="d-flex justify-content-between">
+    <!-- Кнопка-триггер модального окна -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Удалить
+    </button>
+    <div>
+      {% if user.is_authenticated %}
+      <a href="{% url 'blog:new_language' %}" target="_blank" class="btn btn-outline-primary ms-5 me-2">
+        Добавить новый язык
+      </a>
+      <a href="{% url 'blog:new_blog' %}" target="_blank" class="btn btn-outline-primary">
+        Добавить новый блог
+      </a>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Модальное окно для удаления -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -52,4 +65,4 @@
       </div>
     </div>
   </div>
-  {% endblock %}
+{% endblock %}
