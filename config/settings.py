@@ -81,10 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 DATABASES = {
@@ -109,8 +105,6 @@ CACHES = {
 SELECT2_CACHE_BACKEND = "select2"
 
 # Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -126,16 +120,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SESSION_ENGINE = os.getenv("SESSION_ENGINE", "django.contrib.sessions.backends.db")
 
 CACHE_MIDDLEWARE_SECONDS = json.loads(os.getenv("CACHE_MIDDLEWARE_SECONDS", "5"))
 
 CACHE_MIDDLEWARE_ALIAS = os.getenv("CACHE_MIDDLEWARE_ALIAS", "default")
 
-SESSION_ENGINE = os.getenv("SESSION_ENGINE", "django.contrib.sessions.backends.db")
-
 # Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
 LANGUAGE_CODE = "ru"
 
 TIME_ZONE = "Europe/Moscow"
@@ -144,15 +135,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # We have enabled the static file collection while deploying the app
 # Type 1 to disable
 DISABLE_COLLECTSTATIC = 0
 
-
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = "/"
@@ -162,54 +149,6 @@ LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "login"
 
 AUTH_USER_MODEL = "users.User"
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-# ----Yandex s3 api----
-ENABLED_YANDEX_STORAGE = json.loads(os.getenv("ENABLED_YANDEX_STORAGE", "false"))
-
-if ENABLED_YANDEX_STORAGE:
-    YANDEX_OBJECT_STORAGE_BUCKET_NAME = os.getenv("YANDEX_OBJECT_STORAGE_BUCKET_NAME")
-
-    AWS_DEFAULT_ACL = "public-read"
-
-    AWS_S3_CUSTOM_DOMAIN = f"{YANDEX_OBJECT_STORAGE_BUCKET_NAME}.s3.yandexcloud.net"
-
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-
-    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
-
-    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
-
-    # s3 static settings
-    STATIC_LOCATION = "static"
-
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
-
-    STATICFILES_STORAGE = "common.custom_storage.StaticYandexCloudStorage"
-
-    # s3 public media settings
-    PUBLIC_MEDIA_LOCATION = "media"
-
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
-
-    DEFAULT_FILE_STORAGE = "common.custom_storage.MediaYandexCloudStorage"
-else:
-    STATIC_ROOT = BASE_DIR / "static"
-
-    STATIC_URL = "static/"
-
-    MEDIA_ROOT = BASE_DIR / "media"
-
-    MEDIA_URL = "media/"
-
-
-STATICFILES_DIRS = [
-    BASE_DIR / "assets",  # place for favicon.ico
-]
 
 
 # Set the default value for ChoiceFilter.empty_label
@@ -263,3 +202,51 @@ CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
 
 SESSION_COOKIE_SAMESITE = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.1/howto/static-files/
+# ----Yandex s3 api----
+ENABLED_YANDEX_STORAGE = json.loads(os.getenv("ENABLED_YANDEX_STORAGE", "false"))
+
+if ENABLED_YANDEX_STORAGE:
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+    AWS_DEFAULT_ACL = "public-read"
+
+    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
+
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+
+    YANDEX_OBJECT_STORAGE_BUCKET_NAME = os.getenv("YANDEX_OBJECT_STORAGE_BUCKET_NAME")
+
+    YANDEX_S3_DOMAIN = os.getenv("YANDEX_S3_DOMAIN")
+
+    AWS_S3_CUSTOM_DOMAIN = f"{YANDEX_OBJECT_STORAGE_BUCKET_NAME}{YANDEX_S3_DOMAIN}"
+
+    # s3 static settings
+    STATIC_LOCATION = "static"
+
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
+
+    STATICFILES_STORAGE = "common.custom_storage.StaticYandexCloudStorage"
+
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = "media"
+
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
+
+    DEFAULT_FILE_STORAGE = "common.custom_storage.MediaYandexCloudStorage"
+else:
+    STATIC_ROOT = BASE_DIR / "static"
+
+    STATIC_URL = "static/"
+
+    MEDIA_ROOT = BASE_DIR / "media"
+
+    MEDIA_URL = "media/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "assets",  # place for favicon.ico
+]
