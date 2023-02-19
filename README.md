@@ -12,18 +12,24 @@ You can also follow interesting authors or blogs in your personal feed by subscr
 *All you have to do to try the full functionality of this project is to register on site!*
 
 #### Behind the scene:
-- Python (Django) as the main framework
+- Python (Django as the main framework)
 - PostgreSQL for basic data
-- Redis for caching and online system functionality
+- Redis for caching, sessions and online system functionality
 - Yandex Cloud Object Storage for media and static files
 - Bootstrap 5 for a nice and fast-changing design
 
 #### App on Railway:
 > [Incognito blog](https://incognito-blog.up.railway.app)
 
-*Railway is the same as Heroku, only for free*
+*The same as Heroku*
 
 ## For developers
+
+### Requirements
+
+* Docker
+* Docker compose
+
 If you want to install this project on your local machine manually, you need to do the following:
 Clone the repository and go to it:
 
@@ -31,39 +37,27 @@ Clone the repository and go to it:
 
 `cd django-blog`
 
-Activate the virtual environment and install requirements:
+Now, you have to create .env.dev file and setup environment variables:
 
-`python3 -m pip install poetry`
+`touch .env.dev`
 
-`poetry env use 3.10.4`
+This is the minimum set of variables to start a project:
 
-`poetry install`
-
-`poetry shell`
-
-Create a media directory for uploaded files and images;
-
-`mkdir media`
-
-Create an .env file for the values of the environment variables
-
-`touch .env`
-
-Now, you have to setup environment variables:
+``DATABASE_URL='postgresql://docker_user:docker_password@db:5432/docker_db'
+REDIS_URL='redis://redis:6379'
+SECRET_KEY='your generated secret key for django project'
+DEBUG='true'``
 
 >See [Environment variables](#environment-variables) section.
 
-When you have configured variables, run the remaining commands:
+When you have configured variables, run following docker compose commands:
 
-`./manage.py migrate —no-checks`
+`docker compose build`
 
-And run server to make sure everything works
-
-`./manage.py runserver`
-
+`docker compose up`
 
 ## Environment variables
-This is a list of variables that are needed
+This is a list of enviroment variables that are needed
 for the application to work correctly
 
 **ALLOWED_HOSTS**
@@ -121,7 +115,7 @@ Time during which the user will be considered online
 
 _By default set to 86400 seconds (1 day)_
 
-Time during which the date of the last visit of the user will be stored
+Time during which the date of the last visit of the user will be stored in Redis
 
 ---
 **ENABLED_YANDEX_STORAGE**
@@ -135,15 +129,19 @@ through the S3 API provided by Yandex cloud.
 _Read more in the documentation of Yandex storage
 if you want to use it_
 
+https://cloud.yandex.com/en/docs/storage/s3/
+
+https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
+
+_For more information, read django-storages docs also_
+
 **YANDEX_OBJECT_STORAGE_BUCKET_NAME**
 
 Your backet name in Object Storage
 
-_For more information, read django-storages docs also_
+**YANDEX_S3_DOMAIN**
 
-**AWS_ACCESS_KEY_ID**
-
-**AWS_SECRET_ACCESS_KEY**
+_f.e. '.s3.yandexcloud.net'_
 
 **AWS_S3_ENDPOINT_URL**
 
@@ -154,7 +152,15 @@ _f.e. 'https://storage.yandexcloud.net'_
 _f.e. 'ru-central1-a'_
 
 ---
+**ENABLED_EMAIL**
+
+Whether or not the actual mailing will be used.
+
+_By default set to False_
+
 Define to send a password reset email:
+
+_Requires ENABLED_EMAIL='true'_
 
 **EMAIL_USE_TLS**
 

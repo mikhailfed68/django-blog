@@ -4,6 +4,9 @@ media
 static
 dump.rdb
 
+staticdocker
+mediadocker
+
 env/
 .env
 *.env*

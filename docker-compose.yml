@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=docker_user
+      - POSTGRES_PASSWORD=docker_password
+      - POSTGRES_DB=docker_db
+
+  redis:
+    image: redis:latest
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: make start-in-docker
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - NAME_STATIC_DIR=staticdocker
+      - NAME_MEDIA_DIR=mediadocker
+    env_file:
+      - .env.dev
+
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  postgres_data:
