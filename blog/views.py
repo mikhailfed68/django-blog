@@ -15,7 +15,6 @@ from blog.services import (
     get_articles_for_cards,
     get_articles_for_search_query,
     get_blogs_with_counters,
-    get_preffered_language,
     get_user_personal_news_feed,
     is_author_of_article,
 )
@@ -63,7 +62,6 @@ class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
 
     model = models.Article
     form_class = ArticleForm
-    initial = {"language": get_preffered_language("Русский")}
     template_name = "blog/new_article.html"
 
     success_message = "Статья успешно создана!"

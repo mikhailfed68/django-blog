@@ -7,8 +7,6 @@ from django.utils import timezone
 from sorl import thumbnail
 from tinymce.models import HTMLField
 
-from blog.services import get_default_language
-
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField("Создано", auto_now_add=True)
@@ -30,7 +28,7 @@ class Blog(TimeStampedModel):
 
 
 class Language(models.Model):
-    language = models.CharField(max_length=16, unique=True, default="Others")
+    language = models.CharField(max_length=16, unique=True)
 
     def __str__(self):
         return self.language
@@ -52,7 +50,7 @@ class Article(TimeStampedModel):
         settings.AUTH_USER_MODEL, verbose_name="Автор", on_delete=models.CASCADE
     )
     language = models.ForeignKey(
-        Language, verbose_name="Язык", on_delete=models.SET(get_default_language)
+        Language, verbose_name="Язык", blank=True, null=True, on_delete=models.SET_NULL
     )
     blogs = models.ManyToManyField(Blog, verbose_name="Блоги", blank=True)
 

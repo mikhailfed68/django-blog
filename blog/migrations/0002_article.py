@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('body', models.TextField(verbose_name='Содержание')),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
                 ('blogs', models.ManyToManyField(blank=True, to='blog.blog', verbose_name='Блоги')),
-                ('language', models.ForeignKey(on_delete=models.SET(blog.services.get_default_language), to='blog.language', verbose_name='Язык')),
+                ('language', models.ForeignKey(on_delete=models.SET("Не установлен"), to='blog.language', verbose_name='Язык')),
             ],
             options={
                 'ordering': ['-created_at'],

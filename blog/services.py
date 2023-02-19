@@ -4,23 +4,6 @@ from django.shortcuts import get_object_or_404
 from blog import models
 
 
-def get_default_language():
-    """Gets or creates a default value language (Others)."""
-    language, is_created = models.Language.objects.get_or_create(language="Others")
-    return language
-
-
-def get_preffered_language(language):
-    """
-    Returns a preffered language if one exists,
-    otherwise it calls get_default_language.
-    """
-    try:
-        return models.Language.objects.get(language=language)
-    except models.Language.DoesNotExist:
-        return get_default_language()
-
-
 def is_author_of_article(author, article_id):
     article = get_object_or_404(models.Article, id=article_id)
     return article.author == author

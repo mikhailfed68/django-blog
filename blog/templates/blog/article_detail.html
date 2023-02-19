@@ -37,7 +37,9 @@
     {% endfor %}
   </div>
 
+  {% if article.language %}
   <p><b>Язык: </b>{{ article.language }}</p>
+  {% endif %}
   <p><b>Описание: </b>{{ article.description }}</p>
   <p>{{ article.body|safe }}</p>
   {% endblock %}
