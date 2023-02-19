@@ -162,3 +162,4 @@ class LanguageCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     fields = ["language"]
     template_name_suffix = "_create_form"
     success_message = "Новый язык успешно создан."
+    success_url = reverse_lazy("blog:new_language")
