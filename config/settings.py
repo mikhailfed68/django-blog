@@ -1,3 +1,10 @@
+"""
+Settings file for django-blog project.
+
+For more information on this settings, see README.md
+https://github.com/MichaelFed68/django-blog#for-developers
+"""
+
 import json
 import os
 from pathlib import Path
@@ -9,13 +16,34 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# Security settings
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = json.loads(os.getenv("DEBUG", "false"))
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1 .localhost [::1]").split(" ")
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "127.0.0.1 .localhost [::1]",
+).split(" ")
 
-CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "http://127.0.0.1").split(" ")
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "CSRF_TRUSTED_ORIGINS",
+    "http://127.0.0.1 http://localhost",
+).split(" ")
+
+CSRF_COOKIE_SECURE = json.loads(os.getenv("CSRF_COOKIE_SECURE", "true"))
+
+SESSION_COOKIE_SECURE = json.loads(os.getenv("SESSION_COOKIE_SECURE", "true"))
+
+CSRF_COOKIE_HTTPONLY = json.loads(os.getenv("CSRF_COOKIE_HTTPONLY", "true"))
+
+SESSION_COOKIE_HTTPONLY = json.loads(os.getenv("SESSION_COOKIE_HTTPONLY", "true"))
+
+SESSION_COOKIE_SAMESITE = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")
+
+SESSION_ENGINE = os.getenv("SESSION_ENGINE", "django.contrib.sessions.backends.cache")
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -81,12 +109,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+# Database settings
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 DATABASES = {
     "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
 }
 
+# Cache settings
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
@@ -100,6 +130,10 @@ CACHES = {
         },
     },
 }
+
+CACHE_MIDDLEWARE_SECONDS = json.loads(os.getenv("CACHE_MIDDLEWARE_SECONDS", "0"))
+
+CACHE_MIDDLEWARE_ALIAS = os.getenv("CACHE_MIDDLEWARE_ALIAS", "default")
 
 # Tell select2 which cache configuration to use:
 SELECT2_CACHE_BACKEND = "select2"
@@ -120,11 +154,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-SESSION_ENGINE = os.getenv("SESSION_ENGINE", "django.contrib.sessions.backends.db")
-
-CACHE_MIDDLEWARE_SECONDS = json.loads(os.getenv("CACHE_MIDDLEWARE_SECONDS", "5"))
-
-CACHE_MIDDLEWARE_ALIAS = os.getenv("CACHE_MIDDLEWARE_ALIAS", "default")
 
 # Internationalization
 LANGUAGE_CODE = "ru"
@@ -135,9 +164,11 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 # We have enabled the static file collection while deploying the app
 # Type 1 to disable
 DISABLE_COLLECTSTATIC = 0
+
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -154,17 +185,21 @@ AUTH_USER_MODEL = "users.User"
 # Set the default value for ChoiceFilter.empty_label
 FILTERS_EMPTY_CHOICE_LABEL = "Не выбрано"
 
+
+# Online system settings
 USER_ONLINE_TIMEOUT = json.loads(os.getenv("USER_ONLINE_TIMEOUT", "60"))
 
 USER_LAST_SEEN_TIMEOUT = json.loads(os.getenv("USER_LAST_SEEN_TIMEOUT", "86400"))
 
-# ----The settings for base group of users on the site----
+
+# Settings for base group of users on the site
 BASE_GROUP = os.getenv("BASE_GROUP", "base_members_of_site")
 
 PERMISSIONS_FOR_BASE_GROUP = json.loads(
     os.getenv("PERMISSIONS_FOR_BASE_GROUP", "false")
 )
 
+# Default settings for base group
 if not PERMISSIONS_FOR_BASE_GROUP:
     PERMISSIONS_FOR_BASE_GROUP = [
         "add_article",
@@ -179,33 +214,35 @@ if not PERMISSIONS_FOR_BASE_GROUP:
         "view_profile",
     ]
 
-EMAIL_USE_TLS = json.loads(os.getenv("EMAIL_USE_TLS", "true"))
 
-EMAIL_HOST = os.getenv("EMAIL_HOST")
+# Setting Email configuration for sending reset email
+ENABLED_EMAIL = json.loads(os.getenv("ENABLED_EMAIL", "false"))
 
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+if ENABLED_EMAIL:
+    EMAIL_USE_TLS = json.loads(os.getenv("EMAIL_USE_TLS", "true"))
 
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+    EMAIL_HOST = os.getenv("EMAIL_HOST")
 
-EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT", "25"))
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+    EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT", "25"))
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+# Setting for django-debug-tool-bar
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-CSRF_COOKIE_SECURE = True
-
-SESSION_COOKIE_SECURE = True
-
-CSRF_COOKIE_HTTPONLY = True
-
-SESSION_COOKIE_HTTPONLY = True
-
-SESSION_COOKIE_SAMESITE = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-# ----Yandex s3 api----
+# Yandex S3 API
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
+# https://cloud.yandex.com/en/docs/storage/s3/
 ENABLED_YANDEX_STORAGE = json.loads(os.getenv("ENABLED_YANDEX_STORAGE", "false"))
 
 if ENABLED_YANDEX_STORAGE:
@@ -225,27 +262,32 @@ if ENABLED_YANDEX_STORAGE:
 
     AWS_S3_CUSTOM_DOMAIN = f"{YANDEX_OBJECT_STORAGE_BUCKET_NAME}{YANDEX_S3_DOMAIN}"
 
-    # s3 static settings
+    # S3 static settings
     STATIC_LOCATION = "static"
 
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
 
     STATICFILES_STORAGE = "common.custom_storage.StaticYandexCloudStorage"
 
-    # s3 public media settings
+    # S3 public media settings
     PUBLIC_MEDIA_LOCATION = "media"
 
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
 
     DEFAULT_FILE_STORAGE = "common.custom_storage.MediaYandexCloudStorage"
 else:
-    STATIC_ROOT = BASE_DIR / "static"
+    NAME_STATIC_DIR = os.getenv("NAME_STATIC_DIR", "static")
 
-    STATIC_URL = "static/"
+    STATIC_ROOT = BASE_DIR / NAME_STATIC_DIR
 
-    MEDIA_ROOT = BASE_DIR / "media"
+    STATIC_URL = f"{NAME_STATIC_DIR}/"
 
-    MEDIA_URL = "media/"
+    NAME_MEDIA_DIR = os.getenv("NAME_MEDIA_DIR", "media")
+
+    MEDIA_ROOT = BASE_DIR / NAME_MEDIA_DIR
+
+    MEDIA_URL = f"{NAME_MEDIA_DIR}/"
+
 
 STATICFILES_DIRS = [
     BASE_DIR / "assets",  # place for favicon.ico
