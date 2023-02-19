@@ -18,4 +18,5 @@ urlpatterns = [
     path("blogs/", views.BlogListView.as_view(), name="blogs"),
     path("blogs/<int:pk>/", views.BlogDetailView.as_view(), name="articles_by_blog"),
     path("blogs/new", views.BlogCreateView.as_view(), name="new_blog"),
+    path("languages/new", views.LanguageCreateView.as_view(), name="new_language"),
 ]

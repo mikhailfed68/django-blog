@@ -153,3 +153,12 @@ class BlogDetailView(SingleObjectMixin, ListView):
 
     def get_queryset(self):
         return self.object.article_set.all()
+
+
+class LanguageCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    """Creates a new language."""
+
+    model = models.Language
+    fields = ["language"]
+    template_name_suffix = "_create_form"
+    success_message = "Новый язык успешно создан."
