@@ -28,7 +28,7 @@ class Blog(TimeStampedModel):
 
 
 class Language(models.Model):
-    language = models.CharField('Язык', max_length=16, unique=True)
+    language = models.CharField("Язык", max_length=16, unique=True)
 
     def __str__(self):
         return self.language
