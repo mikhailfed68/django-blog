@@ -49,9 +49,11 @@ REDIS_URL='redis://redis:6379'
 
 SECRET_KEY='your generated secret key for django project'
 
-For example:
-``from django.core.management.utils import get_random_secret_key
-get_random_secret_key()``
+_For example:_
+
+`from django.core.management.utils import get_random_secret_key`
+
+`get_random_secret_key()`
 
 DEBUG='true'
 
