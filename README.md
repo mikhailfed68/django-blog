@@ -13,10 +13,10 @@ You can also follow interesting authors or blogs in your personal feed by subscr
 
 #### Behind the scene:
 - Python (Django as the main framework)
-- PostgreSQL for basic data
+- PostgreSQL for data
 - Redis for caching, sessions and online system functionality
-- Yandex Cloud Object Storage for media and static files
-- Bootstrap 5 for a nice and fast-changing design
+- Yandex Cloud Object Storage (S3 API) for media and static files
+- Bootstrap 5 for a beautiful and fast-changing design
 
 #### App on Railway:
 > [Incognito blog](https://incognito-blog.up.railway.app)
@@ -44,8 +44,11 @@ Now, you have to create .env.dev file and setup environment variables:
 This is the minimum set of variables to start a project:
 
 ``DATABASE_URL='postgresql://docker_user:docker_password@db:5432/docker_db'
+
 REDIS_URL='redis://redis:6379'
+
 SECRET_KEY='your generated secret key for django project'
+
 DEBUG='true'``
 
 >See [Environment variables](#environment-variables) section.
