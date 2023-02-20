@@ -27,7 +27,7 @@
     {% load bootstrap5 %}
     {% bootstrap_form form %}
     {% buttons %}
-    <button type="submit" class="btn btn-primary">
+    <button type="submit" class="btn btn-primary" onclick="this.form.submit(); this.disabled = true;">
       Сохранить
     </button>
     {% endbuttons %}
@@ -39,7 +39,7 @@
     </button>
 
   <!-- Модальное окно для удаления -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="RemoveModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -55,7 +55,7 @@
 
           <form action="{% url 'blog:destroy_article' article.pk %}" method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">
+            <button type="submit" class="btn btn-danger" onclick="this.form.submit(); this.disabled = true;">
               Удалить
             </button>
           </form>

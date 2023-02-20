@@ -10,7 +10,7 @@
   {% csrf_token %}
   {% bootstrap_form form %}
   {% buttons %}
-  <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+  <button type="submit" class="btn btn-primary" onclick="this.form.submit(); this.disabled = true;">Зарегистрироваться</button>
   {% endbuttons %}
 </form>
 {% endblock content %}
