@@ -38,10 +38,10 @@ def get_articles_for_search_query(search_query):
     )
 
 
-def get_user_personal_news_feed(user):
+def get_personal_news_feed(user):
     """
-    Retruns the user personal news feed
-    by his blogs and author following list.
+    Retruns the user personal news feed by his blogs
+    and authors that the user is following.
     """
     user_blogs = user.profile.blogs.all().values("id")
     user_following_list = user.profile.following.all().values("id")

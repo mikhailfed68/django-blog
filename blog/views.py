@@ -15,7 +15,7 @@ from blog.services import (
     get_articles_for_cards,
     get_articles_for_search_query,
     get_blogs_with_counters,
-    get_user_personal_news_feed,
+    get_personal_news_feed,
     is_author_of_article,
 )
 
@@ -43,7 +43,7 @@ class PersonalNewsFeedView(LoginRequiredMixin, ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return get_user_personal_news_feed(self.request.user)
+        return get_personal_news_feed(self.request.user)
 
 
 class ArticleDetailView(DetailView):

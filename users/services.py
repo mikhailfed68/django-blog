@@ -6,8 +6,9 @@ from django.db.models import Count
 
 def add_user_to_base_group_or_create_one(user):
     """
-    Add user to base group of users on site
-    or creates such group with needed permissons.
+    Add user to base group of users on the site
+    or creates such group with the necessary
+    permissions if one does not exist.
     """
     group, created = Group.objects.get_or_create(name=settings.BASE_GROUP)
     if created:
@@ -20,8 +21,8 @@ def add_user_to_base_group_or_create_one(user):
 
 def get_users_with_counters():
     """
-    Returns a user list with article
-    and followers counters for each user.
+    Returns a user list with article counter
+    and follower counter for each user.
     """
     return (
         get_user_model()
@@ -35,10 +36,10 @@ def get_users_with_counters():
     )
 
 
-def get_users_for_profile():
+def get_users_with_all_counter():
     """
-    Returns a user list with article
-    and followers counters for each user.
+    Returns get_users_with_counters and also
+    user counter that the user is following.
     """
     return get_users_with_counters().annotate(
         following__count=Count("profile__following", distinct=True),
@@ -47,8 +48,9 @@ def get_users_for_profile():
 
 def get_user_following_list(user):
     """
-    Returns a followng list with article
-    and followers counters for each user.
+    Returns a list of users that the user is following.
+    Users in the list has its own article counter
+    and follower counter.
     """
     return (
         user.profile.following.annotate(
@@ -62,20 +64,20 @@ def get_user_following_list(user):
 
 
 def add_blogs_to_user(user, *blogs):
-    """Add blogs to user's blog list."""
+    """Add blogs to the list that the user is following."""
     user.profile.blogs.add(*blogs)
 
 
 def remove_blogs_from_user(user, *blogs):
-    """Remove blogs from user's blog list."""
+    """Remove blogs from the list that the user is following."""
     user.profile.blogs.remove(*blogs)
 
 
 def add_authors_to_user(user, *authors):
-    """Add authors to user's following list."""
+    """Add authors to the list that the user is following."""
     user.profile.following.add(*authors)
 
 
 def remove_authors_from_user(user, *authors):
-    """Remove authors from user's following list."""
+    """Remove authors from the list that the user is following."""
     user.profile.following.remove(*authors)

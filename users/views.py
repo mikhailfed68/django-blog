@@ -21,7 +21,7 @@ from users.services import (
     add_blogs_to_user,
     add_user_to_base_group_or_create_one,
     get_user_following_list,
-    get_users_for_profile,
+    get_users_with_all_counter,
     get_users_with_counters,
     remove_authors_from_user,
     remove_blogs_from_user,
@@ -62,7 +62,7 @@ class ProfileDetailView(SingleObjectMixin, ListView):
         object atrribute for further processing.
         """
         self.object = self.get_object(
-            queryset=get_users_for_profile(),
+            queryset=get_users_with_all_counter(),
         )
         return super().get(request, *args, **kwargs)
 
@@ -165,7 +165,9 @@ class UserDestroyView(
 
 
 class AddBlogToProfileView(LoginRequiredMixin, SuccessMessageMixin, View):
-    """Add blog to profile of current authenticated user."""
+    """
+    Add blog to the list that the current authenticated user is following.
+    """
 
     def post(self, request, *args, **kwargs):
         blog_id = request.POST.get("blog_id")
@@ -176,7 +178,9 @@ class AddBlogToProfileView(LoginRequiredMixin, SuccessMessageMixin, View):
 
 
 class RemoveBlogFromProfileView(LoginRequiredMixin, View):
-    """Remove blog from profile of current authenticated user."""
+    """
+    Remove blog from the list that the current authenticated user is following.
+    """
 
     def post(self, request, *args, **kwargs):
         blog_id = request.POST.get("blog_id")
@@ -187,7 +191,9 @@ class RemoveBlogFromProfileView(LoginRequiredMixin, View):
 
 
 class AddAuthorToProfileView(LoginRequiredMixin, View):
-    """Add author to user's following list for current authenticated user."""
+    """
+    Add author to the list that the current authenticated user is following.
+    """
 
     def post(self, request, *args, **kwargs):
         author_id = request.POST.get("author_id")
@@ -198,7 +204,10 @@ class AddAuthorToProfileView(LoginRequiredMixin, View):
 
 
 class RemoveAuthorFromProfileView(LoginRequiredMixin, View):
-    """Add author to user's following list for current authenticated user."""
+    """
+    Remove author from the list that the current
+    authenticated user is following.
+    """
 
     def post(self, request, *args, **kwargs):
         author_id = request.POST.get("author_id")
