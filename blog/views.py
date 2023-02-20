@@ -4,7 +4,9 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin,
 )
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.transaction import atomic
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import BaseDeleteView, CreateView, UpdateView
@@ -52,6 +54,7 @@ class ArticleDetailView(DetailView):
     model = models.Article
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     """
     Returns a form for creation an article by GET request
@@ -71,6 +74,7 @@ class ArticleCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView
         return super().form_valid(form)
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class ArticleUpdateView(
     UserPassesTestMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView
 ):
@@ -93,6 +97,7 @@ class ArticleUpdateView(
         )
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class ArticleDestroyView(
     UserPassesTestMixin, PermissionRequiredMixin, SuccessMessageMixin, BaseDeleteView
 ):
@@ -111,6 +116,7 @@ class ArticleDestroyView(
         )
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class BlogCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Creates a new blog."""
 
@@ -155,6 +161,7 @@ class BlogDetailView(SingleObjectMixin, ListView):
         return self.object.article_set.all()
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class LanguageCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Creates a new language."""
 

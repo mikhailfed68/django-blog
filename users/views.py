@@ -7,7 +7,9 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin,
 )
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.transaction import atomic
 from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import CreateView, ListView
 from django.views.generic.detail import SingleObjectMixin
@@ -28,6 +30,7 @@ from users.services import (
 )
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class SiqnUp(CreateView):
     """Registers the user on the site."""
 
@@ -110,6 +113,7 @@ class UserFollowingListView(LoginRequiredMixin, ListView):
         return context
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
     """Update User data as well as his Profile data."""
 
@@ -145,6 +149,7 @@ class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
         )
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class UserDestroyView(
     UserPassesTestMixin, PermissionRequiredMixin, SuccessMessageMixin, BaseDeleteView
 ):
@@ -164,6 +169,7 @@ class UserDestroyView(
         return self.request.user.get_username() == self.kwargs.get("username")
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class AddBlogToProfileView(LoginRequiredMixin, SuccessMessageMixin, View):
     """
     Add blog to the list that the current authenticated user is following.
@@ -177,6 +183,7 @@ class AddBlogToProfileView(LoginRequiredMixin, SuccessMessageMixin, View):
         return redirect("blog:articles_by_blog", pk=blog_id)
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class RemoveBlogFromProfileView(LoginRequiredMixin, View):
     """
     Remove blog from the list that the current authenticated user is following.
@@ -190,6 +197,7 @@ class RemoveBlogFromProfileView(LoginRequiredMixin, View):
         return redirect("blog:articles_by_blog", pk=blog_id)
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class AddAuthorToProfileView(LoginRequiredMixin, View):
     """
     Add author to the list that the current authenticated user is following.
@@ -203,6 +211,7 @@ class AddAuthorToProfileView(LoginRequiredMixin, View):
         return redirect("users:profile", username=author_username)
 
 
+@method_decorator(decorator=atomic, name="dispatch")
 class RemoveAuthorFromProfileView(LoginRequiredMixin, View):
     """
     Remove author from the list that the current
