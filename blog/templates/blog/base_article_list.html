@@ -3,6 +3,19 @@
 {% block content %}
 
 {% block othercontent %}{% endblock %}
+{% load bootstrap5 %}
+
+{% if filter %}
+<form method="get">
+  <div class="d-flex align-items-start flex-column">
+    <div class="d-flex justify-content-start align-items-start">
+      <div>{% bootstrap_field filter.form.range bound_css_class='form-select-sm' %}</div>
+    </div>
+    <div class="ms-2 mb-3"><input type="submit" class="btn btn-outline-primary" value="Найти"></div>
+  </div>
+</form>
+{% endif %}
+
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   {% for article in object_list %}

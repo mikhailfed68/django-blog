@@ -31,10 +31,26 @@ class IndexListView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        search_query = self.request.GET.get("search_query")
-        if search_query:
-            return get_articles_for_search_query(search_query)
-        return get_articles_for_cards()
+        self.search_query = self.request.GET.get("search_query")
+        func = (
+            get_articles_for_search_query(self.search_query)
+            if self.search_query
+            else get_articles_for_cards()
+        )
+
+        self.filter = filters.ArticleFilter(
+            self.request.GET,
+            queryset=func,
+            request=self.request,
+        )
+        return self.filter.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
+        if self.search_query:
+            context["query"] = self.search_query
+        return context
 
 
 class PersonalNewsFeedView(LoginRequiredMixin, ListView):

@@ -1,5 +1,17 @@
 import django_filters
 
+from .models import Article
+
+
+class ArticleFilter(django_filters.FilterSet):
+    range = django_filters.DateRangeFilter(
+        field_name="created_at", label="Период публикации"
+    )
+
+    class Meta:
+        model = Article
+        fields = ["range"]
+
 
 class BlogFilter(django_filters.FilterSet):
     """Blog filter for searching and ordering by subscribers or articles."""
