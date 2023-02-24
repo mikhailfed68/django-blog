@@ -31,7 +31,7 @@ def get_users_with_counters():
             Count("followers", distinct=True),
         )
         .select_related("profile")
-        .order_by("date_joined")
+        .order_by("-followers__count")
         .only("username", "first_name", "last_name", "profile")
     )
 

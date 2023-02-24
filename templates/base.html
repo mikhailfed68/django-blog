@@ -16,13 +16,13 @@
   {% bootstrap_css %}
   {% bootstrap_javascript %}
 
+  {% load cache %}
+
   {% block style %}{% endblock %}
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-  {% load cache %}
   <header>
-    {% cache 84600 nav request.user %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded" aria-label="Eleventh navbar example">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'blog:index' %}">Incognito</a>
@@ -54,7 +54,7 @@
             {% endif %}
           </ul>
           <form method="get" action="{% url 'blog:index' %}" class="me-2 mb-2 mb-sm-2 mb-md-2 mt-lg-2">
-            <input type="text" name='search_query' placeholder='Найти статью' class='form-control' aria-label='Search'>
+            <input type="text" value='{{ query }}' name='search_query' placeholder='Найти статью' class='form-control' aria-label='Search'>
           </form>
           {% if user.is_authenticated %}
           <div>
@@ -67,15 +67,12 @@
         </div>
       </div>
     </nav>
-    {% endcache %}
   </header>
 
   {# Display django.contrib.messages as Bootstrap alerts #}
   {% bootstrap_messages %}
 
   <main class="container mt-2 mb-5">
-    {% block search %}{% endblock %}
-
     {% block content %}{% endblock %}
 
     {% block pagination %}

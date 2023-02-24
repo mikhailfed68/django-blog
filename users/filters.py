@@ -37,7 +37,7 @@ class UserFilter(django_filters.FilterSet):
         for counter, param in ordering_param.items():
             field_of_param = (
                 "followers__count"
-                if counter == "by_subscriber_count"
+                if counter == "by_followers_count"
                 else "article__count"
             )
             if param == "asc":
