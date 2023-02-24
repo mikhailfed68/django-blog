@@ -25,5 +25,7 @@ shell:
 cls:
 	poetry run python3 manage.py collectstatic
 
+docker-rmi-dangling:
+	docker rmi $(docker images -f "dangling=true" -q)
 
 .PHONY: format lint test check start startdb shell cls
