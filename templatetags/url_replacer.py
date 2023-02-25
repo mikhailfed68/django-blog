@@ -3,13 +3,15 @@ from django import template
 register = template.Library()
 
 
-# This tag was created to be used to keep the pagination state with search query,
-# when visitor steps through each of the individual pages.
+# This tag was created to be used to keep the pagination state
+# with search query, when visitor steps through
+# each of the individual pages
 @register.simple_tag(takes_context=True)
 def replace_param(context, **kwargs):
     """
-    Replaces the passed parameters in the url and
-    removes those that have no values.
+    Replaces the parameters with new values 
+    in query string and removes those
+    that have no values.
     """
     querydict = context["request"].GET.copy()
     for param, value in kwargs.items():
