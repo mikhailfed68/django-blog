@@ -9,7 +9,7 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def replace_param(context, **kwargs):
     """
-    Replaces the parameters with new values 
+    Replaces the parameters with new values
     in query string and removes those
     that have no values.
     """
