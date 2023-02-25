@@ -3,11 +3,14 @@ from django import template
 register = template.Library()
 
 
-# This tag was created to be used to move through the resulting list
-# of objects, keeping the parameters of the previous search query
+# This tag was created to be used to keep the pagination state with search query,
+# when visitor steps through each of the individual pages.
 @register.simple_tag(takes_context=True)
 def replace_param(context, **kwargs):
-    """Replaces with new parameters passed and clears parameters."""
+    """
+    Replaces the passed parameters in the url and
+    removes those that have no values.
+    """
     querydict = context["request"].GET.copy()
     for param, value in kwargs.items():
         querydict[param] = value
