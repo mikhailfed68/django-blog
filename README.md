@@ -19,7 +19,7 @@ You can also follow interesting authors or blogs in your personal feed by subscr
 - Bootstrap 5 for a beautiful and fast-changing design
 
 #### App on Railway:
-> [Incognito blog](https://incognito-blog.up.railway.app)
+> [Incognito blog](https://incognito-b.up.railway.app)
 
 *The same as Heroku*
 
