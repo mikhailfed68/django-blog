@@ -47,6 +47,8 @@ DATABASE_URL='postgresql://docker_user:docker_password@db:5432/docker_db'
 
 REDIS_URL='redis://redis:6379'
 
+DEBUG='true'
+
 SECRET_KEY='your generated secret key for django project'
 
 _For example:_
@@ -54,8 +56,6 @@ _For example:_
 `from django.core.management.utils import get_random_secret_key`
 
 `get_random_secret_key()`
-
-DEBUG='true'
 
 >See [Environment variables](#environment-variables) section.
 
