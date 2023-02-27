@@ -8,7 +8,7 @@ services:
     environment:
       - POSTGRES_USER=docker_user
       - POSTGRES_PASSWORD=docker_password
-      - POSTGRES_DB=docker_db
+      - POSTGRES_DB=incognito_blog_db
 
   redis:
     image: redis:latest
@@ -23,6 +23,8 @@ services:
     volumes:
       - .:/usr/src/app
     environment:
+      - DATABASE_URL=postgresql://docker_user:docker_password@db:5432/incognito_blog_db
+      - REDIS_URL=redis://redis:6379
       - NAME_STATIC_DIR=staticdocker
       - NAME_MEDIA_DIR=mediadocker
     env_file:

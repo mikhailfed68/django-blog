@@ -43,10 +43,6 @@ Now, you have to create .env.dev file and setup environment variables:
 
 This is the minimum set of variables to start a project:
 
-DATABASE_URL='postgresql://docker_user:docker_password@db:5432/docker_db'
-
-REDIS_URL='redis://redis:6379'
-
 DEBUG='true'
 
 SECRET_KEY='your generated secret key for django project'
