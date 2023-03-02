@@ -1,20 +1,13 @@
-{% extends "blog/base_article_list.html" %}
+{% extends "base.html" %}
 
-{% block othercontent %}
+{% block content %}
 <h2 class="display-4">Ваша личная лента</h2>
 
-<a href="{% url 'users:following' %}" class="btn btn-outline-primary mb-5">Посмотреть подписки</a>
+<a href="{% url 'users:following' %}" class="btn btn-outline-primary mb-3">Посмотреть подписки</a>
 
-<p>Блоги на которые вы подписаны:</p>
-<div class="d-flex align-items-start flex-wrap mb-5">
-  {% for blog in user.profile.blogs.all %}
-  <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
-    <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
-      {{ blog.name }}
-    </div>
-  </a>
-  {% empty %}
-  <li>Еще не подписаны</li>
-  {% endfor %}
+<div class="mb-5">
+  {% include "blog/includes/blogs_snippet.html" with blogs=user.profile.blogs.all only %}
 </div>
+
+{% include "blog/includes/articles_snippet.html" %}
 {% endblock %}
