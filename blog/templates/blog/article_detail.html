@@ -27,15 +27,7 @@
   <img src="{{ article.title_photo.url }}" class="img-fluid rounded mx-auto d-block" alt="title-photo">
   {% endif %}
 
-  <div class="d-flex align-items-start flex-wrap">
-    {% for blog in article.blogs.all %}
-    <a href="{% url 'blog:articles_by_blog' blog.pk %}" class="text-decoration-none">
-      <div class="bg-primary rounded-pill text-light fw-bold p-1 m-2">
-        {{ blog.name }}
-      </div>
-    </a>
-    {% endfor %}
-  </div>
+  {% include "blog/includes/blogs_snippet.html" with blogs=article.blogs.all only %}
 
   {% if article.language %}
   <p><b>Язык: </b>{{ article.language }}</p>

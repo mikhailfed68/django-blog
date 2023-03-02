@@ -1,8 +1,8 @@
-{% extends 'blog/base_article_list.html' %}
+{% extends 'base.html' %}
 
 {% block title %} Автор | {{ author.get_username }} {% endblock %}
 
-{% block othercontent %}
+{% block content %}
 <h2 class="display-4">Об авторе</h2>
 {% if user.get_username == author.get_username %}
 <a href="{% url 'blog:new_article' %}" class="btn btn-outline-secondary mt-1 mb-3  btn-sm">Создать статью</a>
@@ -11,23 +11,23 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-{% if user.get_username != author.get_username %}
-{% if author not in user.profile.following.all %}
-<form action="{% url 'users:add_author_to_profile' %}" method="post">
-  {% csrf_token %}
-  <input type="hidden" name="author_id" value="{{ author.id }}">
-  <input type="hidden" name="author_username" value="{{ author.username }}">
-  <button class="btn btn-outline-secondary mb-2">Подписаться</button>
-</form>
-{% else %}
-<form action="{% url 'users:remove_author_from_profile' %}" method="post">
-  {% csrf_token %}
-  <input type="hidden" name="author_id" value="{{ author.id }}">
-  <input type="hidden" name="author_username" value="{{ author.username }}">
-  <button class="btn btn-outline-secondary mb-2">Отписаться</button>
-</form>
-{% endif %}
-{% endif %}
+  {% if user.get_username != author.get_username %}
+    {% if author not in user.profile.following.all %}
+    <form action="{% url 'users:add_author_to_profile' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="author_id" value="{{ author.id }}">
+      <input type="hidden" name="author_username" value="{{ author.username }}">
+      <button class="btn btn-outline-secondary mb-2">Подписаться</button>
+    </form>
+    {% else %}
+    <form action="{% url 'users:remove_author_from_profile' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="author_id" value="{{ author.id }}">
+      <input type="hidden" name="author_username" value="{{ author.username }}">
+      <button class="btn btn-outline-secondary mb-2">Отписаться</button>
+    </form>
+    {% endif %}
+  {% endif %}
 {% endif %}
 
 <div class="mb-3">
@@ -65,5 +65,5 @@
 <p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>
 {% endif %}
 
-<h2 class="display-4 mb-2">Статьи пользователя</h2>
+{% include "blog/includes/articles_snippet.html" with is_users_articles=True %}
 {% endblock %}
