@@ -19,4 +19,7 @@ urlpatterns = [
     path("blogs/<int:pk>/", views.BlogDetailView.as_view(), name="articles_by_blog"),
     path("blogs/new", views.BlogCreateView.as_view(), name="new_blog"),
     path("languages/new", views.LanguageCreateView.as_view(), name="new_language"),
+    path("bookmarks/", views.BookmarksView.as_view(), name="bookmarks"),
+    path("bookmarks/add", views.AddArticleInBookmarks.as_view(), name="add_article_to_bookmarks"),
+    path("bookmarks/delete", views.RemoveArticleFromBookmarks.as_view(), name="remove_article_from_bookmarks"),
 ]

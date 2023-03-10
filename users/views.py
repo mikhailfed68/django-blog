@@ -15,7 +15,6 @@ from django.views.generic import CreateView, ListView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import BaseDeleteView
 
-from users import models
 from users.filters import UserFilter
 from users.forms import CustomUserChangeForm, SignUpForm
 from users.services import (
@@ -93,26 +92,6 @@ class UserListView(ListView):
         return context
 
 
-class UserFollowingListView(LoginRequiredMixin, ListView):
-    """Returns a followng list of current user."""
-
-    model = get_user_model()
-    paginate_by = 5
-
-    def get_queryset(self):
-        self.filter = UserFilter(
-            self.request.GET,
-            queryset=get_user_following_list(self.request.user),
-            request=self.request,
-        )
-        return self.filter.qs
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["filter"] = self.filter
-        return context
-
-
 @method_decorator(decorator=atomic, name="dispatch")
 class UserUpdateView(
     UserPassesTestMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView
@@ -180,6 +159,26 @@ class RemoveBlogFromProfileView(LoginRequiredMixin, View):
         remove_blogs_from_user(request.user, blog_id)
         messages.success(request, f"Вы отписались от блога {blog_name}")
         return redirect("blog:articles_by_blog", pk=blog_id)
+
+
+class UserFollowingListView(LoginRequiredMixin, ListView):
+    """Returns a followng list of current user."""
+
+    model = get_user_model()
+    paginate_by = 5
+
+    def get_queryset(self):
+        self.filter = UserFilter(
+            self.request.GET,
+            queryset=get_user_following_list(self.request.user),
+            request=self.request,
+        )
+        return self.filter.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
+        return context
 
 
 @method_decorator(decorator=atomic, name="dispatch")

@@ -1,5 +1,6 @@
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from blog import models
 
@@ -52,3 +53,11 @@ def get_personal_news_feed(user):
         .filter(Q(blogs__in=user_blogs) | Q(author__in=user_following_list))
         .distinct()
     )
+
+
+def add_article_to_bookmarks(user, *articles):
+    user.bookmarks.add(*articles, through_defaults={"date_added": timezone.now()})
+
+
+def remove_article_from_bookmarks(user, *articles):
+    user.bookmarks.remove(*articles)

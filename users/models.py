@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from sorl import thumbnail
 
-from blog.models import Blog
+from blog.models import Article, Blog
 
 
 def get_user_directory_path(instance, filename):
@@ -46,6 +46,9 @@ class User(AbstractUser):
         verbose_name="Следит за данными авторами",
         blank=True,
     )
+    bookmarks = models.ManyToManyField(
+        Article, verbose_name="Закладки", through="BookmarksRelation"
+    )
 
     def __str__(self):
         return self.get_username()
@@ -64,3 +67,9 @@ class User(AbstractUser):
                 return False
             return True
         return False
+
+
+class BookmarksRelation(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date_added = models.DateTimeField()

@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions

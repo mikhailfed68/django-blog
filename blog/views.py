@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
@@ -5,20 +6,23 @@ from django.contrib.auth.mixins import (
 )
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.transaction import atomic
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import BaseDeleteView, CreateView, UpdateView
 
 from blog import filters, models
 from blog.forms import ArticleForm
 from blog.services import (
+    add_article_to_bookmarks,
     get_articles_for_cards,
     get_articles_for_search_query,
     get_blogs_with_counters,
     get_personal_news_feed,
     is_author_of_article,
+    remove_article_from_bookmarks,
 )
 
 
@@ -27,7 +31,6 @@ class IndexListView(ListView):
 
     model = models.Article
     template_name = "blog/index.html"
-    context_object_name = "articles"
     paginate_by = 6
 
     def get_queryset(self):
@@ -186,3 +189,48 @@ class LanguageCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     template_name_suffix = "_create_form"
     success_message = "Новый язык успешно создан."
     success_url = reverse_lazy("blog:new_language")
+
+
+class BookmarksView(LoginRequiredMixin, ListView):
+    model = models.Article
+    template_name = "blog/bookmarks.html"
+    paginate_by = 6
+
+    def get_queryset(self):
+        self.filter = filters.BookmarkFilter(
+            self.request.GET,
+            queryset=self.request.user.bookmarks.all().defer("language_id", "body"),
+            request=self.request,
+        )
+        return self.filter.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
+        return context
+
+
+@method_decorator(decorator=atomic, name="dispatch")
+class AddArticleInBookmarks(LoginRequiredMixin, View):
+    """
+    Add article to the bookmarks user.
+    """
+
+    def post(self, request, *args, **kwargs):
+        article_id = request.POST.get("article_id")
+        add_article_to_bookmarks(request.user, article_id)
+        messages.success(request, "Публикация добавлена в закладки.")
+        return redirect("blog:article_detail", pk=article_id)
+
+
+@method_decorator(decorator=atomic, name="dispatch")
+class RemoveArticleFromBookmarks(LoginRequiredMixin, View):
+    """
+    Remove article from the bookmarks user.
+    """
+
+    def post(self, request, *args, **kwargs):
+        article_id = request.POST.get("article_id")
+        remove_article_from_bookmarks(request.user, article_id)
+        messages.success(request, "Публикация убрана из закладок.")
+        return redirect("blog:article_detail", pk=article_id)

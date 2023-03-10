@@ -30,8 +30,15 @@ def get_users_with_counters():
             Count("article", distinct=True),
             Count("followers", distinct=True),
         )
-        .order_by("-followers__count")
-        .only("username", "first_name", "last_name", "profile_picture", "about_me", "following")
+        .order_by("-date_joined")
+        .only(
+            "username",
+            "first_name",
+            "last_name",
+            "profile_picture",
+            "about_me",
+            "following",
+        )
     )
 
 
@@ -56,7 +63,7 @@ def get_user_following_list(user):
             Count("article", distinct=True),
             Count("followers", distinct=True),
         )
-        .order_by("-followers__count")
+        .order_by("-date_joined")
         .only("username", "first_name", "last_name", "profile_picture", "about_me")
     )
 

@@ -5,8 +5,26 @@
 {% block content %}
 <h2 class="display-4">{{ article.title }}</h1>
   {% if user.get_username == article.author.get_username and perms.blog.change_article %}
-  <a href="{% url 'blog:update_article' article.id %}" class="btn btn-outline-secondary  btn-sm">Редактировать</a>
+  <a href="{% url 'blog:update_article' article.id %}" class="btn btn-outline-secondary mb-2 btn-sm">Редактировать</a>
   {% endif %}
+
+
+  {% if user.is_authenticated %}
+    {% if article in user.bookmarks.all %}
+    <form action="{% url 'blog:remove_article_from_bookmarks' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="article_id" value="{{ article.id }}">
+      <button class="btn btn-outline-secondary mb-2 btn-sm">Убрать из закладок</button>
+    </form>
+    {% else %}
+    <form action="{% url 'blog:add_article_to_bookmarks' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="article_id" value="{{ article.id }}">
+      <button class="btn btn-outline-secondary mb-2 btn-sm">Добавить в закладки</button>
+    </form>
+    {% endif %}
+  {% endif %}
+
 
   <div class="m-3">
 

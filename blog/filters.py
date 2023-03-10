@@ -1,16 +1,21 @@
 import django_filters
 
-from .models import Article
+from blog.models import Article
 
 
 class ArticleFilter(django_filters.FilterSet):
+    article_name = django_filters.CharFilter(
+        label="Название публикации",
+        field_name="title",
+        lookup_expr="icontains",
+    )
     range = django_filters.DateRangeFilter(
         field_name="created_at", label="Период публикации"
     )
 
     class Meta:
         model = Article
-        fields = ["range"]
+        fields = ["article_name", "range"]
 
 
 class BlogFilter(django_filters.FilterSet):
@@ -50,12 +55,25 @@ class BlogFilter(django_filters.FilterSet):
         ordering = []
         for counter, param in ordering_param.items():
             field_of_param = (
-                "user__count"
-                if counter == "by_followers_count"
-                else "article__count"
+                "user__count" if counter == "by_followers_count" else "article__count"
             )
             if param == "asc":
                 ordering.append(field_of_param)
             elif param == "desc":
                 ordering.append(f"-{field_of_param}")
         return queryset.order_by(*ordering)
+
+
+class BookmarkFilter(django_filters.FilterSet):
+    article_name = django_filters.CharFilter(
+        label="Название публикации",
+        field_name="title",
+        lookup_expr="icontains",
+    )
+    range = django_filters.DateRangeFilter(
+        field_name="bookmarksrelation__date_added", label="Период добавления"
+    )
+
+    class Meta:
+        model = Article
+        fields = ["article_name", "range"]
