@@ -150,7 +150,7 @@ class AdddingAndRemovingBlogsViewTests(TestCase):
             follow=True,
             secure=True,
         )
-        self.assertQuerysetEqual(self.user.profile.blogs.all(), [self.blog])
+        self.assertQuerysetEqual(self.user.blogs.all(), [self.blog])
 
     def test_views_remove_blog_from_user_profile(self):
         self.client.post(
@@ -166,7 +166,7 @@ class AdddingAndRemovingBlogsViewTests(TestCase):
             secure=True,
         )
 
-        self.assertQuerysetEqual(self.user.profile.blogs.all(), [])
+        self.assertQuerysetEqual(self.user.blogs.all(), [])
 
 
 class ProfileDetailViewTests(TestCase):
@@ -358,10 +358,10 @@ class AdddingAndRemovingAuthorsViewTests(TestCase):
             secure=True,
         )
         self.assertQuerysetEqual(
-            self.user.profile.following.all().order_by("date_joined"),
+            self.user.following.all().order_by("date_joined"),
             [self.author_1, self.author_2],
         )
-        self.assertQuerysetEqual(self.author_1.followers.all(), [self.user.profile])
+        self.assertQuerysetEqual(self.author_1.followers.all(), [self.user])
 
     def test_view_removes_author_from_user_profile(self):
         self.client.post(
@@ -376,5 +376,5 @@ class AdddingAndRemovingAuthorsViewTests(TestCase):
             follow=True,
             secure=True,
         )
-        self.assertQuerysetEqual(self.user.profile.following.all(), [])
+        self.assertQuerysetEqual(self.user.following.all(), [])
         self.assertQuerysetEqual(self.author_1.followers.all(), [])

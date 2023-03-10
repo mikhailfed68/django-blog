@@ -5,9 +5,9 @@ For more information on this settings, see README.md
 https://github.com/MichaelFed68/django-blog#for-developers
 """
 
-import socket
 import json
 import os
+import socket
 from pathlib import Path
 
 import dj_database_url
@@ -230,7 +230,7 @@ else:
 # Setting for django-debug-tool-bar
 if DEBUG:
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [f"{ip[:-1]}1" for ip in ips] + ['127.0.0.1']
+    INTERNAL_IPS = [f"{ip[:-1]}1" for ip in ips] + ["127.0.0.1"]
 
 
 # Static files (CSS, JavaScript, Images)
