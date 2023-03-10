@@ -12,7 +12,7 @@ from blog.models import Article, Blog
 
 
 def get_user_directory_path(instance, filename):
-    return f"users/user_{instance.user.id}/profile_picture/{filename}"
+    return f"users/user_{instance.id}/profile_picture/{filename}"
 
 
 class User(AbstractUser):
