@@ -30,7 +30,7 @@
     <li class="list-group-item d-flex justify-content-between align-items-start">
 
       {% load thumbnail %}
-      {% thumbnail author.profile.profile_picture "60x60" crop="center" as im %}
+      {% thumbnail author.profile_picture "60x60" crop="center" as im %}
       <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
         class="img-fluid img-thumbnail rounded-pill" alt="profile-picture">
       {% empty %}
@@ -51,8 +51,8 @@
         <span class="text-secondary">Не в сети</span>
         {% endif %}
         <div>{{ author.get_full_name }}</div>
-        {% if author.profile.about_me %}
-        <div>{{ author.profile.about_me }}</div>
+        {% if author.about_me %}
+        <div>{{ author.about_me }}</div>
         {% endif %}
       </div>
       <span class="badge bg-secondary rounded-pill ms-5 me-2">{{ author.followers__count }}</span>

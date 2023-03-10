@@ -12,7 +12,7 @@
 
 {% if user.is_authenticated %}
   {% if user.get_username != author.get_username %}
-    {% if author not in user.profile.following.all %}
+    {% if author not in user.following.all %}
     <form action="{% url 'users:add_author_to_profile' %}" method="post">
       {% csrf_token %}
       <input type="hidden" name="author_id" value="{{ author.id }}">
@@ -32,7 +32,7 @@
 
 <div class="mb-3">
   {% load thumbnail %}
-  {% thumbnail author.profile.profile_picture "75x75" crop="center" as im %}
+  {% thumbnail author.profile_picture "75x75" crop="center" as im %}
   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-fluid img-thumbnail rounded-pill"
     alt="profile-picture">
   {% empty %}
@@ -61,8 +61,8 @@
 <p><b>Подписчиков: </b>{{ author.followers__count }}</p>
 <p><b>Подписок: </b>{{ author.following__count }}</p>
 <p><b>Публикаций: </b>{{ author.article__count }}</p>
-{% if author.profile.about_me %}
-<p class="about_author"><b>О себе: </b>{{ author.profile.about_me }}</p>
+{% if author.about_me %}
+<p class="about_author"><b>О себе: </b>{{ author.about_me }}</p>
 {% endif %}
 
 {% include "blog/includes/articles_snippet.html" with is_users_articles=True %}

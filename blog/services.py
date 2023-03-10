@@ -16,7 +16,8 @@ def get_blogs_with_counters():
     """
     return (
         models.Blog.objects.annotate(
-            Count("article", distinct=True), Count("profile", distinct=True)
+            Count("article", distinct=True),
+            Count("user", distinct=True),
         )
         .order_by("created_at")
         .only("name", "description")
@@ -43,8 +44,8 @@ def get_personal_news_feed(user):
     Retruns the user personal news feed by his blogs
     and authors that the user is following.
     """
-    user_blogs = user.profile.blogs.all().values("id")
-    user_following_list = user.profile.following.all().values("id")
+    user_blogs = user.blogs.all().values("id")
+    user_following_list = user.following.all().values("id")
 
     return (
         get_articles_for_cards()

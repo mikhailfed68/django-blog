@@ -11,7 +11,7 @@
   <div class="m-3">
 
     {% load thumbnail %}
-    {% thumbnail article.author.profile.profile_picture "75x75" crop="center" as im %}
+    {% thumbnail article.author.profile_picture "75x75" crop="center" as im %}
     <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-fluid img-thumbnail rounded-pill"
       alt="profile-picture">
     {% empty %}

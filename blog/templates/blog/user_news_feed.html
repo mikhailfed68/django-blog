@@ -6,7 +6,7 @@
 <a href="{% url 'users:following' %}" class="btn btn-outline-primary mb-3">Посмотреть подписки</a>
 
 <div class="mb-5">
-  {% include "blog/includes/blogs_snippet.html" with blogs=user.profile.blogs.all only %}
+  {% include "blog/includes/blogs_snippet.html" with blogs=user.blogs.all only %}
 </div>
 
 {% include "blog/includes/articles_snippet.html" %}

@@ -3,9 +3,9 @@
 {% block title %}Редактирование профиля | {{ user.get_username }} {% endblock %}
 
 {% block style %}
-{{ profile_form.media.css }}
+{{ form.media.css }}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-{{ profile_form.media.js }}
+{{ form.media.js }}
 {% endblock %}
 
 {% block content %}
@@ -13,8 +13,7 @@
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {% load bootstrap5 %}
-  {% bootstrap_form user_form %}
-  {% bootstrap_form profile_form %}
+  {% bootstrap_form form %}
   {% buttons %}
   <button type="submit" class="btn btn-primary" onclick="this.form.submit(); this.disabled = true;">
     Сохранить

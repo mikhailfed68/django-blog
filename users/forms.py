@@ -6,7 +6,7 @@ from django_select2 import forms as s2forms
 
 from blog.forms import BlogsWidget
 
-from .models import Profile, User
+from .models import User
 
 
 class AuthorsWidget(s2forms.ModelSelect2MultipleWidget):
@@ -30,10 +30,21 @@ class SignUpForm(UserCreationForm):
         ]
 
 
-class ChangeProfileForm(forms.ModelForm):
+class CustomUserChangeForm(UserChangeForm):
+    password = None
+
     class Meta:
-        model = Profile
-        fields = ["profile_picture", "about_me", "blogs", "following"]
+        model = User
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "profile_picture",
+            "about_me",
+            "blogs",
+            "following",
+        ]
         widgets = {
             "blogs": BlogsWidget,
             "following": AuthorsWidget,
@@ -58,11 +69,3 @@ class ChangeProfileForm(forms.ModelForm):
                     """
                 )
         return picture
-
-
-class CustomUserChangeForm(UserChangeForm):
-    password = None
-
-    class Meta:
-        model = User
-        fields = ["username", "first_name", "last_name", "email"]

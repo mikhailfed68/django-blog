@@ -30,19 +30,18 @@ def get_users_with_counters():
             Count("article", distinct=True),
             Count("followers", distinct=True),
         )
-        .select_related("profile")
         .order_by("-followers__count")
-        .only("username", "first_name", "last_name", "profile")
+        .only("username", "first_name", "last_name", "profile_picture", "about_me", "following")
     )
 
 
 def get_users_with_all_counter():
     """
-    Returns get_users_with_counters and also
+    Returns 'get_users_with_counters' and also
     user counter that the user is following.
     """
     return get_users_with_counters().annotate(
-        following__count=Count("profile__following", distinct=True),
+        following__count=Count("following", distinct=True),
     )
 
 
@@ -53,31 +52,30 @@ def get_user_following_list(user):
     and follower counter.
     """
     return (
-        user.profile.following.annotate(
+        user.following.annotate(
             Count("article", distinct=True),
             Count("followers", distinct=True),
         )
-        .order_by("date_joined")
-        .select_related("profile")
-        .only("username", "first_name", "last_name", "profile")
+        .order_by("-followers__count")
+        .only("username", "first_name", "last_name", "profile_picture", "about_me")
     )
 
 
 def add_blogs_to_user(user, *blogs):
     """Add blogs to the list that the user is following."""
-    user.profile.blogs.add(*blogs)
+    user.blogs.add(*blogs)
 
 
 def remove_blogs_from_user(user, *blogs):
     """Remove blogs from the list that the user is following."""
-    user.profile.blogs.remove(*blogs)
+    user.blogs.remove(*blogs)
 
 
 def add_authors_to_user(user, *authors):
     """Add authors to the list that the user is following."""
-    user.profile.following.add(*authors)
+    user.following.add(*authors)
 
 
 def remove_authors_from_user(user, *authors):
     """Remove authors from the list that the user is following."""
-    user.profile.following.remove(*authors)
+    user.following.remove(*authors)

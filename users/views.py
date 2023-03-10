@@ -8,16 +8,16 @@ from django.contrib.auth.mixins import (
 )
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.transaction import atomic
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import BaseDeleteView
 
 from users import models
 from users.filters import UserFilter
-from users.forms import ChangeProfileForm, CustomUserChangeForm, SignUpForm
+from users.forms import CustomUserChangeForm, SignUpForm
 from users.services import (
     add_authors_to_user,
     add_blogs_to_user,
@@ -34,7 +34,7 @@ from users.services import (
 class SiqnUp(CreateView):
     """Registers the user on the site."""
 
-    model = models.User
+    model = get_user_model()
     form_class = SignUpForm
     template_name = "registration/signup.html"
     success_url = settings.LOGIN_REDIRECT_URL
@@ -76,7 +76,7 @@ class ProfileDetailView(SingleObjectMixin, ListView):
 class UserListView(ListView):
     """Rerturn the registred users list."""
 
-    model = models.User
+    model = get_user_model()
     paginate_by = 5
 
     def get_queryset(self):
@@ -96,7 +96,7 @@ class UserListView(ListView):
 class UserFollowingListView(LoginRequiredMixin, ListView):
     """Returns a followng list of current user."""
 
-    model = models.User
+    model = get_user_model()
     paginate_by = 5
 
     def get_queryset(self):
@@ -114,39 +114,24 @@ class UserFollowingListView(LoginRequiredMixin, ListView):
 
 
 @method_decorator(decorator=atomic, name="dispatch")
-class UserUpdateView(UserPassesTestMixin, PermissionRequiredMixin, View):
-    """Update User data as well as his Profile data."""
+class UserUpdateView(
+    UserPassesTestMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
+    """Update User data."""
 
     permission_required = "users.change_profile"
+
+    model = get_user_model()
+    slug_field = "username"
+    slug_url_kwarg = "username"
+    template_name = "users/update_user.html"
+    form_class = CustomUserChangeForm
+
+    success_message = "Вы успешно обновили свои данные."
 
     def test_func(self):
         "Verify user identity by session user object"
         return self.request.user.get_username() == self.kwargs.get("username")
-
-    def get(self, request, *args, **kwargs):
-        user_form = CustomUserChangeForm(instance=request.user)
-        profile_form = ChangeProfileForm(instance=request.user.profile)
-        return render(
-            request,
-            "users/update_user.html",
-            dict(user_form=user_form, profile_form=profile_form),
-        )
-
-    def post(self, request, *args, **kwargs):
-        user_form = CustomUserChangeForm(request.POST, instance=request.user)
-        profile_form = ChangeProfileForm(
-            request.POST, request.FILES, instance=request.user.profile
-        )
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            profile_form.save()
-            messages.success(request, "Вы успешно обновили свои данные")
-            return redirect("users:update_user", username=user.get_username())
-        return render(
-            request,
-            "users/update_user.html",
-            dict(user_form=user_form, profile_form=profile_form),
-        )
 
 
 @method_decorator(decorator=atomic, name="dispatch")
