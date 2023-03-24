@@ -204,9 +204,9 @@ if not PERMISSIONS_FOR_BASE_GROUP:
         "add_blog",
         "view_blog",
         "view_language",
-        "change_profile",
-        "delete_profile",
-        "view_profile",
+        "change_user",
+        "delete_user",
+        "view_user",
     ]
 
 

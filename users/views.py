@@ -98,7 +98,7 @@ class UserUpdateView(
 ):
     """Update User data."""
 
-    permission_required = "users.change_profile"
+    permission_required = "users.change_user"
 
     model = get_user_model()
     slug_field = "username"
@@ -119,7 +119,7 @@ class UserDestroyView(
 ):
     """Delete user."""
 
-    permission_required = "users.delete_profile"
+    permission_required = "users.delete_user"
 
     model = get_user_model()
     slug_field = "username"
