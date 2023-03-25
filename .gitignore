@@ -12,3 +12,6 @@ env/
 *.env*
 venv/
 .venv/
+
+.Dockerfile
+.docker-compose.yml
