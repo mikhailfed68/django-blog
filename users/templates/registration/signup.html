@@ -5,8 +5,8 @@
 {% load bootstrap5 %}
 
 {% block content %}
-<h2 class="display-4">Регистрация</h2>
-<form action="" method="post">
+<h2 class="display-4 text-center">Регистрация</h2>
+<form action="" method="post" class="col-lg-6 mx-lg-auto">
   {% csrf_token %}
   {% bootstrap_form form %}
   {% buttons %}
