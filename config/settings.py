@@ -210,7 +210,7 @@ if not PERMISSIONS_FOR_BASE_GROUP:
     ]
 
 
-# Setting Email configuration for sending reset email
+# Setting Email configuration for sending reset or error email
 ENABLED_EMAIL = json.loads(os.getenv("ENABLED_EMAIL", "false"))
 
 if ENABLED_EMAIL:
@@ -223,6 +223,13 @@ if ENABLED_EMAIL:
     EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
     EMAIL_PORT = json.loads(os.getenv("EMAIL_PORT", "25"))
+
+    SERVER_EMAIL = os.getenv("SERVER_EMAIL")
+
+    ADMINS = [tuple(json.loads(os.getenv("ADMINS", "[]")))]
+    if not ADMINS is [()]:
+        ADMINS = []
+
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 

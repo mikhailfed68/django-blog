@@ -163,9 +163,15 @@ Whether or not the actual mailing will be used.
 
 _By default set to False_
 
-Define to send a password reset email:
+Define to send a password reset email and error reporting:
 
 _Requires ENABLED_EMAIL='true'_
+
+**SERVER_EMAIL**
+
+**ADMINS**
+
+A *tuple* of all the people who get code error notifications
 
 **EMAIL_USE_TLS**
 
