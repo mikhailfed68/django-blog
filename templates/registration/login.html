@@ -2,9 +2,16 @@
 
 {% block title %}Вход{% endblock %}
 
+{% load static %}
+
 {% block content %}
+
+
 <div class="col-md-3 mx-md-auto">
-  <h2 class="display-4">Вход</h2>
+  <div class="mb-4 mt-4 text-center">
+    <img src="{% static 'blog/images/incognito.png' %}" alt="label" width="300" height="100">
+  </div>
+  <h2 class="display-4 text-center">Вход</h2>
   
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
